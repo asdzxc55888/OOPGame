@@ -68,12 +68,13 @@ namespace game_framework
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g)
 {
-	StartBtn = new CAnimation(3);
+	for(int i=0;i<4;i++)
+		menuBtn[i] = new CAnimation(3);
 }
 
 CGameStateInit::~CGameStateInit()
 {
-	delete StartBtn;
+	for (int i = 0; i < 4;i++)delete menuBtn[i];
 }
 
 void CGameStateInit::OnInit()
@@ -88,11 +89,14 @@ void CGameStateInit::OnInit()
     // 開始載入資料
     //
     Background.LoadBitmap("Bitmaps\\StartBackground.bmp");
-	StartBtn->AddBitmap("Bitmaps\\startBtn3.bmp",RGB(255,255,255));
-	StartBtn->AddBitmap("Bitmaps\\startBtn2.bmp", RGB(255, 255, 255));
-	StartBtn->AddBitmap("Bitmaps\\startBtn1.bmp", RGB(255, 255, 255));
-	StartBtn->AddBitmap("Bitmaps\\startBtn2.bmp", RGB(255, 255, 255));
-	StartBtn->AddBitmap("Bitmaps\\startBtn3.bmp", RGB(255, 255, 255));
+	menuBtn[0]->AddBitmap("Bitmaps\\menu\\start.bmp",RGB(255,255,255));
+	menuBtn[0]->AddBitmap("Bitmaps\\menu\\start1.bmp", RGB(255, 255, 255));
+	menuBtn[1]->AddBitmap("Bitmaps\\menu\\load.bmp", RGB(255, 255, 255));
+	menuBtn[1]->AddBitmap("Bitmaps\\menu\\load1.bmp", RGB(255, 255, 255));
+	menuBtn[2]->AddBitmap("Bitmaps\\menu\\Options.bmp", RGB(255, 255, 255));
+	menuBtn[2]->AddBitmap("Bitmaps\\menu\\Options1.bmp", RGB(255, 255, 255));
+	menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit.bmp", RGB(255, 255, 255));
+	menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit1.bmp", RGB(255, 255, 255));
 	CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");
 
     Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
@@ -104,7 +108,7 @@ void CGameStateInit::OnInit()
 
 void CGameStateInit::OnBeginState()
 {
-	isMouseOn = false;
+	for (int i = 0; i < 4;i++)isMouseOn[i] = false;
 	isLoadingBitmaps = false;
 }
 
@@ -121,22 +125,26 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    if (point.x > StartBtn->Left() && point.x < StartBtn->Left() + StartBtn->Width() && point.y > StartBtn->Top() && point.y < StartBtn->Height() + StartBtn->Top()) // 開始遊戲
+    if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y <  menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
         GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
+		exit(1);		// 離開遊戲
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (isLoadingBitmaps) {
-		if (point.x > StartBtn->Left() && point.x < StartBtn->Left() + StartBtn->Width() && point.y > StartBtn->Top() && point.y < StartBtn->Height() + StartBtn->Top())
-		{
-			if(!isPlayAudio)CAudio::Instance()->Play(AUDIO_DING);
-			isMouseOn = true;
-			isPlayAudio = true;
-		}
-		else {
-			isMouseOn = false;
-			isPlayAudio = false;
+		for (int i = 0; i < 4; i++) {
+			if (point.x > menuBtn[i]->Left() && point.x <  menuBtn[i]->Left() + menuBtn[i]->Width() && point.y >  menuBtn[i]->Top() && point.y < menuBtn[i]->Height() + menuBtn[i]->Top())
+			{
+				if (!isPlayAudio)CAudio::Instance()->Play(AUDIO_DING);
+				isMouseOn[i] = true;
+				isPlayAudio = true;
+			}
+			else {
+				isMouseOn[i] = false;
+				isPlayAudio = false;
+			}
 		}
 	}
 }
@@ -148,9 +156,15 @@ void CGameStateInit::OnShow()
     // 貼上logo
     //
     Background.ShowBitmap();
-	if (isMouseOn)StartBtn->OnMove(); else StartBtn->Reset();
-    StartBtn->SetTopLeft((SIZE_X - StartBtn->Width()) / 2, SIZE_Y / 2 + 100);
-	StartBtn->OnShow();
+	for (int i = 0; i < 4; i++) {
+		if (isMouseOn[i]) {
+			if(!menuBtn[i]->IsFinalBitmap())menuBtn[i]->OnMove();
+		}
+		else  menuBtn[i]->Reset();
+
+		menuBtn[i]->SetTopLeft((SIZE_X - menuBtn[i]->Width()) / 2, SIZE_Y / 2 + 60*(i+1));
+		menuBtn[i]->OnShow();
+	}
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //

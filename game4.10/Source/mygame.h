@@ -71,8 +71,8 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap Background;                       // 背景
-		CAnimation *StartBtn;
-		bool isMouseOn;
+		CAnimation *menuBtn[4];
+		bool isMouseOn[4];
 		bool isLoadingBitmaps;
 		bool isPlayAudio;
 	};
