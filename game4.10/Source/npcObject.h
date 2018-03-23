@@ -1,24 +1,23 @@
 #pragma once
-#include "stdafx.h"
-#include "Resource.h"
-#include <mmsystem.h>
-#include <ddraw.h>
-#include "audio.h"
-#include "gamelib.h"
-#include "mygame.h"
-
+using namespace std;
 namespace game_framework {
 	enum Attack_Type
 	{
 		Ad,		//物理攻擊 0
 		Ap		//魔法攻擊 1		
 	};
+	enum MovingAnimation_Type { //移動狀態
+		Forward,       //向前
+		Back,			//向後
+		Moving_Left,
+		Moving_Right
+	};
 	class npcObject
 	{
 	public:
 		npcObject();
 		~npcObject();
-		void LoadBitmap();		// 載入圖形
+		void LoadBitmap(string monsterName);		// 載入圖形
 		void OnMove();			// 移動
 		void OnShow();			// 將圖形貼到畫面
 		void SetPoint(int _x, int _y);
@@ -35,7 +34,7 @@ namespace game_framework {
 		int GetAttackType();
 
 	private:
-		int x, y;				//座標
+		int _x, _y;				//座標
 		int Hp;					//血量
 		int ApDefense;			//魔法防禦
 		int AdDefense;			//物理防禦
@@ -44,8 +43,9 @@ namespace game_framework {
 		bool isMovingLeft;			// 是否正在往左移動
 		bool isMovingRight;			// 是否正在往右移動
 		bool isMovingUp;			// 是否正在往上移動
-		CAnimation animation;   //動畫
+		
+		CAnimation  *animation[4];   //動畫
 		Attack_Type AttackType; //攻擊模式
-
+		MovingAnimation_Type nowMovingType;
 	};
 }
