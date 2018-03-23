@@ -132,6 +132,9 @@
     <ClCompile Include="Source\npcObject.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Monster.cpp">
+      <Filter>MyGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -171,6 +174,9 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\npcObject.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Monster.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>

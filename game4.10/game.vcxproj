@@ -280,6 +280,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Source\Monster.cpp" />
     <ClCompile Include="Source\npcObject.cpp" />
     <ClCompile Include="Source\StdAfx.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -303,6 +304,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Monster.h" />
     <ClInclude Include="Source\npcObject.h" />
     <ClInclude Include="Source\audio.h" />
     <ClInclude Include="Source\CBall.h" />
