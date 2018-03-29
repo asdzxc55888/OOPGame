@@ -9,7 +9,7 @@
  *      1. Remove #define _WIN32_WINNT and Preprocessor Definitions (WINVER=0x500)
  *      2. Include SDKDDKVER.h, the file automatic setting WINVER and _WIN32_WINNT in latest version
 */
-
+#pragma once
 #include <sdkddkver.h>
 
 #if !defined(AFX_STDAFX_H__243A7A47_6962_11D3_9B4D_BAD1A91E5344__INCLUDED_)
@@ -24,6 +24,7 @@
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions
 #include <afxdisp.h>        // MFC OLE automation classes
+#include <time.h>
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT

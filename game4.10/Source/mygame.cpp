@@ -158,7 +158,7 @@ void CGameStateInit::OnShow()
     Background.ShowBitmap();
 	for (int i = 0; i < 4; i++) {
 		if (isMouseOn[i]) {
-			if(!menuBtn[i]->IsFinalBitmap())menuBtn[i]->OnMove();
+			if(!menuBtn[i]->IsFinalBitmap())menuBtn[i]->OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
 		}
 		else  menuBtn[i]->Reset();
 
@@ -240,14 +240,15 @@ void CGameStateOver::OnShow()
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CGameStateRun::CGameStateRun(CGame* g)
     : CGameState(g)
 {
-    
+	int room_x = 650, room_y = 505;
+	for (int i = 0; i < 4; i++)gameRoom[i] = new Room(room_x + i * 115, room_y);
 }
 
 CGameStateRun::~CGameStateRun()
@@ -257,15 +258,17 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-   
+
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    //
-    // 如果希望修改cursor的樣式，則將下面程式的commment取消即可
-	tentacle.SetPoint(500, 500);
-	//tentacle.OnMove();
+	
+	for (int i=0;i<4;i++)
+	{
+		gameRoom[i]->OnMove();
+	}
+	tentacle.OnMove();
 	
 }
 
@@ -280,7 +283,10 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     // 開始載入資料
     //
 	Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
+	for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
 	tentacle.LoadBitmap("tentacle");
+	tentacle.SetMonsterType("tentacle");
+
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
@@ -292,6 +298,18 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     const char KEY_UP    = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN  = 0x28; // keyboard下箭頭
+	if (nChar == KEY_LEFT) {
+		tentacle.SetMovingLeft(true);
+	}
+	else if (nChar == KEY_RIGHT) {
+		tentacle.SetMovingRight(true);
+	}
+	else if (nChar == KEY_UP) {
+		gameRoom[0]->LetMonsterGohome();
+	}
+	else if (nChar == KEY_DOWN) {
+		gameRoom[0]->SetMonsterIntoRoom(&tentacle);
+	}
 
 }
 
@@ -301,7 +319,12 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     const char KEY_UP    = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN  = 0x28; // keyboard下箭頭
-
+	if (nChar == KEY_LEFT) {
+		tentacle.SetMovingLeft(false);
+	}
+	else if (nChar == KEY_RIGHT) {
+		tentacle.SetMovingRight(false);
+	}
  
 }
 
@@ -338,10 +361,9 @@ void CGameStateRun::OnShow()
     //        說，Move負責MVC中的Model，Show負責View，而View不應更動Model。
     //
 	Background.ShowBitmap();
+	for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(true);
+	for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(false);
 	tentacle.OnShow();
-    //
-    //  貼上背景圖、撞擊數、球、擦子、彈跳的球
-    //
 
 }
 }

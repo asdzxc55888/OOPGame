@@ -1,1 +1,46 @@
 #include "stdafx.h"
+#include "Resource.h"
+#include <mmsystem.h>
+#include <ddraw.h>
+#include "audio.h"
+#include "gamelib.h"
+#include "Monster.h"
+namespace game_framework {
+	Monster::Monster()
+	{
+		monsterType = "";
+		isExist = false;
+	}
+	void Monster::operator=(Monster &obj)
+	{
+		_x = obj._x;
+		_y = obj._y;
+		Hp = obj.Hp;								//血量
+		ApDefense = obj.ApDefense;
+		AdDefense = obj.AdDefense;
+		AttackPower = obj.AttackPower;				//攻擊力
+		isMovingDown = obj.isMovingDown;			// 是否正在往下移動
+		isMovingLeft = obj.isMovingLeft;			// 是否正在往左移動
+		isMovingRight = obj.isMovingRight;			// 是否正在往右移動
+		isMovingUp = obj.isMovingRight;				// 是否正在往上移動
+		AttackType = obj.AttackType;				//攻擊模式
+		nowMovingType = obj.nowMovingType;			//移動模式
+		monsterType = obj.monsterType;				//怪物種類
+		npcObject::LoadBitmap(monsterType);
+		name=obj.name;
+		isExist = true;
+	}
+	
+	void Monster::SetMonsterType(string _monsterType)
+	{
+		monsterType = _monsterType;
+	}
+	void Monster::SetMonsterIsExist(bool flag)
+	{
+		isExist = flag;
+	}
+	bool Monster::GetIsExist()
+	{
+		return isExist;
+	}
+}

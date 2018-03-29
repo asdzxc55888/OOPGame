@@ -37,11 +37,11 @@
  *      2. Replace the demonstration of animation as a new bouncing ball.
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
-
+#pragma once
 #include "CEraser.h"
 #include "CBall.h"
 #include "CBouncingBall.h"
-#include "Monster.h"
+#include "Room.h"
 
 
 namespace game_framework {
@@ -102,7 +102,9 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap Background;
+		Room *gameRoom[4];
 		Monster tentacle;
+		int houseLevele;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
