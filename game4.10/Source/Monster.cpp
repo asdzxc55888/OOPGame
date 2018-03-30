@@ -32,7 +32,6 @@ namespace game_framework {
 		nowMovingType = obj.nowMovingType;			//移動模式
 		monsterType = obj.monsterType;				//怪物種類
 		npcObject::LoadBitmap(monsterType);
-		name=obj.name;
 		isExist = true;
 	}
 	
@@ -40,9 +39,17 @@ namespace game_framework {
 	{
 		monsterType = _monsterType;
 	}
+	void Monster::SetMonsterState(Monster_state _state)
+	{
+		nowMonsterState = _state;
+	}
 	void Monster::SetMonsterIsExist(bool flag)
 	{
 		isExist = flag;
+	}
+	Monster_state Monster::GetMonsterState()
+	{
+		return nowMonsterState;
 	}
 	string Monster::GetMonsterType()
 	{
