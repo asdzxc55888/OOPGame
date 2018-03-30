@@ -163,7 +163,7 @@ int game_framework::npcObject::GetY()
 
 int game_framework::npcObject::GetWidth()
 {
-	return animation[0]->Width;
+	return animation[0]->Width();
 }
 
 int game_framework::npcObject::GetHeight()

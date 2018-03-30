@@ -2,7 +2,10 @@
 #include "npcObject.h"
 
 namespace game_framework {
-	
+	enum Monster_state {
+		wolking,
+		findHouse
+	};
 	class Monster :public npcObject
 	{
 	
@@ -16,6 +19,7 @@ namespace game_framework {
 		bool GetIsExist();
 	private:
 		string monsterType;
+		Monster_state nowMonsterState;
 		int name;
 		bool isExist;
 	};
