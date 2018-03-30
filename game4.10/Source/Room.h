@@ -12,8 +12,9 @@ class Room
         void OnMove();
         Monster GetLiveMonster();
 		void LetMonsterGohome();
+		bool IsMouseOn(CPoint point);
 		void SetMonsterIntohome(bool flag);
-        void SetMonsterIntoRoom(Monster *_monster);
+        void SetMonsterlivingRoom(Monster *_monster);
     private:
         int _x, _y; //®y¼Ð
 		int counter;

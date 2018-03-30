@@ -10,7 +10,7 @@ game_framework::npcObject::npcObject()
     for (int i = 0; i < 5; i++)
         animation[i] = new CAnimation;
 
-    _x = -100;
+    _x = 0;
     _y = 530;
     isMovingDown = false;			// 是否正在往下移動
     isMovingLeft = false;			// 是否正在往左移動
@@ -159,6 +159,16 @@ int game_framework::npcObject::GetX()
 int game_framework::npcObject::GetY()
 {
     return _y;
+}
+
+int game_framework::npcObject::GetWidth()
+{
+	return animation[0]->Width;
+}
+
+int game_framework::npcObject::GetHeight()
+{
+	return animation[0]->Height();
 }
 
 int game_framework::npcObject::GetHp()

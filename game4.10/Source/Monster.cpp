@@ -6,9 +6,14 @@
 #include "gamelib.h"
 #include "Monster.h"
 namespace game_framework {
+	Monster::Monster(string _monsterTpye)
+	{
+		monsterType = _monsterTpye;
+		isExist = false;
+	}
 	Monster::Monster()
 	{
-		monsterType = "";
+		monsterType = "tentacle";
 		isExist = false;
 	}
 	void Monster::operator=(Monster &obj)
@@ -38,6 +43,10 @@ namespace game_framework {
 	void Monster::SetMonsterIsExist(bool flag)
 	{
 		isExist = flag;
+	}
+	string Monster::GetMonsterType()
+	{
+		return monsterType;
 	}
 	bool Monster::GetIsExist()
 	{

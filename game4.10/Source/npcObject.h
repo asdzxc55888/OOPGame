@@ -32,6 +32,8 @@ namespace game_framework {
 		void SetIntoHouse(bool flag);
 		int GetX();
 		int GetY();
+		int GetWidth();
+		int GetHeight();
 		int GetHp();
 		int GetApDefense();
 		int GetAdDefense();

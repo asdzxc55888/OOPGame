@@ -41,8 +41,7 @@
 #include "CEraser.h"
 #include "CBall.h"
 #include "CBouncingBall.h"
-#include "Room.h"
-
+#include"GameEvent.h"
 
 namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////
@@ -102,8 +101,11 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap Background;
+		CSpecialEffect Clock;                         //計時器
 		Room *gameRoom[4];
+		Monster *comingMonster;                    //來看房子的怪物
 		Monster tentacle;
+		int comingMonster_SIZE;                       //來看房子的怪物的個數
 		int houseLevele;
 	};
 

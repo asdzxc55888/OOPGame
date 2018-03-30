@@ -244,9 +244,10 @@ void CGameStateOver::OnShow()
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CGameStateRun::CGameStateRun(CGame* g)
-    : CGameState(g)
+CGameStateRun::CGameStateRun(CGame* g): CGameState(g)
 {
+	comingMonster_SIZE = 0;
+	comingMonster = NULL;
 	int room_x = 650, room_y = 505;
 	for (int i = 0; i < 4; i++)gameRoom[i] = new Room(room_x + i * 115, room_y);
 }
@@ -263,7 +264,8 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	
+
+	comingMonster=CreateMonster_event(comingMonster, &comingMonster_SIZE);
 	for (int i=0;i<4;i++)
 	{
 		gameRoom[i]->OnMove();
@@ -308,7 +310,7 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		gameRoom[0]->LetMonsterGohome();
 	}
 	else if (nChar == KEY_DOWN) {
-		gameRoom[0]->SetMonsterIntoRoom(&tentacle);
+		gameRoom[0]->SetMonsterlivingRoom(&tentacle);
 	}
 
 }
@@ -345,7 +347,9 @@ void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-  
+	for (int i = 0; i < 4; i++) {
+		if (gameRoom[i]->IsMouseOn(point));
+	}
 }
 
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -363,6 +367,10 @@ void CGameStateRun::OnShow()
 	Background.ShowBitmap();
 	for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(true);
 	for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(false);
+	if (comingMonster!=NULL) {
+		comingMonster->OnShow();
+	}
+
 	tentacle.OnShow();
 
 }

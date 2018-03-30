@@ -37,9 +37,9 @@ void Room::OnShow(bool flag)
 }
 void Room::OnMove()
 {
-	if (isMonsterGoHome)isMonsterGoHome = MonsterGoHome();
+	if (isMonsterGoHome)isMonsterGoHome = MonsterGoHome();           
 	if (liveMonster.GetIsExist())liveMonster.OnMove();
-	if (isDoorOpen) {
+	if (isDoorOpen) {                           //開關門動畫
 		if (!animation.IsFinalBitmap()) {
 			animation.OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
 			animation.SetDelayCount(50);
@@ -58,6 +58,13 @@ Monster Room::GetLiveMonster()
 void Room::LetMonsterGohome()
 {
 	isMonsterGoHome = true;
+}
+bool Room::IsMouseOn(CPoint point)
+{
+	if (point.x > liveMonster.GetX() && point.x <= liveMonster.GetX() + liveMonster.GetWidth() && point.y > liveMonster.GetY() && point.y <= liveMonster.GetY() + liveMonster.GetHeight()) {
+		return true;
+	}	
+	return false;
 }
 void Room::SetMonsterIntohome(bool flag)
 {
@@ -85,7 +92,7 @@ bool Room::MonsterGoHome()  //未完成
 	}
 	return true;
 }
-void Room::SetMonsterIntoRoom(Monster* _monster)
+void Room::SetMonsterlivingRoom(Monster* _monster)
 {
     liveMonster = *_monster;
 }

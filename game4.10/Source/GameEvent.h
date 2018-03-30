@@ -6,4 +6,5 @@ namespace game_framework {
 	};
 	void ChoseEvent(GameEvent_number event);
 	void MonsterGohome_event(Room *_room);
+	Monster* CreateMonster_event(Monster *_monster, int *monsterNumber);
 }
