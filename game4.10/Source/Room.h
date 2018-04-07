@@ -8,23 +8,24 @@ class Room
         Room(int x, int y);
         ~Room();
         void LoadBitmap();
-		void OnShow(bool flag);
+		void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
         void OnMove();
         Monster GetLiveMonster();
+		bool GetIsMonsterLiving();
 		void LetMonsterGohome();
-		bool IsMouseOn(CPoint point);
-		void SetMonsterIntohome(bool flag);
-        void SetMonsterlivingRoom(Monster *_monster);
+		bool IsMouseOn(CPoint point); //檢查滑鼠是否在上面
+        void SetMonsterlivingRoom(Monster **_monster); //讓怪物住進房子，回傳NULL指標將原本的怪物抹去
     private:
         int _x, _y; //座標
 		int counter;
         Monster liveMonster;	//居住怪物
         CAnimation animation;  //動畫
+		void SetMonsterIntohome(bool flag); //怪物進門的動作
 		bool MonsterGoHome(); //若還沒到達家裡得坐標，回傳 true ，到達了回傳false
-        bool isMonsterIn;		
-        bool isDoorOpen;
-		bool isMonsterGoHome;
-		bool MonsterGohomeEvent;
+		bool isMonsterLiving; //是否居住怪物
+        bool isMonsterIn;		//居住的怪物是否在裡面
+        bool isDoorOpen;		//門有沒有開
+		bool isMonsterGoHome;	//怪物是否正在移動進屋
 };
 }
 

@@ -7,93 +7,101 @@
 #include "Room.h"
 namespace game_framework
 {
-Room::Room(int x, int y): _x(x), _y(y)
-{
-	counter = 0;
-    isDoorOpen = false;
-    isMonsterIn = false;
-	isMonsterGoHome = false;
-	animation.SetDelayCount(10);
-}
-Room::~Room()
-{
-}
-void Room::LoadBitmap()
-{
-    animation.AddBitmap("Bitmaps\\gameRun\\room.bmp", RGB(255, 255, 255));
-    animation.AddBitmap("Bitmaps\\gameRun\\room1.bmp", RGB(255, 255, 255));
-}
-void Room::OnShow(bool flag)
-{
-	if (flag) {
-		animation.SetTopLeft(_x, _y);
-		animation.OnShow();
+	Room::Room(int x, int y) : _x(x), _y(y) //未完成
+	{
+		counter = 0;
+		isDoorOpen = false;
+		isMonsterIn = false;
+		isMonsterGoHome = false;
+		isMonsterLiving = false;
+		animation.SetDelayCount(10);
 	}
-	else {
-		if (liveMonster.GetIsExist())liveMonster.OnShow();  //怪物存在地圖上與否
+	Room::~Room()
+	{
 	}
-    
-	
-}
-void Room::OnMove()
-{
-	if (isMonsterGoHome)isMonsterGoHome = MonsterGoHome();           
-	if (liveMonster.GetIsExist())liveMonster.OnMove();
-	if (isDoorOpen) {                           //開關門動畫
-		if (!animation.IsFinalBitmap()) {
-			animation.OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
-			animation.SetDelayCount(50);
+	void Room::LoadBitmap()
+	{
+		animation.AddBitmap("Bitmaps\\gameRun\\room.bmp", RGB(255, 255, 255));
+		animation.AddBitmap("Bitmaps\\gameRun\\room1.bmp", RGB(255, 255, 255));
+	}
+	void Room::OnShow(bool flag)  //true 為讓門顯示 false試讓怪物顯示
+	{
+		if (flag) {
+			animation.SetTopLeft(_x, _y);
+			animation.OnShow();
 		}
 		else {
-			animation.OnMove();
-			animation.SetDelayCount(10);
-			if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
+			if (liveMonster.GetIsExist())liveMonster.OnShow();  //怪物存在地圖上與否
+		}
+
+
+	}
+	void Room::OnMove()
+	{
+		if (isMonsterGoHome)isMonsterGoHome = MonsterGoHome();// 怪物回家移動
+		if (liveMonster.GetIsExist())liveMonster.OnMove();
+		if (isDoorOpen) {                           //開關門動畫
+			if (!animation.IsFinalBitmap()) {
+				animation.OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
+				animation.SetDelayCount(50);
+			}
+			else {
+				animation.OnMove();
+				animation.SetDelayCount(10);
+				if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
+			}
 		}
 	}
-}
-Monster Room::GetLiveMonster()
-{
-    return liveMonster;
-}
-void Room::LetMonsterGohome()
-{
-	isMonsterGoHome = true;
-}
-bool Room::IsMouseOn(CPoint point)
-{
-	if (point.x > liveMonster.GetX() && point.x <= liveMonster.GetX() + liveMonster.GetWidth() && point.y > liveMonster.GetY() && point.y <= liveMonster.GetY() + liveMonster.GetHeight()) {
-		return true;
-	}	
-	return false;
-}
-void Room::SetMonsterIntohome(bool flag)
-{
-	if (flag) {
-		liveMonster.SetIntoHouse(true);
-	}
-	isDoorOpen = flag;
-}
-bool Room::MonsterGoHome()  //未完成 
-{
-	if (liveMonster.GetX() >= _x&&liveMonster.GetX() < _x + animation.Width())
+	Monster Room::GetLiveMonster()
 	{
-		liveMonster.SetMovingLeft(false);
-		liveMonster.SetMovingRight(false);
-		SetMonsterIntohome(true);
+		return liveMonster;
+	}
+	bool Room::GetIsMonsterLiving()
+	{
+		return isMonsterLiving;
+	}
+	void Room::LetMonsterGohome()
+	{
+		isMonsterGoHome = true;
+		isMonsterLiving = true;
+	}
+	bool Room::IsMouseOn(CPoint point)
+	{
+		if (point.x > _x && point.x <= _x + animation.Width() && point.y > _y && point.y <= _y + animation.Height()) {
+			return true;
+		}
 		return false;
 	}
-	else if (liveMonster.GetX() > _x)
+	void Room::SetMonsterIntohome(bool flag) //怪物到達門後的動作
 	{
-		liveMonster.SetMovingLeft(true);
+		if (flag) {
+			liveMonster.SetIntoHouse(true);
+		}
+		isDoorOpen = flag;
 	}
-	else if (liveMonster.GetX() <= _x)
+	bool Room::MonsterGoHome()  //讓怪物移動回家
 	{
-		liveMonster.SetMovingRight(true);
+		if (liveMonster.GetX() >= _x&&liveMonster.GetX() < _x + animation.Width())
+		{
+			liveMonster.SetMovingLeft(false);
+			liveMonster.SetMovingRight(false);
+			SetMonsterIntohome(true);
+			return false;
+		}
+		else if (liveMonster.GetX() > _x)
+		{
+			liveMonster.SetMovingLeft(true);
+		}
+		else if (liveMonster.GetX() <= _x)
+		{
+			liveMonster.SetMovingRight(true);
+		}
+		return true;
 	}
-	return true;
-}
-void Room::SetMonsterlivingRoom(Monster* _monster)
-{
-    liveMonster = *_monster;
-}
+	void Room::SetMonsterlivingRoom(Monster** _monster)
+	{
+		liveMonster = **_monster;
+		delete *_monster;
+		*_monster = NULL;
+	}
 }

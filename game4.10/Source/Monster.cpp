@@ -13,7 +13,7 @@ namespace game_framework {
 	}
 	Monster::Monster()
 	{
-		monsterType = "tentacle";
+		RandMonsterType();
 		isExist = false;
 	}
 	void Monster::operator=(Monster &obj)
@@ -58,5 +58,18 @@ namespace game_framework {
 	bool Monster::GetIsExist()
 	{
 		return isExist;
+	}
+	bool Monster::IsMouseOn(CPoint point)
+	{
+		if (point.x > _x && point.x <= _x + GetWidth() && point.y > _y && point.y <= _y + GetHeight()) {
+			return true;
+		}
+		return false;
+	}
+	void Monster::RandMonsterType()
+	{
+		string totalMonsterType[totalMonsterType_size] = { "tentacle","kappa" };
+		int result = rand() % totalMonsterType_size;
+		monsterType = totalMonsterType[result];
 	}
 }

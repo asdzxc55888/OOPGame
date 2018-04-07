@@ -1,8 +1,10 @@
 #pragma once
 #include "npcObject.h"
-
+#define totalMonsterType_size  2
 namespace game_framework {
 	enum Monster_state {
+		leave,
+		nothing,
 		wolking,
 		findHouse
 	};
@@ -18,7 +20,9 @@ namespace game_framework {
 		Monster_state GetMonsterState();            //取的怪物狀態
 		string GetMonsterType();
 		bool GetIsExist();							//取得怪物是否顯示在地圖上
+		bool IsMouseOn(CPoint point);
 	private:
+		void RandMonsterType();
 		string monsterType;                          //怪物類型
 		Monster_state nowMonsterState;				//怪物當前狀態
 		bool isExist;

@@ -30,6 +30,7 @@ namespace game_framework {
 		void SetMovingRight(bool flag); // 設定是否正在往右移動
 		void SetMovingUp(bool flag);	// 設定是否正在往上移動
 		void SetIntoHouse(bool flag);
+		int GetFloor();
 		int GetX();
 		int GetY();
 		int GetWidth();
@@ -41,6 +42,7 @@ namespace game_framework {
 		int GetAttackType();
 	protected:
 		int _x, _y;				//座標
+		int floor;            //所在的樓層
 		int Hp;					//血量
 		int ApDefense;			//魔法防禦
 		int AdDefense;			//物理防禦

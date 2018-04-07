@@ -99,8 +99,10 @@ namespace game_framework {
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
+		void OnEvent();                                 // 事件處理
 	private:
 		CMovingBitmap Background;
+		CMovingBitmap TaskBoard;
 		CSpecialEffect Clock;                         //計時器
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物

@@ -12,6 +12,7 @@ game_framework::npcObject::npcObject()
 
     _x = 0;
     _y = 530;
+	floor = 0;
     isMovingDown = false;			// 是否正在往下移動
     isMovingLeft = false;			// 是否正在往左移動
     isMovingRight = false;			// 是否正在往右移動
@@ -144,6 +145,11 @@ void game_framework::npcObject::SetMovingUp(bool flag)
 void game_framework::npcObject::SetIntoHouse(bool flag)
 {
 	isIntoHouse = flag;
+}
+
+int game_framework::npcObject::GetFloor()
+{
+	return floor;
 }
 
 void game_framework::npcObject::SetMovingDown(bool flag)
