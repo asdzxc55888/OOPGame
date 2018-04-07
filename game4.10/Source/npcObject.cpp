@@ -43,34 +43,7 @@ void game_framework::npcObject::operator=(npcObject obj)
 	for(int i = 0; i <5; i++)animation[i]=obj.animation[i];
 }
 
-void game_framework::npcObject::LoadBitmap(string monsterName)
-{
-    monsterName += ".bmp";
-    string root = "Bitmaps\\monster\\monster_";
-    root += monsterName;
-    char test[100];
-    strcpy(test, root.c_str());
-    animation[Forward]->AddBitmap(test, RGB(255, 255, 255));
-    root = "Bitmaps\\monster\\monsterBack1_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Back]->AddBitmap(test, RGB(255, 255,  255));
-    root = "Bitmaps\\monster\\monsterBack2_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Back]->AddBitmap(test, RGB(255, 255, 255));
-    root = "Bitmaps\\monster\\monsterLeft1_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-    root = "Bitmaps\\monster\\monsterLeft2_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-    root = "Bitmaps\\monster\\monsterRight1_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-    root = "Bitmaps\\monster\\monsterRight2_" + monsterName;
-    strcpy(test, root.c_str());
-    animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-	animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
-}
+
 
 void game_framework::npcObject::OnMove()
 {

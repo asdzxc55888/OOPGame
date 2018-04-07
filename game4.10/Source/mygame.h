@@ -48,11 +48,13 @@ namespace game_framework {
 	// Constants
 	/////////////////////////////////////////////////////////////////////////////
 
-	enum AUDIO_ID {				// 定義各種音效的編號
+	/*enum AUDIO_ID {				// 定義各種音效的編號
 		AUDIO_DING,				// 0
 		AUDIO_LAKE,				// 1
-		AUDIO_NTUT				// 2
-	};
+		AUDIO_NTUT,				// 2
+		AUDIO_DOOROPEN,
+		AUDIO_DOORCLOSE
+	};*/
 
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
@@ -106,8 +108,7 @@ namespace game_framework {
 		CSpecialEffect Clock;                         //計時器
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物
-		Monster tentacle;
-		int comingMonster_SIZE;                       //來看房子的怪物的個數
+		Warrior *warrior[10];
 		int houseLevele;
 	};
 

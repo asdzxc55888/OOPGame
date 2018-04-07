@@ -254,7 +254,6 @@ namespace game_framework
 
 	CGameStateRun::CGameStateRun(CGame* g) : CGameState(g)
 	{
-		comingMonster_SIZE = 0;
 		comingMonster = NULL;
 		int room_x = 650, room_y = 510;
 
@@ -283,8 +282,6 @@ namespace game_framework
 		{
 			gameRoom[i]->OnMove();
 		}
-
-		tentacle.OnMove();
 	}
 
 	void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -300,10 +297,9 @@ namespace game_framework
 		Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
 		TaskBoard.LoadBitmap("Bitmaps\\TaskBoard.bmp", RGB(255, 255, 255));
 
+		CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
+		CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
 		for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
-
-		tentacle.LoadBitmap("tentacle");
-		tentacle.SetMonsterType("tentacle");
 		//
 		// 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
 		//
@@ -318,19 +314,15 @@ namespace game_framework
 
 		if (nChar == KEY_LEFT)
 		{
-			tentacle.SetMovingLeft(true);
 		}
 		else if (nChar == KEY_RIGHT)
 		{
-			tentacle.SetMovingRight(true);
 		}
 		else if (nChar == KEY_UP)
 		{
-			gameRoom[0]->LetMonsterGohome();
 		}
 		else if (nChar == KEY_DOWN)
 		{
-			gameRoom[0]->SetMonsterlivingRoom(&comingMonster);
 		}
 	}
 
@@ -343,11 +335,9 @@ namespace game_framework
 
 		if (nChar == KEY_LEFT)
 		{
-			tentacle.SetMovingLeft(false);
 		}
 		else if (nChar == KEY_RIGHT)
 		{
-			tentacle.SetMovingRight(false);
 		}
 	}
 
@@ -397,8 +387,6 @@ namespace game_framework
 		{
 			comingMonster->OnShow();
 		}
-
-		tentacle.OnShow();
 	}
 	void CGameStateRun::OnEvent()
 	{

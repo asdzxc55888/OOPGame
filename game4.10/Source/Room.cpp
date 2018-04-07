@@ -44,10 +44,12 @@ namespace game_framework
 			if (!animation.IsFinalBitmap()) {
 				animation.OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
 				animation.SetDelayCount(50);
+				CAudio::Instance()->Play(AUDIO_DOOROPEN);
 			}
 			else {
 				animation.OnMove();
 				animation.SetDelayCount(10);
+				CAudio::Instance()->Play(AUDIO_DOORCLOSE);
 				if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
 			}
 		}

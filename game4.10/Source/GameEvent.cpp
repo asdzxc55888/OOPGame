@@ -19,7 +19,7 @@ namespace game_framework {
 	}
 	void MonsterFindHouse(Monster **_monster, int TaskBoard_x, int TaskBoard_Width) //©Çª«§ä©Ð
 	{
-		if (Moving(_monster,TaskBoard_x+20,0)) {
+		if (Moving(_monster,TaskBoard_x+30,0)) {
 			(*_monster)->SetMovingType(Back);
 			(*_monster)->SetMonsterState(findHouse);
 		}
@@ -87,6 +87,7 @@ namespace game_framework {
 				(*_monster)->LoadBitmap((*_monster)->GetMonsterType());
 				(*_monster)->SetMonsterIsExist(true);
 				(*_monster)->SetMonsterState(nothing);
+				(*_monster)->SetPoint(-100, 530);
 			}
 		
 	}
@@ -96,5 +97,28 @@ namespace game_framework {
 			delete *_monster;
 			(*_monster) = NULL;
 		}
+	}
+	bool Moving(Warrior ** _warrior, int x, int floor)
+	{
+		if ((*_warrior)->GetFloor() == floor) {
+			if ((*_warrior)->GetX() > x + 10) {
+				(*_warrior)->SetMovingLeft(true);
+			}
+			else if ((*_warrior)->GetX() <= x - 10) {
+				(*_warrior)->SetMovingRight(true);
+			}
+			else {
+				(*_warrior)->SetMovingLeft(false);
+				(*_warrior)->SetMovingRight(false);
+				return true;
+			}
+		}
+		return false;
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	void CreateWarrior_event(Warrior ** _warrior,warrior_type type)
+	{
+		(*_warrior) = new Warrior(type);
+		(*_warrior)->SetPoint(-100, 530);
 	}
 }

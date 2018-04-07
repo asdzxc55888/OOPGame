@@ -14,6 +14,7 @@ namespace game_framework {
 		Monster(string _monsterTpye);
 		Monster();
 		void operator= (Monster &obj);
+		void LoadBitmap(string monsterName);
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
 		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
@@ -23,6 +24,7 @@ namespace game_framework {
 		bool IsMouseOn(CPoint point);
 	private:
 		void RandMonsterType();
+		void RandBasicAbility();
 		string monsterType;                          //怪物類型
 		Monster_state nowMonsterState;				//怪物當前狀態
 		bool isExist;

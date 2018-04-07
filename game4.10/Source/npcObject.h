@@ -20,7 +20,6 @@ namespace game_framework {
 		npcObject();
 		~npcObject();
 		void operator=(npcObject obj);
-		void LoadBitmap(string monsterName);	// 載入圖形
 		void OnMove();			// 移動
 		void OnShow();			// 將圖形貼到畫面
 		void SetPoint(int _x, int _y);
