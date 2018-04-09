@@ -19,7 +19,7 @@ namespace game_framework {
 	}
 	void MonsterFindHouse(Monster **_monster, int TaskBoard_x, int TaskBoard_Width) //©Çª«§ä©Ð
 	{
-		if (Moving(_monster,TaskBoard_x+30,0)) {
+		if (Moving(_monster,TaskBoard_x+60,0)) {
 			(*_monster)->SetMovingType(Back);
 			(*_monster)->SetMonsterState(findHouse);
 		}
@@ -65,10 +65,10 @@ namespace game_framework {
 	bool Moving(Monster **_monster, int x, int floor)
 	{
 		if ((*_monster)->GetFloor() == floor) {
-			if ((*_monster)->GetX() > x+10) {
+			if ((*_monster)->GetX() > x+40) {
 				(*_monster)->SetMovingLeft(true);
 			}
-			else if ((*_monster)->GetX() <= x-10) {
+			else if ((*_monster)->GetX() <= x-40) {
 				(*_monster)->SetMovingRight(true);
 			}
 			else {
@@ -78,6 +78,20 @@ namespace game_framework {
 			}
 		}
 		return false;
+	}
+	void AttackWarrior(Monster *_monster,Warrior * _warrior)
+	{
+		if (_warrior->GetX() > _monster->GetX()) {
+			_monster->SetMovingType(Attack_Right);
+		}
+		else {
+			_monster->SetMovingType(Attack_Left);
+		}
+		_warrior->BeingAttack(_monster->GetAttackPower(), _monster->GetAttackType());
+	}
+	bool HitWarrior(Monster *_monster,Warrior *_warrior)
+	{
+		return _monster->HitRectangle(_warrior->GetX(), _warrior->GetY(), _warrior->GetX() + _warrior->GetWidth(), _warrior->GetY() - _warrior->GetHeight());
 	}
 	void CreateMonster_event(Monster **_monster) {
 			int result = 0;
@@ -98,14 +112,17 @@ namespace game_framework {
 			(*_monster) = NULL;
 		}
 	}
+	
 	bool Moving(Warrior ** _warrior, int x, int floor)
 	{
 		if ((*_warrior)->GetFloor() == floor) {
 			if ((*_warrior)->GetX() > x + 10) {
 				(*_warrior)->SetMovingLeft(true);
+				(*_warrior)->SetMovingRight(false);
 			}
 			else if ((*_warrior)->GetX() <= x - 10) {
 				(*_warrior)->SetMovingRight(true);
+				(*_warrior)->SetMovingLeft(false);
 			}
 			else {
 				(*_warrior)->SetMovingLeft(false);
@@ -119,6 +136,54 @@ namespace game_framework {
 	void CreateWarrior_event(Warrior ** _warrior,warrior_type type)
 	{
 		(*_warrior) = new Warrior(type);
-		(*_warrior)->SetPoint(-100, 530);
+		(*_warrior)->SetPoint(-100, 540);
+	}
+	void AttackMonster(Warrior * _warrior, Monster * _monster)
+	{
+		if (_monster->GetX() >_warrior->GetX()) {
+			_warrior->SetMovingType(Attack_Right);
+		}
+		else {
+			_warrior->SetMovingType(Attack_Left);
+		}
+		_monster->BeingAttack(_warrior->GetAttackPower(), _warrior->GetAttackType());
+	}
+	bool HitMonster(Warrior * _warrior, Monster *_monster)
+	{
+		return _warrior->HitRectangle(_monster->GetX(), _monster->GetY(), _monster->GetX() + _monster->GetWidth(), _monster->GetY() - _monster->GetHeight());
+	}
+	Monster * findMonsterTarget(Warrior * _warrior, Room **gameroom, int room_size)
+	{
+		Monster* result = NULL;
+		int minX=9999;
+		for (int i = 0; i < room_size; i++) {
+			if (gameroom[i] ->GetIsMonsterLiving()&&abs(_warrior->GetX() - (gameroom[i]->GetLiveMonster())->GetX()) < minX) {
+				minX = abs(_warrior->GetX() - (gameroom[i]->GetLiveMonster())->GetX());
+				result = (gameroom[i]->GetLiveMonster());
+			}
+		}
+		return result;
+	}
+	Warrior * findWarriorTarget(Monster *_monster, Warrior ** _warrior)
+	{
+		Warrior* result = NULL;
+		int minX = 9999;
+		for (int i = 0; i<10; i++) {
+			if (_warrior[i]!=NULL&&abs(_monster->GetX()- _warrior[i]->GetX()) < minX) {
+				minX = abs(_monster->GetX() - _warrior[i]->GetX());
+				result = _warrior[i];
+			}
+		}
+		return result;
+	}
+	void WarriorAdAttack(Warrior * _warrior, Monster _monster)
+	{
+		
+	}
+	
+	void BattleTest1(Warrior ** _warrior,bool &isIntoBattle, Room **gameRoom)
+	{
+		isIntoBattle = true;
+		CreateWarrior_event(&_warrior[0],villager);
 	}
 }

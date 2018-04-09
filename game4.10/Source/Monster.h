@@ -1,12 +1,14 @@
 #pragma once
 #include "npcObject.h"
+class Warrior;
+#include"Warrior.h"
 #define totalMonsterType_size  2
 namespace game_framework {
 	enum Monster_state {
 		leave,
 		nothing,
 		wolking,
-		findHouse
+		findHouse,
 	};
 	class Monster :public npcObject
 	{

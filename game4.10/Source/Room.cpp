@@ -14,6 +14,7 @@ namespace game_framework
 		isMonsterIn = false;
 		isMonsterGoHome = false;
 		isMonsterLiving = false;
+		isMonsterFight = false;
 		animation.SetDelayCount(10);
 	}
 	Room::~Room()
@@ -54,13 +55,21 @@ namespace game_framework
 			}
 		}
 	}
-	Monster Room::GetLiveMonster()
+	Monster* Room::GetLiveMonster()
 	{
-		return liveMonster;
+		return &liveMonster;
 	}
 	bool Room::GetIsMonsterLiving()
 	{
 		return isMonsterLiving;
+	}
+	bool Room::GetIsMonsterIn()
+	{
+		return isMonsterIn;
+	}
+	bool Room::GetIsMonsterFight()
+	{
+		return isMonsterFight;
 	}
 	void Room::LetMonsterGohome()
 	{
@@ -74,12 +83,15 @@ namespace game_framework
 		}
 		return false;
 	}
-	void Room::SetMonsterIntohome(bool flag) //怪物到達門後的動作
+	void Room::SetMonsterFight(bool flag)
 	{
-		if (flag) {
-			liveMonster.SetIntoHouse(true);
-		}
-		isDoorOpen = flag;
+		isMonsterFight = flag;
+	}
+	void Room::SetMonsterIntohome() //怪物到達門後的動作
+	{
+		liveMonster.SetIntoHouse(true);
+		isMonsterIn = true;
+		isDoorOpen = true;
 	}
 	bool Room::MonsterGoHome()  //讓怪物移動回家
 	{
@@ -87,7 +99,7 @@ namespace game_framework
 		{
 			liveMonster.SetMovingLeft(false);
 			liveMonster.SetMovingRight(false);
-			SetMonsterIntohome(true);
+			SetMonsterIntohome();
 			return false;
 		}
 		else if (liveMonster.GetX() > _x)

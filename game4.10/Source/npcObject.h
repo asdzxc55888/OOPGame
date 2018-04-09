@@ -12,6 +12,8 @@ namespace game_framework {
 		Back,			//向後
 		Moving_Left,
 		Moving_Right,
+		Attack_Left,
+		Attack_Right,
 		Hide
 	};
 	class npcObject
@@ -29,6 +31,9 @@ namespace game_framework {
 		void SetMovingRight(bool flag); // 設定是否正在往右移動
 		void SetMovingUp(bool flag);	// 設定是否正在往上移動
 		void SetIntoHouse(bool flag);
+		void SetIsAlive(bool flag);
+		void BeingAttack(int damge,Attack_Type type);
+		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 		int GetFloor();
 		int GetX();
 		int GetY();
@@ -38,7 +43,7 @@ namespace game_framework {
 		int GetApDefense();
 		int GetAdDefense();
 		int GetAttackPower();
-		int GetAttackType();
+		Attack_Type GetAttackType();
 	protected:
 		int _x, _y;				//座標
 		int floor;            //所在的樓層
@@ -51,9 +56,10 @@ namespace game_framework {
 		bool isMovingRight;			// 是否正在往右移動
 		bool isMovingUp;			// 是否正在往上移動
 		bool isIntoHouse;
+		bool isAlive;                //是否存活
 		Attack_Type AttackType; //攻擊模式
 		MovingAnimation_Type nowMovingType;
-		CAnimation *animation[5];
+		CAnimation *animation[7];
 	private:
 
 	};

@@ -48,14 +48,6 @@ namespace game_framework {
 	// Constants
 	/////////////////////////////////////////////////////////////////////////////
 
-	/*enum AUDIO_ID {				// 定義各種音效的編號
-		AUDIO_DING,				// 0
-		AUDIO_LAKE,				// 1
-		AUDIO_NTUT,				// 2
-		AUDIO_DOOROPEN,
-		AUDIO_DOORCLOSE
-	};*/
-
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的遊戲開頭畫面物件
 	// 每個Member function的Implementation都要弄懂
@@ -105,11 +97,15 @@ namespace game_framework {
 	private:
 		CMovingBitmap Background;
 		CMovingBitmap TaskBoard;
-		CSpecialEffect Clock;                         //計時器
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物
 		Warrior *warrior[10];
+		time_t Settime,nowtime;
+		int Clock;
 		int houseLevele;
+		int roomSize;
+		bool isIntoBattle;                        //是否剛進入戰鬥
+		bool isOnBattle;                          //是否在戰鬥
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

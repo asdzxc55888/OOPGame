@@ -28,7 +28,8 @@ namespace game_framework {
 		{
 		case game_framework::villager:
 			LoadBmpString = "villager";
-			break;
+			warriorType = villager;
+			break; 
 		default:
 			break;
 		}
@@ -61,6 +62,18 @@ namespace game_framework {
 		root = "Bitmaps\\warrior\\warriorRight2_" + str;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\warrior\\warriorAttackLeft1_" + str;
+		strcpy(test, root.c_str());
+		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\warrior\\warriorAttackLeft2_" + str;
+		strcpy(test, root.c_str());
+		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\warrior\\warriorAttackRight1_" + str;
+		strcpy(test, root.c_str());
+		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\warrior\\warriorAttackRight2_" + str;
+		strcpy(test, root.c_str());
+		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\warrior\\warriorHide.bmp", RGB(255, 255, 255));
 	}
 	void Warrior::RandWarroirType()

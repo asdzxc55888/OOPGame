@@ -7,7 +7,7 @@
 #include "npcObject.h"
 game_framework::npcObject::npcObject()
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 7; i++)
         animation[i] = new CAnimation;
 
     _x = 0;
@@ -18,32 +18,18 @@ game_framework::npcObject::npcObject()
     isMovingRight = false;			// 是否正在往右移動
     isMovingUp = false;			// 是否正在往上移動
 	isIntoHouse = false;
+	isAlive = true;
 	nowMovingType = Forward;    // 預設動圖
 }
 
 game_framework::npcObject::~npcObject()
 {
-    for (int i = 0; i < 5; i++)delete animation[i];
+    for (int i = 0; i < 7; i++)delete animation[i];
 }
 
 void game_framework::npcObject::operator=(npcObject obj)
 {
-	_x = obj._x;
-	_y = obj._y;
-	Hp=obj.Hp;					//血量
-	ApDefense=obj.ApDefense;
-	AdDefense = obj.AdDefense;
-	AttackPower=obj.AttackPower;        //攻擊力
-	isMovingDown=obj.isMovingDown;			// 是否正在往下移動
-	isMovingLeft=obj.isMovingLeft;			// 是否正在往左移動
-	isMovingRight=obj.isMovingRight;			// 是否正在往右移動
-	isMovingUp=obj.isMovingRight;			// 是否正在往上移動
-	AttackType=obj.AttackType; //攻擊模式
-	nowMovingType=obj.nowMovingType;
-	for(int i = 0; i <5; i++)animation[i]=obj.animation[i];
 }
-
-
 
 void game_framework::npcObject::OnMove()
 {
@@ -84,11 +70,12 @@ void game_framework::npcObject::OnMove()
 
 void game_framework::npcObject::OnShow()
 {
-    for (int i = 0; i < 4; i++)animation[i]->SetTopLeft(_x, _y);
+	if (isAlive) {
+		for (int i = 0; i < 7; i++)animation[i]->SetTopLeft(_x, _y);
 
-    animation[nowMovingType]->OnShow();
+		animation[nowMovingType]->OnShow();
+	}
 }
-
 void game_framework::npcObject::SetPoint(int x, int y)
 {
     _x = x;
@@ -118,6 +105,31 @@ void game_framework::npcObject::SetMovingUp(bool flag)
 void game_framework::npcObject::SetIntoHouse(bool flag)
 {
 	isIntoHouse = flag;
+}
+
+void game_framework::npcObject::SetIsAlive(bool flag)
+{
+	isAlive = flag;
+}
+
+void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
+{
+	int HpDamge = 0;
+	switch (type)
+	{
+	case game_framework::Ad:
+		HpDamge = damge - AdDefense;
+		break;
+	case game_framework::Ap:
+		HpDamge = damge - ApDefense;
+		break;
+	default:
+		break;
+	}
+	if (HpDamge <= 0) {
+		HpDamge = 1;
+	}
+	Hp -= HpDamge;
 }
 
 int game_framework::npcObject::GetFloor()
@@ -170,9 +182,21 @@ int game_framework::npcObject::GetAttackPower()
     return AttackPower;
 }
 
-int game_framework::npcObject::GetAttackType()
+game_framework::Attack_Type game_framework::npcObject::GetAttackType()
 {
     return AttackType;
+}
+
+bool game_framework::npcObject::HitRectangle(int tx1, int ty1, int tx2, int ty2)
+{
+	int x1 = _x ;				// 球的左上角x座標
+	int y1 = _y ;				// 球的左上角y座標
+	int x2 = x1 + animation[0]->Width();	// 球的右下角x座標
+	int y2 = y1 + animation[0]->Height();	// 球的右下角y座標
+								//
+								// 檢測球的矩形與參數矩形是否有交集
+								//
+	return (tx2 >= x1 && tx1 <= x2);
 }
 
 

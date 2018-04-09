@@ -12,11 +12,21 @@ namespace game_framework {
 	void MonsterBeingClick(Monster **_monster, int room_size, Room **gameroom); //怪物被點擊事件
 	bool MonsterLeave(Monster **_monster);                                      //怪物離開，直接消失的那種離開
 	bool Moving(Monster **_monster, int x, int floor);                          //怪物移動
+	void AttackWarrior(Monster *monster,Warrior *_warrior);
+	bool HitWarrior(Monster *_monster,Warrior *_warrior);          //判斷有無碰到勇者
 	void CreateMonster_event(Monster **_monster);
 	void DeleteMonster_event(Monster **_monster);
+	//bool HitMonster(Monster _monster);
+	//bool HitWarrior(Warrior _warrior);
 	////////////////////////////////////////////////////////////////////////////勇者事件//////////////////////////////////////////////////////////
 	bool Moving(Warrior **_warrior, int x, int floor);
 	void CreateWarrior_event(Warrior **_warrior, warrior_type type);
+	void AttackMonster(Warrior *_warrior,Monster *_monster);
+	bool HitMonster(Warrior *_warrior,Monster *_monster);
 	/////////////////////////////////////////////////////////////////////////////////戰鬥事件/////////////////////////////////////////////////////
-	void BattleTest1(Warrior **_warrior);
+	Monster* findMonsterTarget(Warrior *_warrior, Room **gameroom,int room_size);
+	Warrior* findWarriorTarget(Monster *_monster, Warrior **_warrior);
+	void WarriorAdAttack(Warrior *_warrior, Monster *_monster);
+	void BattleTest1(Warrior **_warrior, bool &isIntoBattle, Room **gameRoom);
+
 }

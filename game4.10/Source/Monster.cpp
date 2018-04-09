@@ -63,6 +63,18 @@ namespace game_framework {
 		root = "Bitmaps\\monster\\monsterRight2_" + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\monster\\monsterAttackLeft1_" + monsterName;
+		strcpy(test, root.c_str());
+		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\monster\\monsterAttackLeft2_" + monsterName;
+		strcpy(test, root.c_str());
+		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\monster\\monsterAttackRight1_" + monsterName;
+		strcpy(test, root.c_str());
+		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
+		root = "Bitmaps\\monster\\monsterAttackRight2_" + monsterName;
+		strcpy(test, root.c_str());
+		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
 	}
 	
