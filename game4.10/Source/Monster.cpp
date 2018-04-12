@@ -33,6 +33,7 @@ namespace game_framework {
 		AttackType = obj.AttackType;				//攻擊模式
 		nowMovingType = obj.nowMovingType;			//移動模式
 		monsterType = obj.monsterType;				//怪物種類
+		isAlive = obj.isAlive;
 		LoadBitmap(monsterType);
 		isExist = true;
 	}
@@ -122,17 +123,18 @@ namespace game_framework {
 		for (int i = 1; i < 4; i++)randValue[i] = rand() % 5;
 		//基礎能力
 		if (monsterType == "tentacle") {
+			AttackType = Ap;
 			Hp=100;					//血量
 			ApDefense=8;			//魔法防禦
 			AdDefense=5;			//物理防禦
-			AttackPower=10;         //攻擊力
+			AttackPower=20;         //攻擊力
 			AttackType=Ap;			//攻擊模式
 		}
 		else if (monsterType == "kappa") {
 			Hp = 120;					//血量
 			ApDefense = 5;			//魔法防禦
 			AdDefense = 9;			//物理防禦
-			AttackPower = 12;         //攻擊力
+			AttackPower = 24;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 		}
 		//隨機能力
@@ -140,5 +142,14 @@ namespace game_framework {
 		ApDefense += randValue[1];
 		AdDefense += randValue[2];
 		AttackPower += randValue[3];
+		switch (AttackType)
+		{
+		case game_framework::Ad:
+			movingSpeed = 4;
+			break;
+		case game_framework::Ap:
+			movingSpeed = 5;
+			break;
+		}
 	}
 }

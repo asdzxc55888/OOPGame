@@ -97,6 +97,7 @@ namespace game_framework {
 	private:
 		CMovingBitmap Background;
 		CMovingBitmap TaskBoard;
+		CMovingBitmap Warning;
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物
 		Warrior *warrior[10];

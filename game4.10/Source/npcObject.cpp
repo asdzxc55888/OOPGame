@@ -9,7 +9,11 @@ game_framework::npcObject::npcObject()
 {
     for (int i = 0; i < 7; i++)
         animation[i] = new CAnimation;
-
+	for (int i = 0; i < 3; i++) {
+		magicAttack[i] = NULL;
+	}
+	
+	movingSpeed = 5;
     _x = 0;
     _y = 530;
 	floor = 0;
@@ -18,13 +22,17 @@ game_framework::npcObject::npcObject()
     isMovingRight = false;			// 是否正在往右移動
     isMovingUp = false;			// 是否正在往上移動
 	isIntoHouse = false;
+	isGoOutside = false;
 	isAlive = true;
+	isFirstShot = true;
+	isOnBattle = false;
 	nowMovingType = Forward;    // 預設動圖
 }
 
 game_framework::npcObject::~npcObject()
 {
     for (int i = 0; i < 7; i++)delete animation[i];
+	for (int i = 0; i < 3; i++)delete magicAttack[i];
 }
 
 void game_framework::npcObject::operator=(npcObject obj)
@@ -33,7 +41,11 @@ void game_framework::npcObject::operator=(npcObject obj)
 
 void game_framework::npcObject::OnMove()
 {
-	if (isIntoHouse) {      //怪物進房
+	if (isIntoHouse) {      //怪物進屋
+		if (isOnBattle) {
+			BattleTemp = true;        //戰鬥緩衝
+			isOnBattle = false;
+		}
 		nowMovingType = Back;
 		if (!animation[nowMovingType]->IsFinalBitmap()) {
 			animation[nowMovingType]->OnMove();        //若不是最後一個圖形，就OnMove到最後一個圖形後停止。
@@ -45,26 +57,64 @@ void game_framework::npcObject::OnMove()
 				isIntoHouse = false;
 				nowMovingType = Hide;
 				animation[nowMovingType]->OnMove();
+				if (isMovingDown) {                      //下樓動畫
+					_y += 100;
+					isMovingDown = false;
+					nowMovingType = Forward;
+					animation[nowMovingType]->OnMove();
+					isGoOutside = true;
+				}
+				else if (isMovingUp) {                  //上樓動畫
+					_y -= 100;
+					isMovingUp = false;
+					nowMovingType = Forward;
+					animation[nowMovingType]->OnMove();
+					isGoOutside = true;
+				}
+				
 			}
+		}
+	}
+	else if (isGoOutside) {                         //出門動畫
+		if (abs(time(&nowTime) - setTime)>=2) {
+			nowMovingType = Forward;
+			isGoOutside = false;
+			if(BattleTemp=true)isOnBattle = true;
+			animation[nowMovingType]->OnMove();
+		}
+		else if (abs(time(&nowTime) - setTime) >= 1) {
+			nowMovingType = Forward;
+			animation[nowMovingType]->OnMove();
+		}
+		else {
+			nowMovingType = Hide;
+			animation[nowMovingType]->OnMove();
 		}
 	}
 	else {
 		if (isMovingDown)
 		{
-
+			isIntoHouse = true;
+			floor -= 1;
 		}
 		else if (isMovingUp) {
-
+			isIntoHouse = true;
+			floor += 1;
 		}
 		else if (isMovingLeft) {
 			nowMovingType = Moving_Left;
-			_x -= 5;
+			_x -= movingSpeed;
 		}
 		else if (isMovingRight) {
 			nowMovingType = Moving_Right;
-			_x += 5;
+			_x += movingSpeed;
 		}
 		animation[nowMovingType]->OnMove();
+	}
+	for (int i = 0; i < 3; i++) {
+		if (magicAttack[i] != NULL) {
+			magicAttack[i]->OnMove();
+		}
 	}
 }
 
@@ -74,6 +124,11 @@ void game_framework::npcObject::OnShow()
 		for (int i = 0; i < 7; i++)animation[i]->SetTopLeft(_x, _y);
 
 		animation[nowMovingType]->OnShow();
+	}
+	for (int i = 0; i < 3; i++) {
+		if (magicAttack[i] != NULL) {
+			magicAttack[i]->OnShow();
+		}
 	}
 }
 void game_framework::npcObject::SetPoint(int x, int y)
@@ -107,9 +162,81 @@ void game_framework::npcObject::SetIntoHouse(bool flag)
 	isIntoHouse = flag;
 }
 
+void game_framework::npcObject::SetIsGoOutside(bool flag)
+{
+	time(&setTime);//設置出屋時間
+	isGoOutside = flag;
+}
+
 void game_framework::npcObject::SetIsAlive(bool flag)
 {
 	isAlive = flag;
+}
+
+void game_framework::npcObject::SetIsOnBattle(bool flag)
+{
+	isOnBattle = flag;
+}
+
+void game_framework::npcObject::SetBattleTemp(bool flag)
+{
+	BattleTemp = flag;
+}
+
+bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2,string type)
+{
+	/////////////////////////////////////////////////////////////////////創造魔法攻擊
+	int i = 0;
+	while (magicAttack[i] != NULL)
+	{
+		i++;
+		if (i > 3) return false;
+	}
+
+	if (isFirstShot || time(&nowTime) - setTime > 1) {
+		magicAttack[i] = new MagicAttack(_x, _y+10, AttackPower, type);
+		magicAttack[i]->SetTarget(target_x1, target_x2);
+		if (target_x1 < _x) {
+			magicAttack[i]->SetDirection(Left);
+		}
+		else {
+			magicAttack[i]->SetDirection(Right);
+		}
+		time(&setTime);
+		isFirstShot = false;
+	}
+	//////////////////////////////////////////////////////////////////////////判斷是否擊中
+	for (int k = 0; k < 3; k++) {         
+		if (magicAttack[k] != NULL) {
+			if (magicAttack[k]->HitTarget()) {
+				delete magicAttack[k];
+				magicAttack[k]=NULL;
+				return true;
+			}
+			else {
+			//	magicAttack[i]->SetTarget(target_x1, target_x2);
+			}
+		}
+	}
+	return false;
+}
+
+bool game_framework::npcObject::PhysicalAttack_event(int tar_x1,int tar_x2)
+{
+	if (isFirstShot || time(&nowTime) - setTime > 1) {
+		if (tar_x1 > _x)
+		{
+			SetMovingType(Attack_Right);
+		}
+		else
+		{
+			SetMovingType(Attack_Left);
+		}
+		isFirstShot = false;
+		time(&setTime);
+		return HitRectangle(tar_x1, tar_x2, 0, 0);
+	}
+	return false;
 }
 
 void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
@@ -130,6 +257,9 @@ void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
 		HpDamge = 1;
 	}
 	Hp -= HpDamge;
+	if (Hp <= 0) {
+		isAlive = false;
+	}
 }
 
 int game_framework::npcObject::GetFloor()
@@ -180,6 +310,16 @@ int game_framework::npcObject::GetAdDefense()
 int game_framework::npcObject::GetAttackPower()
 {
     return AttackPower;
+}
+
+bool game_framework::npcObject::GetIsOnBattle()
+{
+	return isOnBattle;
+}
+
+bool game_framework::npcObject::GetIsAlive()
+{
+	return isAlive;
 }
 
 game_framework::Attack_Type game_framework::npcObject::GetAttackType()

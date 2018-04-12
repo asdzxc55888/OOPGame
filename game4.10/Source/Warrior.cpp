@@ -76,6 +76,18 @@ namespace game_framework {
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\warrior\\warriorHide.bmp", RGB(255, 255, 255));
 	}
+	string Warrior::GetWarriorType()
+	{
+		switch (warriorType)
+		{
+		case game_framework::villager:
+			return "villager";
+			break;
+		default:
+			break;
+		}
+		return "";
+	}
 	void Warrior::RandWarroirType()
 	{
 		int randValue = rand() % warrior_type_size;
@@ -90,10 +102,10 @@ namespace game_framework {
 		switch (warriorType)
 		{
 		case game_framework::villager:
-			Hp = 200;					//血量
+			Hp = 100;					//血量
 			ApDefense = 4;			//魔法防禦
 			AdDefense = 2;			//物理防禦
-			AttackPower = 5;         //攻擊力
+			AttackPower = 10;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 			break;
 		default:
@@ -104,5 +116,14 @@ namespace game_framework {
 		ApDefense += randValue[1];
 		AdDefense += randValue[2];
 		AttackPower += randValue[3];
+		switch (AttackType)
+		{
+		case game_framework::Ad:
+			movingSpeed = 4;
+			break;
+		case game_framework::Ap:
+			movingSpeed = 5;
+			break;
+		}
 	}
 }

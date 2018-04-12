@@ -86,6 +86,10 @@ namespace game_framework
 	void Room::SetMonsterFight(bool flag)
 	{
 		isMonsterFight = flag;
+		isMonsterIn = false;
+		isDoorOpen = true;
+		liveMonster.SetIsGoOutside(true);
+		liveMonster.SetBattleTemp(true);
 	}
 	void Room::SetMonsterIntohome() //怪物到達門後的動作
 	{
@@ -105,10 +109,12 @@ namespace game_framework
 		else if (liveMonster.GetX() > _x)
 		{
 			liveMonster.SetMovingLeft(true);
+			liveMonster.SetMovingRight(false);
 		}
 		else if (liveMonster.GetX() <= _x)
 		{
 			liveMonster.SetMovingRight(true);
+			liveMonster.SetMovingLeft(false);
 		}
 		return true;
 	}

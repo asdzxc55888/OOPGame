@@ -12,6 +12,7 @@ namespace game_framework {
 		Warrior();
 		Warrior(warrior_type type);
 		void LoadBitmap(string str);
+		string GetWarriorType();
 	private:
 		void RandWarroirType();
 		void RandBasicAbility();

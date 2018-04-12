@@ -268,6 +268,7 @@ CGameStateRun::~CGameStateRun()
 void CGameStateRun::OnBeginState()
 {
     TaskBoard.SetTopLeft(330, 485);   //設定任務版座標
+	Warning.SetTopLeft(-1280, 100);
     roomSize = 4;
 	Clock = int(time(&nowtime))+60000;
     isOnBattle = false;
@@ -279,7 +280,9 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
     OnEvent();
-
+	if (Warning.Left() > -1280) {                                  //警告圖片向左移動
+		Warning.SetTopLeft(Warning.Left() - 20, Warning.Top());
+	}
     if (comingMonster != NULL)
     {
         comingMonster->OnMove();
@@ -307,6 +310,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     //
     Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
     TaskBoard.LoadBitmap("Bitmaps\\TaskBoard.bmp", RGB(255, 255, 255));
+	Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
 
@@ -381,6 +385,11 @@ void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 			if (gameRoom[i]->IsMouseOn(point) && gameRoom[i]->GetIsMonsterIn()) {
 				gameRoom[i]->SetMonsterFight(true);
 			}
+			Monster* _monster = gameRoom[i]->GetLiveMonster();
+			if (_monster->GetIsOnBattle() && _monster->IsMouseOn(point)) {
+				MonsterGohome_event(gameRoom[i]);
+				_monster->SetIsOnBattle(false);
+			}
 		}
 	}
 }
@@ -411,11 +420,13 @@ void CGameStateRun::OnShow()
     {
         comingMonster->OnShow();
     }
+	Warning.ShowBitmap();
 }
 void CGameStateRun::OnEvent()
 {
 	if (isIntoBattle)  //進入戰鬥時的事件
 	{
+		Warning.SetTopLeft(1280, 100); //警告圖片
 		if (comingMonster != NULL)comingMonster->SetMonsterState(leave); //拜訪怪物離開
 
 		for (int i = 0; i < roomSize; i++)
@@ -436,13 +447,10 @@ void CGameStateRun::OnEvent()
 
 			if (target != NULL)
 			{
-				Moving(&(warrior[0]), target->GetX(), target->GetFloor());
-				if (HitMonster(warrior[0], target))
-				{
-					warrior[0]->SetMovingLeft(false);
-					warrior[0]->SetMovingRight(false);
-					AttackMonster(warrior[0], target);
-				}
+				WarriorAttack_event(warrior[0], &target);
+			}
+			else {
+				Moving(&(warrior[0]), 700, 1);
 			}
 		}
 	}
@@ -450,15 +458,15 @@ void CGameStateRun::OnEvent()
 	/////////////////////////////////////////////////////////////////////////////怪物攻擊事件
 	if (isOnBattle) {
 		for (int i = 0; i < roomSize; i++) {
-			if (gameRoom[i]->GetIsMonsterFight()) {
+			if (gameRoom[i]->GetLiveMonster()->GetIsOnBattle()) {
 				Monster* _monster = gameRoom[i]->GetLiveMonster();
 				Warrior* target = findWarriorTarget(_monster, warrior);
-				Moving((&_monster), target->GetX(), target->GetFloor());
-				if (HitWarrior(_monster, target))
-				{
-					warrior[0]->SetMovingLeft(false);
-					warrior[0]->SetMovingRight(false);
-					AttackWarrior(_monster, target);
+				if (target!=NULL) {
+					MonsterAttack_event(_monster, &warrior[0]);
+				}
+				else {                                         //結束戰鬥
+					MonsterGohome_event(gameRoom[i]);
+					isOnBattle = false;
 				}
 			}
 		}
