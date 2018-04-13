@@ -10,6 +10,7 @@ namespace game_framework
 	Room::Room(int x, int y) : _x(x), _y(y) //未完成
 	{
 		counter = 0;
+		floor = 0;
 		isDoorOpen = false;
 		isMonsterIn = false;
 		isMonsterGoHome = false;
@@ -83,6 +84,26 @@ namespace game_framework
 		}
 		return false;
 	}
+	bool Room::MovingLR(int x)
+	{
+		if (liveMonster.GetX() > x -30)
+		{
+			liveMonster.SetMovingLeft(true);
+			liveMonster.SetMovingRight(false);
+		}
+		else if (liveMonster.GetX() <= x -40)
+		{
+			liveMonster.SetMovingRight(true);
+			liveMonster.SetMovingLeft(false);
+		}
+		else
+		{
+			liveMonster.SetMovingLeft(false);
+			liveMonster.SetMovingRight(false);
+			return true;
+		}
+		return false;
+	}
 	void Room::SetMonsterFight(bool flag)
 	{
 		isMonsterFight = flag;
@@ -90,6 +111,10 @@ namespace game_framework
 		isDoorOpen = true;
 		liveMonster.SetIsGoOutside(true);
 		liveMonster.SetBattleTemp(true);
+	}
+	void Room::SetIsMonsterIn(bool flag)
+	{
+		isMonsterIn = flag;
 	}
 	void Room::SetMonsterIntohome() //怪物到達門後的動作
 	{
@@ -99,22 +124,25 @@ namespace game_framework
 	}
 	bool Room::MonsterGoHome()  //讓怪物移動回家
 	{
-		if (liveMonster.GetX() >= _x&&liveMonster.GetX() < _x + animation.Width())
+		int Floor_x[3] = { 1150,750,1150 };
+		int _monsterFloor = liveMonster.GetFloor();
+		if (_monsterFloor == floor)
 		{
-			liveMonster.SetMovingLeft(false);
-			liveMonster.SetMovingRight(false);
-			SetMonsterIntohome();
-			return false;
+			if (MovingLR(_x+40)) {
+				SetMonsterIntohome();
+				isMonsterGoHome = false;
+				return false;
+			}
 		}
-		else if (liveMonster.GetX() > _x)
-		{
-			liveMonster.SetMovingLeft(true);
-			liveMonster.SetMovingRight(false);
+		else if (_monsterFloor<floor) {                      //上樓
+			if (MovingLR(Floor_x[_monsterFloor])) {
+				liveMonster.SetMovingUp(true);
+			}
 		}
-		else if (liveMonster.GetX() <= _x)
-		{
-			liveMonster.SetMovingRight(true);
-			liveMonster.SetMovingLeft(false);
+		else {                                              //下樓
+			if (MovingLR(Floor_x[_monsterFloor - 1])) {
+				liveMonster.SetMovingDown(true);
+			}
 		}
 		return true;
 	}

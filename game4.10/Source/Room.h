@@ -23,11 +23,14 @@ class Room
 		bool GetIsMonsterFight();
 		void LetMonsterGohome();
 		bool IsMouseOn(CPoint point); //檢查滑鼠是否在上面
+		bool MovingLR(int x);
 		void SetMonsterFight(bool flag);
+		void SetIsMonsterIn(bool flag);
         void SetMonsterlivingRoom(Monster **_monster); //讓怪物住進房子，回傳NULL指標將原本的怪物抹去
     private:
         int _x, _y; //座標
 		int counter;
+		int floor;
         Monster liveMonster;	//居住怪物
         CAnimation animation;  //動畫
 		void SetMonsterIntohome(); //怪物進門的動作

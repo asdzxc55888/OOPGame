@@ -465,12 +465,14 @@ void CGameStateRun::OnEvent()
 					MonsterAttack_event(_monster, &warrior[0]);
 				}
 				else {                                         //結束戰鬥
-					MonsterGohome_event(gameRoom[i]);
+					BattleEnd(gameRoom,roomSize);
 					isOnBattle = false;
+					break;
 				}
 			}
 		}
 	}
+
     /////////////////////////////////////////////////////////////////////////////拜訪怪物事件
     if (comingMonster != NULL)
     {
