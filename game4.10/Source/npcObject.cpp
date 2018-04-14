@@ -234,7 +234,7 @@ bool game_framework::npcObject::PhysicalAttack_event(int tar_x1,int tar_x2)
 		}
 		isFirstShot = false;
 		time(&setTime);
-		return HitRectangle(tar_x1, tar_x2, 0, 0);
+		return HitRectangle(tar_x1, 0, tar_x2, 0);
 	}
 	return false;
 }

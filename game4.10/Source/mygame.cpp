@@ -96,7 +96,8 @@ void CGameStateInit::OnInit()
     menuBtn[2]->AddBitmap("Bitmaps\\menu\\Options1.bmp", RGB(255, 255, 255));
     menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit.bmp", RGB(255, 255, 255));
     menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit1.bmp", RGB(255, 255, 255));
-    CAudio::Instance()->Load(AUDIO_DING, "sounds\\ding.wav");
+    CAudio::Instance()->Load(AUDIO_DING, "sounds\\Ding.mp3");
+	CAudio::Instance()->Load(AUDIO_DECISION, "sounds\\decision.mp3");
     Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
@@ -109,6 +110,8 @@ void CGameStateInit::OnBeginState()
     for (int i = 0; i < 4; i++)isMouseOn[i] = false;
 
     isLoadingBitmaps = false;
+	CAudio::Instance()->Load(AUDIO_MENUBGM, "sounds\\menuBGM.mp3");
+	CAudio::Instance()->Play(AUDIO_MENUBGM);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -124,9 +127,11 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
-        GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
-
+	if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
+	{
+		CAudio::Instance()->Play(AUDIO_DECISION);
+		GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
+	}
     if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
         exit(1);		// 離開遊戲
 }
@@ -139,8 +144,7 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
         {
             if (point.x > menuBtn[i]->Left() && point.x <  menuBtn[i]->Left() + menuBtn[i]->Width() && point.y >  menuBtn[i]->Top() && point.y < menuBtn[i]->Height() + menuBtn[i]->Top())
             {
-                if (!isPlayAudio)CAudio::Instance()->Play(AUDIO_DING);
-
+                if (!isPlayAudio&&!isMouseOn[i])CAudio::Instance()->Play(AUDIO_DING);
                 isMouseOn[i] = true;
                 isPlayAudio = true;
             }
@@ -465,12 +469,14 @@ void CGameStateRun::OnEvent()
 					MonsterAttack_event(_monster, &warrior[0]);
 				}
 				else {                                         //結束戰鬥
-					MonsterGohome_event(gameRoom[i]);
+					BattleEnd(gameRoom,roomSize);
 					isOnBattle = false;
+					break;
 				}
 			}
 		}
 	}
+
     /////////////////////////////////////////////////////////////////////////////拜訪怪物事件
     if (comingMonster != NULL)
     {

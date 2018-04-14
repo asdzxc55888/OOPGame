@@ -30,6 +30,7 @@ namespace game_framework {
 	void MonsterAttack_event(Monster *_monster, Warrior ** target);
 	Monster* findMonsterTarget(Warrior *_warrior, Room **gameroom,int room_size);
 	Warrior* findWarriorTarget(Monster *_monster, Warrior **_warrior);
+	void BattleEnd(Room **gameRoom, int roomsize);
 	void BattleTest1(Warrior **_warrior, bool &isIntoBattle, Room **gameRoom);
 
 }

@@ -38,8 +38,6 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 #pragma once
-#include "CEraser.h"
-#include "CBall.h"
 #include "CBouncingBall.h"
 #include"GameEvent.h"
 

@@ -324,6 +324,15 @@ Warrior* findWarriorTarget(Monster* _monster, Warrior** _warrior)
 
     return result;
 }
+void BattleEnd(Room ** gameRoom, int roomsize)
+{
+	for (int i = 0; i < roomsize; i++) {
+		if (gameRoom[i]->GetLiveMonster()->GetIsOnBattle()) {
+			gameRoom[i]->LetMonsterGohome();
+			gameRoom[i]->GetLiveMonster()->SetIsOnBattle(false);
+		}
+	}
+}
 void WarriorAdAttack(Warrior* _warrior, Monster _monster)
 {
 }
