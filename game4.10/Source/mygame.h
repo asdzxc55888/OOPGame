@@ -64,7 +64,7 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap Background;                       // 背景
-		CAnimation *menuBtn[4];							
+		CAnimation *menuBtn[4];			
 		bool isMouseOn[4];
 		bool isLoadingBitmaps;
 		bool isPlayAudio;
@@ -96,10 +96,13 @@ namespace game_framework {
 		CMovingBitmap Background;
 		CMovingBitmap TaskBoard;
 		CMovingBitmap Warning;
+		CAnimation SpeedControlBtn[3];
+		Obstacle mapObstacle;
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物
 		Warrior *warrior[10];
 		time_t Settime,nowtime;
+		int TimeBoost;                            //時間快慢
 		int Clock;
 		int houseLevele;
 		int roomSize;
@@ -123,5 +126,7 @@ namespace game_framework {
 	private:
 		int counter;	// 倒數之計數器
 	};
+
+	
 
 }

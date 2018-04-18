@@ -177,6 +177,9 @@ void CGameStateInit::OnShow()
         menuBtn[i]->OnShow();
     }
 
+	CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
+	CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
+
     //
     // Demo螢幕字型的使用，不過開發時請盡量避免直接使用字型，改用CMovingBitmap比較好
     //
@@ -283,6 +286,9 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
+	CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
+	CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
+
     OnEvent();
 	if (Warning.Left() > -1280) {                                  //警告圖片向左移動
 		Warning.SetTopLeft(Warning.Left() - 20, Warning.Top());
@@ -389,10 +395,13 @@ void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 			if (gameRoom[i]->IsMouseOn(point) && gameRoom[i]->GetIsMonsterIn()) {
 				gameRoom[i]->SetMonsterFight(true);
 			}
-			Monster* _monster = gameRoom[i]->GetLiveMonster();
-			if (_monster->GetIsOnBattle() && _monster->IsMouseOn(point)) {
-				MonsterGohome_event(gameRoom[i]);
-				_monster->SetIsOnBattle(false);
+			
+			if (gameRoom[i]->GetLiveMonster() != NULL) {                           //怪物被點擊的事件，怪物回家
+				Monster* _monster = gameRoom[i]->GetLiveMonster();
+				if (_monster->GetIsOnBattle() && _monster->IsMouseOn(point)) {
+					MonsterGohome_event(gameRoom[i]);
+					_monster->SetIsOnBattle(false);
+				}
 			}
 		}
 	}
@@ -443,6 +452,10 @@ void CGameStateRun::OnEvent()
 		isIntoBattle = false;
 		isOnBattle = true;
 	}
+	if (isOnBattle) {
+		mapObstacle.Initial();
+		SetObstacle(gameRoom, warrior, &mapObstacle, roomSize);
+	}
 	/////////////////////////////////////////////////////////////////////////////勇者攻擊事件
 	if (isOnBattle && difftime(time(&nowtime), Clock) > 5) {
 		if (warrior[0] != NULL)
@@ -451,22 +464,29 @@ void CGameStateRun::OnEvent()
 
 			if (target != NULL)
 			{
-				WarriorAttack_event(warrior[0], &target);
+				WarriorAttack_event(warrior[0], &target, mapObstacle);
 			}
 			else {
-				Moving(&(warrior[0]), 700, 1);
+				Moving(&(warrior[0]), 700, 1,mapObstacle);
 			}
 		}
 	}
-
+	for (int i = 0; i < roomSize; i++) {                      //判斷怪物是否活著
+		Monster *_monster = gameRoom[i]->GetLiveMonster();
+		if (_monster != NULL) {
+			if (!_monster->GetIsAlive()) {
+				gameRoom[i]->MonsterDeath();
+			}
+		}
+	}
 	/////////////////////////////////////////////////////////////////////////////怪物攻擊事件
 	if (isOnBattle) {
 		for (int i = 0; i < roomSize; i++) {
-			if (gameRoom[i]->GetLiveMonster()->GetIsOnBattle()) {
+			if (gameRoom[i]->GetLiveMonster()!=NULL && gameRoom[i]->GetLiveMonster()->GetIsOnBattle()) {
 				Monster* _monster = gameRoom[i]->GetLiveMonster();
 				Warrior* target = findWarriorTarget(_monster, warrior);
 				if (target!=NULL) {
-					MonsterAttack_event(_monster, &warrior[0]);
+					MonsterAttack_event(_monster, &warrior[0],mapObstacle);
 				}
 				else {                                         //結束戰鬥
 					BattleEnd(gameRoom,roomSize);
@@ -476,7 +496,6 @@ void CGameStateRun::OnEvent()
 			}
 		}
 	}
-
     /////////////////////////////////////////////////////////////////////////////拜訪怪物事件
     if (comingMonster != NULL)
     {
@@ -512,4 +531,5 @@ void CGameStateRun::OnEvent()
 
     ///////////////////////////////////////////////////////////////////////////
 }
+
 }

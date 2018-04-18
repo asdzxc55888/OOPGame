@@ -9,14 +9,7 @@ namespace game_framework
 {
 	Room::Room(int x, int y) : _x(x), _y(y) //未完成
 	{
-		counter = 0;
-		floor = 0;
-		isDoorOpen = false;
-		isMonsterIn = false;
-		isMonsterGoHome = false;
-		isMonsterLiving = false;
-		isMonsterFight = false;
-		animation.SetDelayCount(10);
+		Initial();
 	}
 	Room::~Room()
 	{
@@ -26,6 +19,17 @@ namespace game_framework
 		animation.AddBitmap("Bitmaps\\gameRun\\room.bmp", RGB(255, 255, 255));
 		animation.AddBitmap("Bitmaps\\gameRun\\room1.bmp", RGB(255, 255, 255));
 	}
+	void Room::Initial()
+	{
+		liveMonster = NULL;
+		floor = 0;
+		isDoorOpen = false;
+		isMonsterIn = false;
+		isMonsterGoHome = false;
+		isMonsterLiving = false;
+		isMonsterFight = false;
+		animation.SetDelayCount(10);
+	}
 	void Room::OnShow(bool flag)  //true 為讓門顯示 false試讓怪物顯示
 	{
 		if (flag) {
@@ -33,7 +37,7 @@ namespace game_framework
 			animation.OnShow();
 		}
 		else {
-			if (liveMonster.GetIsExist())liveMonster.OnShow();  //怪物存在地圖上與否
+			if (liveMonster!=NULL)liveMonster->OnShow();  //怪物存在地圖上與否
 		}
 
 
@@ -42,7 +46,7 @@ namespace game_framework
 	{
 		if (isMonsterGoHome)isMonsterGoHome = MonsterGoHome();// 怪物回家移動
 
-		if (liveMonster.GetIsExist())liveMonster.OnMove();
+		if (liveMonster!=NULL)liveMonster->OnMove();
 
 		if (isDoorOpen) {                           //開關門動畫
 			if (!animation.IsFinalBitmap()) {
@@ -60,7 +64,7 @@ namespace game_framework
 	}
 	Monster* Room::GetLiveMonster()
 	{
-		return &liveMonster;
+		return liveMonster;
 	}
 	bool Room::GetIsMonsterLiving()
 	{
@@ -88,31 +92,36 @@ namespace game_framework
 	}
 	bool Room::MovingLR(int x)
 	{
-		if (liveMonster.GetX() > x -40)
+		if (liveMonster->GetX() > x -40)
 		{
-			liveMonster.SetMovingLeft(true);
-			liveMonster.SetMovingRight(false);
+			liveMonster->SetMovingLeft(true);
+			liveMonster->SetMovingRight(false);
 		}
-		else if (liveMonster.GetX() <= x -45)
+		else if (liveMonster->GetX() <= x -45)
 		{
-			liveMonster.SetMovingRight(true);
-			liveMonster.SetMovingLeft(false);
+			liveMonster->SetMovingRight(true);
+			liveMonster->SetMovingLeft(false);
 		}
 		else
 		{
-			liveMonster.SetMovingLeft(false);
-			liveMonster.SetMovingRight(false);
+			liveMonster->SetMovingLeft(false);
+			liveMonster->SetMovingRight(false);
 			return true;
 		}
 		return false;
+	}
+	void Room::MonsterDeath()
+	{
+		delete liveMonster;
+		Initial();
 	}
 	void Room::SetMonsterFight(bool flag)
 	{
 		isMonsterFight = flag;
 		isMonsterIn = false;
 		isDoorOpen = true;
-		liveMonster.SetIsGoOutside(true);
-		liveMonster.SetBattleTemp(true);
+		liveMonster->SetIsGoOutside(true);
+		liveMonster->SetBattleTemp(true);
 	}
 	void Room::SetIsMonsterIn(bool flag)
 	{
@@ -120,14 +129,15 @@ namespace game_framework
 	}
 	void Room::SetMonsterIntohome() //怪物到達門後的動作
 	{
-		liveMonster.SetIntoHouse(true);
+		liveMonster->SetIntoHouse(true);
 		isMonsterIn = true;
 		isDoorOpen = true;
+		isMonsterFight = false;
 	}
 	bool Room::MonsterGoHome()  //讓怪物移動回家
 	{
 		int Floor_x[3] = { 1150,750,1150 };
-		int _monsterFloor = liveMonster.GetFloor();
+		int _monsterFloor = liveMonster->GetFloor();
 		if (_monsterFloor == floor)
 		{
 			if (MovingLR(_x+40)) {
@@ -138,20 +148,19 @@ namespace game_framework
 		}
 		else if (_monsterFloor<floor) {                      //上樓
 			if (MovingLR(Floor_x[_monsterFloor])) {
-				liveMonster.SetMovingUp(true);
+				liveMonster->SetMovingUp(true);
 			}
 		}
 		else {                                              //下樓
 			if (MovingLR(Floor_x[_monsterFloor - 1])) {
-				liveMonster.SetMovingDown(true);
+				liveMonster->SetMovingDown(true);
 			}
 		}
 		return true;
 	}
 	void Room::SetMonsterlivingRoom(Monster** _monster)
 	{
-		liveMonster = **_monster;
-		delete *_monster;
+		liveMonster = *_monster;
 		*_monster = NULL;
 	}
 }

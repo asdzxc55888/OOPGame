@@ -105,7 +105,7 @@ namespace game_framework {
 			Hp = 100;					//血量
 			ApDefense = 4;			//魔法防禦
 			AdDefense = 2;			//物理防禦
-			AttackPower = 10;         //攻擊力
+			AttackPower = 20;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 			break;
 		default:
