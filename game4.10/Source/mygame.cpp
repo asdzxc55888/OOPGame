@@ -336,12 +336,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
-<<<<<<< HEAD
-=======
-    CAudio::Instance()->Load(AUDIO_WARNING, "Sounds\\battle.mp3");
-    CAudio::Instance()->Load(AUDIO_BATTLEBGM, "Sounds\\battleBGM.mp3");
-
->>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
+	CAudio::Instance()->Load(AUDIO_WARNING, "Sounds\\battle.mp3");
     for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
 
     //
@@ -396,6 +391,7 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+
 }
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -480,6 +476,9 @@ void CGameStateRun::OnEvent()
     if (isIntoBattle)  //進入戰鬥時的事件
     {
         Warning.SetTopLeft(1280, 100); //警告圖片
+
+		CAudio::Instance()->Stop(AUDIO_GAMEBGM);
+		CAudio::Instance()->Play(AUDIO_WARNING);
 
         if (comingMonster != NULL)comingMonster->SetMonsterState(leave); //拜訪怪物離開
 

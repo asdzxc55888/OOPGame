@@ -2,22 +2,6 @@
 #include "Monster.h"
 namespace game_framework
 {
-<<<<<<< HEAD
-=======
-enum AUDIO_ID  				// 定義各種音效的編號
-{
-    AUDIO_DING,				// 0
-    AUDIO_LAKE,				// 1
-    AUDIO_NTUT,				// 2
-    AUDIO_DOOROPEN,
-    AUDIO_DOORCLOSE,
-    AUDIO_MENUBGM,
-    AUDIO_BATTLEBGM,
-    AUDIO_GAMEBGM,
-    AUDIO_DECISION,
-    AUDIO_WARNING
-};
->>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
 class Room
 {
     public:

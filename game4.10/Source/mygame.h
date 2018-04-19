@@ -53,7 +53,6 @@ namespace game_framework
 // 每個Member function的Implementation都要弄懂
 /////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 	class CGameStateInit : public CGameState {
 	public:
 		CGameStateInit(CGame *g);
@@ -73,27 +72,6 @@ namespace game_framework
 		bool isLoadingBitmaps;
 		bool isPlayAudio;
 	};
-=======
-class CGameStateInit : public CGameState
-{
-    public:
-        CGameStateInit(CGame* g);
-        ~CGameStateInit();
-        void OnInit();  								// 遊戲的初值及圖形設定
-        void OnBeginState();							// 設定每次重玩所需的變數
-        void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
-        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-        void OnMouseMove(UINT nFlags, CPoint point);
-    protected:
-        void OnShow();									// 顯示這個狀態的遊戲畫面
-    private:
-        CMovingBitmap Background;                       // 背景
-        CAnimation* menuBtn[4];
-        bool isMouseOn[4];
-        bool isLoadingBitmaps;
-        bool isPlayAudio;
-};
->>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -155,7 +133,5 @@ class CGameStateOver : public CGameState
     private:
         int counter;	// 倒數之計數器
 };
-
-
 
 }

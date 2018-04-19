@@ -98,7 +98,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
 	AUDIO_MENUBGM,
 	AUDIO_BATTLEBGM,
 	AUDIO_GAMEBGM,
-	AUDIO_DECISION
+	AUDIO_DECISION,
+	AUDIO_WARNING
 };
 
 /////////////////////////////////////////////////////////////////////////////

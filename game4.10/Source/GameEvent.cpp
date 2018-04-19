@@ -103,20 +103,18 @@ bool Moving(Monster** _monster, int x, int floor, Obstacle obs = Obstacle())
 {
     int Floor_x[3] = { 1150, 750, 1150 };
     int _monsterFloor = (*_monster)->GetFloor();
-	int x1 = (*_monster)->GetX();
-	int x2 = x1 + (*_monster)->GetWidth();
-    if (obs.isHit(x1,x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
+    int x1 = (*_monster)->GetX();
+    int x2 = x1 + (*_monster)->GetWidth();
+
+    if (obs.isHit(x1, x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
     {
-<<<<<<< HEAD
-		if ((x1>x && x1<=x+20) || (x2>x && x2 <= x + 20) && _monsterFloor == floor) {
-			return true;
-		}
-		(*_monster)->SetMovingLeft(false);
-		(*_monster)->SetMovingRight(false);
-=======
+        if ((x1 > x && x1 <= x + 20) || (x2 > x && x2 <= x + 20) && _monsterFloor == floor)
+        {
+            return true;
+        }
+
         (*_monster)->SetMovingLeft(false);
-        (*_monster)->SetMovingLeft(false);
->>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
+        (*_monster)->SetMovingRight(false);
         return false;
     }
 
@@ -208,22 +206,19 @@ bool Moving(Warrior** _warrior, int x, int floor, Obstacle obs = Obstacle())
 {
     int Floor_x[3] = { 1150, 750, 1150 };
     int _warriorFloor = (*_warrior)->GetFloor();
-	int x1 = (*_warrior)->GetX();
-	int x2 = x1 + (*_warrior)->GetWidth();
+    int x1 = (*_warrior)->GetX();
+    int x2 = x1 + (*_warrior)->GetWidth();
+
     if (obs.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
     {
-<<<<<<< HEAD
-		if ((x1>x && x1 <= x + 20) || (x2>x && x2 <= x + 20) && _warriorFloor == floor) {     //防卡住
-			return true;
-		}
-		(*_warrior)->SetMovingLeft(false);
-		(*_warrior)->SetMovingRight(false);
-        return false;
-=======
+        if ((x1 > x && x1 <= x + 20) || (x2 > x && x2 <= x + 20) && _warriorFloor == floor)   //防卡住
+        {
+            return true;
+        }
+
         (*_warrior)->SetMovingLeft(false);
         (*_warrior)->SetMovingRight(false);
-        return true;
->>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
+        return false;
     }
 
     if (_warriorFloor == floor)
@@ -416,9 +411,9 @@ void WarriorAdAttack(Warrior* _warrior, Monster _monster)
 
 void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
 {
-    CAudio::Instance()->Stop(AUDIO_GAMEBGM);
     isIntoBattle = true;
     CreateWarrior_event(&_warrior[0], villager);
+	CAudio::Instance()->Stop(AUDIO_GAMEBGM);
     CAudio::Instance()->Play(AUDIO_WARNING);
 }
 }
