@@ -48,7 +48,7 @@ void ChoseEvent(GameEvent_number event)
 }
 void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) //怪物找房
 {
-    if (Moving(_monster, TaskBoard_x + 60, 0,Obstacle()))
+    if (Moving(_monster, TaskBoard_x + 60, 0, Obstacle()))
     {
         (*_monster)->SetMovingType(Back);
         (*_monster)->SetMonsterState(findHouse);
@@ -90,10 +90,10 @@ void MonsterBeingClick(Monster** _monster, int room_size, Room** gameroom)
 }
 bool MonsterLeave(Monster** _monster)  //已經離開回傳true
 {
-    if (Moving(_monster, -100, 0,Obstacle()))
+    if (Moving(_monster, -100, 0, Obstacle()))
     {
-		delete *_monster;
-		*_monster = NULL;
+        delete *_monster;
+        *_monster = NULL;
         return true;
     }
 
@@ -107,11 +107,16 @@ bool Moving(Monster** _monster, int x, int floor, Obstacle obs = Obstacle())
 	int x2 = x1 + (*_monster)->GetWidth();
     if (obs.isHit(x1,x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
     {
+<<<<<<< HEAD
 		if ((x1>x && x1<=x+20) || (x2>x && x2 <= x + 20) && _monsterFloor == floor) {
 			return true;
 		}
 		(*_monster)->SetMovingLeft(false);
 		(*_monster)->SetMovingRight(false);
+=======
+        (*_monster)->SetMovingLeft(false);
+        (*_monster)->SetMovingLeft(false);
+>>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
         return false;
     }
 
@@ -207,12 +212,18 @@ bool Moving(Warrior** _warrior, int x, int floor, Obstacle obs = Obstacle())
 	int x2 = x1 + (*_warrior)->GetWidth();
     if (obs.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
     {
+<<<<<<< HEAD
 		if ((x1>x && x1 <= x + 20) || (x2>x && x2 <= x + 20) && _warriorFloor == floor) {     //防卡住
 			return true;
 		}
 		(*_warrior)->SetMovingLeft(false);
 		(*_warrior)->SetMovingRight(false);
         return false;
+=======
+        (*_warrior)->SetMovingLeft(false);
+        (*_warrior)->SetMovingRight(false);
+        return true;
+>>>>>>> 6e07fc77187509e6937d0c6440040659aafb3891
     }
 
     if (_warriorFloor == floor)
@@ -318,7 +329,7 @@ void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
                 _monster->SetMovingType(Moving_Right);
             }
 
-            if (Moving((&_monster), targetX, (*target)->GetFloor())|| (abs((*target)->GetX() - _monster->GetX()) < 200 && (*target)->GetFloor() == _monster->GetFloor()))
+            if (Moving((&_monster), targetX, (*target)->GetFloor()) || (abs((*target)->GetX() - _monster->GetX()) < 200 && (*target)->GetFloor() == _monster->GetFloor()))
             {
                 _monster->SetMovingLeft(false);
                 _monster->SetMovingRight(false);
@@ -392,7 +403,7 @@ void BattleEnd(Room** gameRoom, int roomsize)
 {
     for (int i = 0; i < roomsize; i++)
     {
-        if (gameRoom[i]->GetLiveMonster()!=NULL && gameRoom[i]->GetLiveMonster()->GetIsOnBattle())
+        if (gameRoom[i]->GetLiveMonster() != NULL && gameRoom[i]->GetLiveMonster()->GetIsOnBattle())
         {
             gameRoom[i]->LetMonsterGohome();
             gameRoom[i]->GetLiveMonster()->SetIsOnBattle(false);
@@ -405,7 +416,9 @@ void WarriorAdAttack(Warrior* _warrior, Monster _monster)
 
 void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
 {
+    CAudio::Instance()->Stop(AUDIO_GAMEBGM);
     isIntoBattle = true;
     CreateWarrior_event(&_warrior[0], villager);
+    CAudio::Instance()->Play(AUDIO_WARNING);
 }
 }
