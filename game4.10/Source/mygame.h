@@ -27,7 +27,8 @@
  *   2005-09-29 V4.2Beta2.
  *   2006-02-08 V4.2
  *      1. Rename OnInitialUpdate() -> OnInit().
- *      2. Replace AUDIO_CANYON as AUDIO_NTUT.
+ *      2. Replace
+ _CANYON as AUDIO_NTUT.
  *      3. Add help bitmap to CGameStateRun.
  *   2006-09-09 V4.3
  *      1. Rename Move() and Show() as OnMove and OnShow() to emphasize that they are
@@ -41,93 +42,98 @@
 #include "CBouncingBall.h"
 #include"GameEvent.h"
 
-namespace game_framework {
-	/////////////////////////////////////////////////////////////////////////////
-	// Constants
-	/////////////////////////////////////////////////////////////////////////////
+namespace game_framework
+{
+/////////////////////////////////////////////////////////////////////////////
+// Constants
+/////////////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////////////
-	// 這個class為遊戲的遊戲開頭畫面物件
-	// 每個Member function的Implementation都要弄懂
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// 這個class為遊戲的遊戲開頭畫面物件
+// 每個Member function的Implementation都要弄懂
+/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateInit : public CGameState {
-	public:
-		CGameStateInit(CGame *g);
-		~CGameStateInit();
-		void OnInit();  								// 遊戲的初值及圖形設定
-		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point);
-	protected:
-		void OnShow();									// 顯示這個狀態的遊戲畫面
-	private:
-		CMovingBitmap Background;                       // 背景
-		CAnimation *menuBtn[4];			
-		bool isMouseOn[4];
-		bool isLoadingBitmaps;
-		bool isPlayAudio;
-	};
+class CGameStateInit : public CGameState
+{
+    public:
+        CGameStateInit(CGame* g);
+        ~CGameStateInit();
+        void OnInit();  								// 遊戲的初值及圖形設定
+        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);
+    protected:
+        void OnShow();									// 顯示這個狀態的遊戲畫面
+    private:
+        CMovingBitmap Background;                       // 背景
+        CAnimation* menuBtn[4];
+        bool isMouseOn[4];
+        bool isLoadingBitmaps;
+        bool isPlayAudio;
+};
 
-	/////////////////////////////////////////////////////////////////////////////
-	// 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
-	// 每個Member function的Implementation都要弄懂
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
+// 每個Member function的Implementation都要弄懂
+/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateRun : public CGameState {
-	public:
-		CGameStateRun(CGame *g);
-		~CGameStateRun();
-		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnInit();  								// 遊戲的初值及圖形設定
-		void OnKeyDown(UINT, UINT, UINT);
-		void OnKeyUp(UINT, UINT, UINT);
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作 
-		void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
-	protected:
-		void OnMove();									// 移動遊戲元素
-		void OnShow();									// 顯示這個狀態的遊戲畫面
-		void OnEvent();                                 // 事件處理
-	private:
-		CMovingBitmap Background;
-		CMovingBitmap TaskBoard;
-		CMovingBitmap Warning;
-		CAnimation SpeedControlBtn[3];
-		CInteger Money;
-		Obstacle mapObstacle;
-		Room *gameRoom[4];
-		Monster *comingMonster;                    //來看房子的怪物
-		Warrior *warrior[10];
-		time_t Settime,nowtime;
-		int TimeBoost;                            //時間快慢
-		int Clock;
-		int houseLevele;
-		int roomSize;
-		bool isIntoBattle;                        //是否剛進入戰鬥
-		bool isOnBattle;                          //是否在戰鬥
-	};
+class CGameStateRun : public CGameState
+{
+    public:
+        CGameStateRun(CGame* g);
+        ~CGameStateRun();
+        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnInit();  								// 遊戲的初值及圖形設定
+        void OnKeyDown(UINT, UINT, UINT);
+        void OnKeyUp(UINT, UINT, UINT);
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnLButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+        void OnRButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnRButtonUp(UINT nFlags, CPoint point);	// 處理滑鼠的動作
+    protected:
+        void OnMove();									// 移動遊戲元素
+        void OnShow();									// 顯示這個狀態的遊戲畫面
+        void OnEvent();                                 // 事件處理
+    private:
+        CMovingBitmap Background;
+        CMovingBitmap TaskBoard;
+        CMovingBitmap Warning;
+        CAnimation SpeedControlBtn[3];
+        CInteger Money;
+        Obstacle mapObstacle;
+        Room* gameRoom[4];
+        Monster* comingMonster;                    //來看房子的怪物
+        Warrior* warrior[10];
+        time_t Settime, nowtime;
+        int TimeBoost;                            //時間快慢
+        int Clock;
+        int houseLevele;
+        int roomSize;
+        bool isIntoBattle;                        //是否剛進入戰鬥
+        bool isOnBattle;						  //是否在戰鬥
+        bool WarningQuit;
+};
 
-	/////////////////////////////////////////////////////////////////////////////
-	// 這個class為遊戲的結束狀態(Game Over)
-	// 每個Member function的Implementation都要弄懂
-	/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+// 這個class為遊戲的結束狀態(Game Over)
+// 每個Member function的Implementation都要弄懂
+/////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateOver : public CGameState {
-	public:
-		CGameStateOver(CGame *g);
-		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnInit();
-	protected:
-		void OnMove();									// 移動遊戲元素
-		void OnShow();									// 顯示這個狀態的遊戲畫面
-	private:
-		int counter;	// 倒數之計數器
-	};
+class CGameStateOver : public CGameState
+{
+    public:
+        CGameStateOver(CGame* g);
+        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnInit();
+    protected:
+        void OnMove();									// 移動遊戲元素
+        void OnShow();									// 顯示這個狀態的遊戲畫面
+    private:
+        int counter;	// 倒數之計數器
+};
 
-	
+
 
 }
