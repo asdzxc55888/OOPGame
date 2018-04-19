@@ -103,11 +103,15 @@ bool Moving(Monster** _monster, int x, int floor, Obstacle obs = Obstacle())
 {
     int Floor_x[3] = { 1150, 750, 1150 };
     int _monsterFloor = (*_monster)->GetFloor();
-
-    if (obs.isHit((*_monster)->GetX(), (*_monster)->GetX() + (*_monster)->GetWidth(), (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
+	int x1 = (*_monster)->GetX();
+	int x2 = x1 + (*_monster)->GetWidth();
+    if (obs.isHit(x1,x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
     {
+		if ((x1>x && x1<=x+20) || (x2>x && x2 <= x + 20) && _monsterFloor == floor) {
+			return true;
+		}
 		(*_monster)->SetMovingLeft(false);
-		(*_monster)->SetMovingLeft(false);
+		(*_monster)->SetMovingRight(false);
         return false;
     }
 
@@ -198,29 +202,33 @@ bool MovingLR(Warrior** _warrior, int x)
 bool Moving(Warrior** _warrior, int x, int floor, Obstacle obs = Obstacle())
 {
     int Floor_x[3] = { 1150, 750, 1150 };
-    int __warriorFloor = (*_warrior)->GetFloor();
-
-    if (obs.isHit((*_warrior)->GetX(), (*_warrior)->GetX() + (*_warrior)->GetWidth(), (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
+    int _warriorFloor = (*_warrior)->GetFloor();
+	int x1 = (*_warrior)->GetX();
+	int x2 = x1 + (*_warrior)->GetWidth();
+    if (obs.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
     {
+		if ((x1>x && x1 <= x + 20) || (x2>x && x2 <= x + 20) && _warriorFloor == floor) {     //防卡住
+			return true;
+		}
 		(*_warrior)->SetMovingLeft(false);
 		(*_warrior)->SetMovingRight(false);
-        return true;
+        return false;
     }
 
-    if (__warriorFloor == floor)
+    if (_warriorFloor == floor)
     {
         return MovingLR(_warrior, x);
     }
-    else if (__warriorFloor < floor)                      //上樓
+    else if (_warriorFloor < floor)                      //上樓
     {
-        if (MovingLR(_warrior, Floor_x[__warriorFloor]))
+        if (MovingLR(_warrior, Floor_x[_warriorFloor]))
         {
             (*_warrior)->SetMovingUp(true);
         }
     }
     else                                                //下樓
     {
-        if (MovingLR(_warrior, Floor_x[__warriorFloor - 1]))
+        if (MovingLR(_warrior, Floor_x[_warriorFloor - 1]))
         {
             (*_warrior)->SetMovingDown(true);
         }

@@ -1,6 +1,7 @@
 #pragma once
 #include <string.h>
 #include "MagicAttack.h"
+#include "MonsterDataBoard.h"
 using namespace std;
 namespace game_framework {
 	enum Attack_Type
@@ -32,14 +33,11 @@ namespace game_framework {
 		void SetMovingRight(bool flag); // 設定是否正在往右移動
 		void SetMovingUp(bool flag);	// 設定是否正在往上移動
 		void SetIntoHouse(bool flag);
-		void SetIsGoOutside(bool flag);
-		void SetIsAlive(bool flag);
-		void SetIsOnBattle(bool flag);
+		void SetIsGoOutside(bool flag); //是否外出
+		void SetIsAlive(bool flag);     //是否活著
+		void SetIsOnBattle(bool flag);  //是否在戰鬥
 		void SetBattleTemp(bool flag);
-		bool MagicAttack_event(int _x1, int _x2, string type);
-		bool PhysicalAttack_event(int tar_x1 , int tar_x2);
 		void BeingAttack(int damge,Attack_Type type);
-		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
 		int GetFloor();
 		int GetX();
 		int GetY();
@@ -49,13 +47,18 @@ namespace game_framework {
 		int GetApDefense();
 		int GetAdDefense();
 		int GetAttackPower();
+		bool HitRectangle(int tx1, int ty1, int tx2, int ty2);	// 是否碰到參數範圍的矩形
+		bool MagicAttack_event(int _x1, int _x2, string type);
+		bool PhysicalAttack_event(int tar_x1, int tar_x2);
 		bool GetIsOnBattle();
 		bool GetIsAlive();
+		bool IsMouseOn(CPoint point);
 		Attack_Type GetAttackType();
 	protected:
 		int _x, _y;				//座標
 		int movingSpeed;     //移動速度
 		int floor;            //所在的樓層
+		int MaxHp;
 		int Hp;					//血量
 		int ApDefense;			//魔法防禦
 		int AdDefense;			//物理防禦
@@ -69,6 +72,8 @@ namespace game_framework {
 		bool isAlive;                //是否存活
 		bool isFirstShot;
 		bool isOnBattle;
+		bool isMusicEffectOn;
+		bool isMouseOn;
 		bool BattleTemp;
 		Attack_Type AttackType; //攻擊模式
 		MovingAnimation_Type nowMovingType;

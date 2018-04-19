@@ -89,6 +89,18 @@ enum GAME_STATES {
 	GAME_STATE_OVER
 };
 
+enum AUDIO_ID {				// 定義各種音效的編號
+	AUDIO_DING,				// 0
+	AUDIO_LAKE,				// 1
+	AUDIO_NTUT,				// 2
+	AUDIO_DOOROPEN,
+	AUDIO_DOORCLOSE,
+	AUDIO_MENUBGM,
+	AUDIO_BATTLEBGM,
+	AUDIO_GAMEBGM,
+	AUDIO_DECISION
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // Header for STL (Standard Template Library)
 /////////////////////////////////////////////////////////////////////////////
@@ -259,7 +271,9 @@ public:
 	void LoadBitmap();			// 載入0..9及負號之圖形
 	void SetInteger(int);		// 設定整數值
 	void SetTopLeft(int,int);	// 將動畫的左上角座標移至 (x,y)
+	void SetIsBmpLoaded();
 	void ShowBitmap();			// 將動畫貼到螢幕
+	
 private:
 	const int NUMDIGITS;			// 共顯示NUMDIGITS個位數
 	static CMovingBitmap digit[11]; // 儲存0..9及負號之圖形(bitmap)

@@ -87,6 +87,7 @@ void CGameStateInit::OnInit()
     //
     // 開始載入資料
     //
+	temp.LoadBitmap();
     Background.LoadBitmap("Bitmaps\\StartBackground.bmp");
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start.bmp", RGB(255, 255, 255));
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start1.bmp", RGB(255, 255, 255));
@@ -323,7 +324,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
-
     for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
 
     //
@@ -382,9 +382,20 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-    /*for (int i = 0; i > 4; i++) {
-    	gameRoom[i]->IsMouseOn(point);
-    }*/
+    for (int i = 0; i < 4; i++) {
+		if (gameRoom[i]->GetLiveMonster() != NULL) {
+			gameRoom[i]->GetLiveMonster()->IsMouseOn(point);
+		}
+    }
+	if (comingMonster != NULL) {
+		comingMonster->IsMouseOn(point);
+	}
+	for (int i = 0; i < 10; i++) {
+		if (warrior[i]!= NULL) {
+			warrior[i]->IsMouseOn(point);
+		}
+	}
+
     // 沒事。如果需要處理滑鼠移動的話，寫code在這裡
 }
 

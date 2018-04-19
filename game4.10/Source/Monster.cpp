@@ -11,12 +11,18 @@ namespace game_framework {
 		monsterType = _monsterTpye;
 		RandBasicAbility();
 		isExist = false;
+		isMouseOn = false;
+		isMusicEffectOn = false;
 	}
 	Monster::Monster()
 	{
+		
 		RandMonsterType();
 		RandBasicAbility();
 		isExist = false;
+		isMouseOn = false;
+		isMusicEffectOn = false;
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,true);
 	}
 	void Monster::operator=(Monster &obj)
 	{
@@ -36,6 +42,8 @@ namespace game_framework {
 		isAlive = obj.isAlive;
 		LoadBitmap(monsterType);
 		isExist = true;
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,true);
+		
 	}
 
 	void Monster::LoadBitmap(string monsterName)
@@ -91,6 +99,21 @@ namespace game_framework {
 	{
 		isExist = flag;
 	}
+	void Monster::OnShow()
+	{
+		npcObject::OnShow();
+		if (isMouseOn && nowMovingType!=Hide) {                   //資料欄的顯示
+			if (!isMusicEffectOn) {
+				CAudio::Instance()->Play(AUDIO_DING);
+				isMusicEffectOn = true;
+			}
+			MyBoard->SetData(Hp, MaxHp, ApDefense, AdDefense, AttackPower);
+			MyBoard->OnShow();
+		}
+		else {
+			isMusicEffectOn = false;
+		}
+	}
 	Monster_state Monster::GetMonsterState()
 	{
 		return nowMonsterState;
@@ -106,9 +129,11 @@ namespace game_framework {
 	bool Monster::IsMouseOn(CPoint point)
 	{
 		if (point.x > _x && point.x <= _x + GetWidth() && point.y > _y && point.y <= _y + GetHeight()) {
-			return true;
+			isMouseOn = true;
+			return isMouseOn;
 		}
-		return false;
+		isMouseOn = false;
+		return isMouseOn;
 	}
 	void Monster::RandMonsterType()
 	{
@@ -139,6 +164,7 @@ namespace game_framework {
 		}
 		//隨機能力
 		Hp += randValue[0];
+		MaxHp = Hp;
 		ApDefense += randValue[1];
 		AdDefense += randValue[2];
 		AttackPower += randValue[3];

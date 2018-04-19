@@ -281,6 +281,11 @@ void CInteger::SetTopLeft(int nx, int ny)		// 將動畫的左上角座標移至 (x,y)
 	x = nx; y = ny;
 }
 
+void CInteger::SetIsBmpLoaded()
+{
+	isBmpLoaded = true;
+}
+
 void CInteger::ShowBitmap()
 {
 	GAME_ASSERT(isBmpLoaded, "CInteger: 請先執行LoadBitmap，然後才能ShowBitmap");

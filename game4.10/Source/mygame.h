@@ -65,6 +65,7 @@ namespace game_framework {
 	private:
 		CMovingBitmap Background;                       // ­I´º
 		CAnimation *menuBtn[4];			
+		CInteger temp;
 		bool isMouseOn[4];
 		bool isLoadingBitmaps;
 		bool isPlayAudio;

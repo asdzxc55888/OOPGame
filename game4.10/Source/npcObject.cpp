@@ -28,6 +28,8 @@ game_framework::npcObject::npcObject()
     isAlive = true;
     isFirstShot = true;
     isOnBattle = false;
+	isMusicEffectOn=false;
+	isMouseOn=false;
     nowMovingType = Forward;    // 預設動圖
 }
 
@@ -378,6 +380,16 @@ bool game_framework::npcObject::GetIsOnBattle()
 bool game_framework::npcObject::GetIsAlive()
 {
     return isAlive;
+}
+
+bool game_framework::npcObject::IsMouseOn(CPoint point)
+{
+	if (point.x > _x && point.x <= _x + GetWidth() && point.y > _y && point.y <= _y + GetHeight()) {
+		isMouseOn = true;
+		return isMouseOn;
+	}
+	isMouseOn = false;
+	return isMouseOn;
 }
 
 game_framework::Attack_Type game_framework::npcObject::GetAttackType()

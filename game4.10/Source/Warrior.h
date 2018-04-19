@@ -11,12 +11,15 @@ namespace game_framework {
 	public:
 		Warrior();
 		Warrior(warrior_type type);
+		~Warrior();
 		void LoadBitmap(string str);
+		void OnShow();
 		string GetWarriorType();
 	private:
 		void RandWarroirType();
 		void RandBasicAbility();
 		warrior_type warriorType;
+		MonsterDataBoard *MyBoard;
 	};
 
 }

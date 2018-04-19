@@ -20,6 +20,7 @@ namespace game_framework {
 		}
 		LoadBitmap(LoadBmpString);
 		RandBasicAbility();
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,false);
 	}
 	Warrior::Warrior(warrior_type type)
 	{
@@ -35,6 +36,11 @@ namespace game_framework {
 		}
 		LoadBitmap(LoadBmpString);
 		RandBasicAbility();
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,false);
+	}
+	Warrior::~Warrior()
+	{
+		delete MyBoard;
 	}
 	void Warrior::LoadBitmap(string str)
 	{
@@ -76,6 +82,22 @@ namespace game_framework {
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\warrior\\warriorHide.bmp", RGB(255, 255, 255));
 	}
+	void Warrior::OnShow()
+	{
+		npcObject::OnShow();
+		if (isMouseOn ) {                   //資料欄的顯示
+			if (!isMusicEffectOn) {
+				CAudio::Instance()->Play(AUDIO_DING);
+				isMusicEffectOn = true;
+			}
+			MyBoard->SetData(Hp, MaxHp, ApDefense, AdDefense, AttackPower);
+			MyBoard->OnShow();
+		}
+		else {
+			isMusicEffectOn = false;
+		}
+
+	}
 	string Warrior::GetWarriorType()
 	{
 		switch (warriorType)
@@ -113,6 +135,7 @@ namespace game_framework {
 		}
 		//隨機能力
 		Hp += randValue[0];
+		MaxHp = Hp;
 		ApDefense += randValue[1];
 		AdDefense += randValue[2];
 		AttackPower += randValue[3];
