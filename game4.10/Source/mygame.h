@@ -97,6 +97,7 @@ namespace game_framework {
 		CMovingBitmap TaskBoard;
 		CMovingBitmap Warning;
 		CAnimation SpeedControlBtn[3];
+		CInteger Money;
 		Obstacle mapObstacle;
 		Room *gameRoom[4];
 		Monster *comingMonster;                    //來看房子的怪物

@@ -144,6 +144,9 @@
     <ClCompile Include="Source\obstacle.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MonsterDataBoard.cpp">
+      <Filter>MyGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -195,6 +198,9 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\obstacle.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MonsterDataBoard.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>

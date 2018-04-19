@@ -281,6 +281,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="Source\Monster.cpp" />
+    <ClCompile Include="Source\MonsterDataBoard.cpp" />
     <ClCompile Include="Source\npcObject.cpp" />
     <ClCompile Include="Source\obstacle.cpp" />
     <ClCompile Include="Source\Room.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="Source\GameEvent.h" />
     <ClInclude Include="Source\MagicAttack.h" />
     <ClInclude Include="Source\Monster.h" />
+    <ClInclude Include="Source\MonsterDataBoard.h" />
     <ClInclude Include="Source\npcObject.h" />
     <ClInclude Include="Source\audio.h" />
     <ClInclude Include="Source\CBouncingBall.h" />
