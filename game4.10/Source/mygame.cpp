@@ -336,13 +336,13 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
-	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
-	SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_1.bmp", RGB(255, 255, 255));
+	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_2.bmp", RGB(255, 255, 255));
+	SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[0].SetTopLeft(1035,675);
 	SpeedControlBtn[1].SetTopLeft(1122, 675);
-	SpeedControlBtn[2].SetTopLeft(1210, 675);
+	SpeedControlBtn[2].SetTopLeft(1207, 675);
 	///////////////////////////////////////////////////////////////////
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
