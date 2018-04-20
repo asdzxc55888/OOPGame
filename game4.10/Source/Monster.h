@@ -8,7 +8,8 @@ namespace game_framework {
 		leave,
 		nothing,
 		wolking,
-		findHouse,
+		lookHouse,
+		findHouse
 	};
 	class Monster :public npcObject
 	{
@@ -34,6 +35,7 @@ namespace game_framework {
 		string monsterType;                         //怪物類型
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
+		CMovingBitmap headImg[2];                      //頭上符號
 
 	};
 	

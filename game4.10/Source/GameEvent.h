@@ -3,13 +3,9 @@
 #include "Warrior.h"
 #include "obstacle.h"
 namespace game_framework {
-	enum GameEvent_number {
-		MonsterGohome_eventNumber
-	};
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void SetObstacle(Room** gameRoom,Warrior** _warriors,Obstacle *obs, int roomSize);
 	////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
-	void ChoseEvent(GameEvent_number event);
 	void MonsterFindHouse(Monster **_monster, int TaskBoard_x, int TaskBoard_y); //怪物看屋事件 
 	void MonsterGohome_event(Room *_room);                                     //怪物進房事件，等同怪物住屋事件
 	void MonsterBeingClick(Monster **_monster, int room_size, Room **gameroom); //怪物被點擊事件
