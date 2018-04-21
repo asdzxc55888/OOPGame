@@ -34,25 +34,16 @@ void SetObstacle(Room** gameRoom, Warrior** _warriors, Obstacle* obs, int roomSi
         }
     }
 }
-void ChoseEvent(GameEvent_number event)
-{
-    switch (event)
-    {
-        case game_framework::MonsterGohome_eventNumber:
-            //MonsterGohome_event(Room *_room);
-            break;
-
-        default:
-            break;
-    }
-}
 void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) //怪物找房
 {
     if (Moving(_monster, TaskBoard_x + 60, 0, Obstacle()))
     {
         (*_monster)->SetMovingType(Back);
         (*_monster)->SetMonsterState(findHouse);
-    }
+	}
+	else {
+		(*_monster)->SetMonsterState(lookHouse);
+	}
 }
 void MonsterlivingHouse_event(Room* _room, Monster** _monster)
 {
@@ -69,15 +60,16 @@ void MonsterBeingClick(Monster** _monster, int room_size, Room** gameroom)
 
     switch (nowState)
     {
-        case game_framework::wolking:
-            break;
+        case game_framework::nothing:
 
+            break;
         case game_framework::findHouse:                   //同意怪物住進防屋
             for (int i = 0; i < room_size; i++)
             {
                 if (!(gameroom)[i]->GetIsMonsterLiving())    //沒怪物住的話就分配到那間房
                 {
                     MonsterlivingHouse_event((gameroom)[i], _monster);
+					(gameroom)[i]->GetLiveMonster()->SetMonsterState(nothing);
                     break;
                 }
             }
@@ -260,6 +252,7 @@ bool HitMonster(Warrior* _warrior, Monster* _monster)
 {
     return _warrior->HitRectangle(_monster->GetX(), _monster->GetY(), _monster->GetX() + _monster->GetWidth(), _monster->GetY() - _monster->GetHeight());
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 void WarriorAttack_event(Warrior* _warrior, Monster** target, Obstacle obs)
 {
     switch (_warrior->GetAttackType())
@@ -324,7 +317,7 @@ void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
                 _monster->SetMovingType(Moving_Right);
             }
 
-            if (Moving((&_monster), targetX, (*target)->GetFloor()) || (abs((*target)->GetX() - _monster->GetX()) < 200 && (*target)->GetFloor() == _monster->GetFloor()))
+            if (Moving((&_monster), targetX, (*target)->GetFloor(),obs) || (abs((*target)->GetX() - _monster->GetX()) < 200 && (*target)->GetFloor() == _monster->GetFloor()))
             {
                 _monster->SetMovingLeft(false);
                 _monster->SetMovingRight(false);
@@ -405,15 +398,10 @@ void BattleEnd(Room** gameRoom, int roomsize)
         }
     }
 }
-void WarriorAdAttack(Warrior* _warrior, Monster _monster)
-{
-}
 
 void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
 {
     isIntoBattle = true;
     CreateWarrior_event(&_warrior[0], villager);
-	CAudio::Instance()->Stop(AUDIO_GAMEBGM);
-    CAudio::Instance()->Play(AUDIO_WARNING);
 }
 }

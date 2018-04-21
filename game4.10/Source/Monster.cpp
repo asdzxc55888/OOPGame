@@ -85,6 +85,10 @@ namespace game_framework {
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
+		/////////////////////////////////////////////////////////////////////////////////////
+		
+		headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
+		headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
 	}
 	
 	void Monster::SetMonsterType(string _monsterType)
@@ -112,6 +116,17 @@ namespace game_framework {
 		}
 		else {
 			isMusicEffectOn = false;
+		}
+		switch (nowMonsterState)
+		{
+		case game_framework::lookHouse:
+			headImg[0].SetTopLeft(_x+5, _y - 20);
+			headImg[0].ShowBitmap();
+			break;
+		case game_framework::findHouse:
+			headImg[1].SetTopLeft(_x+5, _y - 20);
+			headImg[1].ShowBitmap();
+			break;
 		}
 	}
 	Monster_state Monster::GetMonsterState()
@@ -145,7 +160,7 @@ namespace game_framework {
 	{
 		int randValue[4];
 		randValue[0] = rand() % 20;
-		for (int i = 1; i < 4; i++)randValue[i] = rand() % 5;
+		for (int i = 1; i < 4; i++)randValue[i] = rand() % 6;
 		//°òÂ¦¯à¤O
 		if (monsterType == "tentacle") {
 			AttackType = Ap;
