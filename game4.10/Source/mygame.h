@@ -97,10 +97,10 @@ class CGameStateRun : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
         void OnEvent();                                 // 事件處理
     private:
-        CMovingBitmap Background;
-        CMovingBitmap TaskBoard;
-        CMovingBitmap Warning;
-        CAnimation SpeedControlBtn[3];
+        CMovingBitmap Background;                  //背景圖
+        CMovingBitmap TaskBoard;				  //任務版
+        CMovingBitmap Warning;                    //警告圖
+        CAnimation SpeedControlBtn[3];            //速度控制圖
         CInteger Money;
         Obstacle mapObstacle;
         Room* gameRoom[4];
@@ -113,6 +113,7 @@ class CGameStateRun : public CGameState
         int roomSize;
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
+		bool isSpeedControlOn[3];
         bool WarningQuit;
 };
 

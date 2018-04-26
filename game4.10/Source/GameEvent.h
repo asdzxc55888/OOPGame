@@ -29,5 +29,7 @@ namespace game_framework {
 	Warrior* findWarriorTarget(Monster *_monster, Warrior **_warrior);
 	void BattleEnd(Room **gameRoom, int roomsize);
 	void BattleTest1(Warrior **_warrior, bool &isIntoBattle, Room **gameRoom);
+	///////////////////////////////////////////////////////////////////®É¶¡±±¨î//////////////////////////////////////////////////////////////////
+	void timeControl_OnMove(int *timeBoost, bool  isSpeedControlOn[3]);
 
 }

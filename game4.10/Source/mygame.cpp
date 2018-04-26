@@ -287,14 +287,31 @@ void CGameStateRun::OnBeginState()
     isOnBattle = false;
     isIntoBattle = false;
     WarningQuit = false;
-
+	///////////////////////////時間設定/////////////////////
+	TimeBoost = 33;
+	isSpeedControlOn[0] = true;
+	for (int i = 1; i < 3; i++)isSpeedControlOn[i] = false;
+	////////////////////////////////////////////////////////
     for (int i = 0; i < 10; i++)warrior[i] = NULL;
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
+    CSpecialEffect::DelayFromSetCurrentTime(TimeBoost);
     CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
+
+	for (int i = 0; i < 3; i++) {
+		if (isSpeedControlOn[i]) {
+			if (!SpeedControlBtn[i].IsFinalBitmap()) {
+				SpeedControlBtn[i].OnMove();
+			}
+		}
+		else {
+			SpeedControlBtn[i].Reset();
+		}
+	}
+	timeControl_OnMove(&TimeBoost, isSpeedControlOn);
+
     OnEvent();
 
     if (Warning.Left() > -1280)                                    //警告圖片向左移動
@@ -334,8 +351,8 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
     TaskBoard.LoadBitmap("Bitmaps\\TaskBoard.bmp", RGB(255, 255, 255));
     Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
-	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
+	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_2.bmp", RGB(255, 255, 255));
@@ -397,6 +414,21 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
     {
         MonsterBeingClick(&comingMonster, 4, gameRoom);
     }
+	for (int i = 0; i < 3; i++) {
+
+		int _x = SpeedControlBtn[i].Left();
+		int _x2 = _x + SpeedControlBtn[i].Width();
+		int _y = SpeedControlBtn[i].Top();
+		int _y2 = SpeedControlBtn[i].Height() + _y;
+
+		if (point.x > _x && point.x <= _x2 && point.y > _y && point.y <= _y2) {
+			if (!isSpeedControlOn[i]) {
+				CAudio::Instance()->Play(AUDIO_DING);
+				for (int k = 0; k < 3; k++)isSpeedControlOn[k] = false;
+				isSpeedControlOn[i] = true;
+			}
+		}
+	}
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -406,21 +438,20 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {                            //處理介面顯示
 		if (gameRoom[i]->GetLiveMonster() != NULL) {
 			gameRoom[i]->GetLiveMonster()->IsMouseOn(point);
 		}
     }
-	if (comingMonster != NULL) {
+	if (comingMonster != NULL) {                            //處理介面顯示
 		comingMonster->IsMouseOn(point);
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 10; i++) {                          //處理介面顯示
 		if (warrior[i]!= NULL) {
 			warrior[i]->IsMouseOn(point);
 		}
 	}
-
-    // 沒事。如果需要處理滑鼠移動的話，寫code在這裡
+	
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
