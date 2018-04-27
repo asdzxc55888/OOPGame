@@ -404,11 +404,12 @@ void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
     isIntoBattle = true;
     CreateWarrior_event(&_warrior[0], villager);
 }
-void timeControl_OnMove(int * timeBoost, bool  isSpeedControlOn[3])
+void timeControl(int * timelevel, bool isSpeedControlOn[3])
 {
-	if (isSpeedControlOn[0]) *timeBoost = 33;
-	if (isSpeedControlOn[1]) *timeBoost = 22;
-	if (isSpeedControlOn[2]) *timeBoost = 11;
+	if (isSpeedControlOn[0]) *timelevel = 1;
+	if (isSpeedControlOn[1]) *timelevel = 2;
+	if (isSpeedControlOn[2]) *timelevel = 3;
 }
+
 
 }

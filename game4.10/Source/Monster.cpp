@@ -16,13 +16,13 @@ namespace game_framework {
 	}
 	Monster::Monster()
 	{
-		
+
 		RandMonsterType();
 		RandBasicAbility();
 		isExist = false;
 		isMouseOn = false;
 		isMusicEffectOn = false;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,true);
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, true);
 	}
 	void Monster::operator=(Monster &obj)
 	{
@@ -42,8 +42,8 @@ namespace game_framework {
 		isAlive = obj.isAlive;
 		LoadBitmap(monsterType);
 		isExist = true;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,true);
-		
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, true);
+
 	}
 
 	void Monster::LoadBitmap(string monsterName)
@@ -86,11 +86,11 @@ namespace game_framework {
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
 		/////////////////////////////////////////////////////////////////////////////////////
-		
+
 		headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
 		headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
 	}
-	
+
 	void Monster::SetMonsterType(string _monsterType)
 	{
 		monsterType = _monsterType;
@@ -103,10 +103,51 @@ namespace game_framework {
 	{
 		isExist = flag;
 	}
+	void Monster::ShowHpBar()
+	{
+		if (isOnBattle) {
+			if (!SHOW_LOAD_PROGRESS)
+				return;
+			int percent = Hp * 100 / MaxHp;
+			const int bar_width = 50;
+			const int bar_height = 8;
+			const int x1 = _x ;
+			const int x2 = x1 + bar_width;
+			const int y1 = _y ;
+			const int y2 = y1 + bar_height;
+			const int pen_width = bar_height / 8;
+			const int progress_x1 = x1 + pen_width;
+			const int progress_x2 = progress_x1 + percent * (bar_width - 2 * pen_width) / 100;
+			const int progress_x2_end = x2 - pen_width;
+			const int progress_y1 = y1 + pen_width;
+			const int progress_y2 = y2 - pen_width;
+
+			CDC *pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC 
+			CPen *pp, p(PS_NULL, 0, RGB(0, 0, 0));		// 清除pen
+			pp = pDC->SelectObject(&p);
+			if (percent >= 50) {
+				CBrush b2(RGB(0, 255, 0));					// 畫黃色 progrss進度
+				pDC->SelectObject(&b2);
+				pDC->Rectangle(progress_x1, progress_y1, progress_x2, progress_y2);
+			}
+			else {
+				int Green = 255 - (50 - percent) * 8;
+				if (Green <= 0)Green = 0;
+				CBrush b3(RGB(255, Green, 0));					// 畫黃色 progrss進度
+				pDC->SelectObject(&b3);
+				pDC->Rectangle(progress_x1, progress_y1, progress_x2, progress_y2);
+			}
+
+			pDC->SelectObject(pp);						// 釋放 pen
+			CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+		}
+
+	}
 	void Monster::OnShow()
 	{
 		npcObject::OnShow();
-		if (isMouseOn && nowMovingType!=Hide) {                   //資料欄的顯示
+
+		if (isMouseOn && nowMovingType != Hide) {                   //資料欄的顯示
 			if (!isMusicEffectOn) {
 				CAudio::Instance()->Play(AUDIO_DING);
 				isMusicEffectOn = true;
@@ -117,17 +158,20 @@ namespace game_framework {
 		else {
 			isMusicEffectOn = false;
 		}
+
 		switch (nowMonsterState)
 		{
 		case game_framework::lookHouse:
-			headImg[0].SetTopLeft(_x+5, _y - 20);
+			headImg[0].SetTopLeft(_x + 5, _y - 20);
 			headImg[0].ShowBitmap();
 			break;
 		case game_framework::findHouse:
-			headImg[1].SetTopLeft(_x+5, _y - 20);
+			headImg[1].SetTopLeft(_x + 5, _y - 20);
 			headImg[1].ShowBitmap();
 			break;
 		}
+
+		ShowHpBar();             //顯示血條
 	}
 	Monster_state Monster::GetMonsterState()
 	{
@@ -160,21 +204,21 @@ namespace game_framework {
 	{
 		int randValue[4];
 		randValue[0] = rand() % 20;
-		for (int i = 1; i < 4; i++)randValue[i] = rand() % 6;
+		for (int i = 1; i < 4; i++)randValue[i] = rand() % 4;
 		//基礎能力
 		if (monsterType == "tentacle") {
 			AttackType = Ap;
-			Hp=100;					//血量
-			ApDefense=8;			//魔法防禦
-			AdDefense=5;			//物理防禦
-			AttackPower=20;         //攻擊力
-			AttackType=Ap;			//攻擊模式
+			Hp = 100;					//血量
+			ApDefense = 3;			//魔法防禦
+			AdDefense = 2;			//物理防禦
+			AttackPower = 10;         //攻擊力
+			AttackType = Ap;			//攻擊模式
 		}
 		else if (monsterType == "kappa") {
 			Hp = 120;					//血量
-			ApDefense = 5;			//魔法防禦
-			AdDefense = 9;			//物理防禦
-			AttackPower = 24;         //攻擊力
+			ApDefense = 2;			//魔法防禦
+			AdDefense = 3;			//物理防禦
+			AttackPower = 12;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 		}
 		//隨機能力
@@ -186,10 +230,10 @@ namespace game_framework {
 		switch (AttackType)
 		{
 		case game_framework::Ad:
-			movingSpeed = 4;
+			movingSpeed = 2;
 			break;
 		case game_framework::Ap:
-			movingSpeed = 5;
+			movingSpeed = 2;
 			break;
 		}
 	}

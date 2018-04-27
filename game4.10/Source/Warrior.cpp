@@ -119,15 +119,15 @@ namespace game_framework {
 	{
 		int randValue[4];
 		randValue[0] = rand() % 20;
-		for (int i = 1; i < 4; i++)randValue[i] = rand() % 5;
+		for (int i = 1; i < 4; i++)randValue[i] = rand() % 4;
 		//基礎能力
 		switch (warriorType)
 		{
 		case game_framework::villager:
 			Hp = 100;					//血量
-			ApDefense = 4;			//魔法防禦
-			AdDefense = 2;			//物理防禦
-			AttackPower = 20;         //攻擊力
+			ApDefense = 3;			//魔法防禦
+			AdDefense = 3;			//物理防禦
+			AttackPower = 10;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 			break;
 		default:
@@ -142,10 +142,10 @@ namespace game_framework {
 		switch (AttackType)
 		{
 		case game_framework::Ad:
-			movingSpeed = 4;
+			movingSpeed = 2;
 			break;
 		case game_framework::Ap:
-			movingSpeed = 5;
+			movingSpeed = 2;
 			break;
 		}
 	}

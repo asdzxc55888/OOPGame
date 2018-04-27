@@ -63,10 +63,10 @@ namespace game_framework {
 		switch (nowDirection)
 		{
 		case game_framework::Left:
-			x -= 10;
+			x -= 5;
 			break;
 		case game_framework::Right:
-			x += 10;
+			x += 5;
 			break;
 		}
 		bmp[nowDirection].SetTopLeft(x, y);

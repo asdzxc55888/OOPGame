@@ -288,7 +288,7 @@ void CGameStateRun::OnBeginState()
     isIntoBattle = false;
     WarningQuit = false;
 	///////////////////////////時間設定/////////////////////
-	TimeBoost = 33;
+	TimeLevel = 1;
 	isSpeedControlOn[0] = true;
 	for (int i = 1; i < 3; i++)isSpeedControlOn[i] = false;
 	////////////////////////////////////////////////////////
@@ -297,9 +297,7 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    CSpecialEffect::DelayFromSetCurrentTime(TimeBoost);
-    CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
-
+	/////////////////////////////////時間控制按鈕////////////////////////////////////////////
 	for (int i = 0; i < 3; i++) {
 		if (isSpeedControlOn[i]) {
 			if (!SpeedControlBtn[i].IsFinalBitmap()) {
@@ -310,13 +308,23 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 			SpeedControlBtn[i].Reset();
 		}
 	}
-	timeControl_OnMove(&TimeBoost, isSpeedControlOn);
 
+	timeControl(&TimeLevel,isSpeedControlOn);
+
+
+	for (int i = 0; i < roomSize; i++) {
+		if(gameRoom[i]->GetLiveMonster()!=NULL)gameRoom[i]->GetLiveMonster()->SetTimeLevel(TimeLevel);
+	}
+	for (int i = 0; i < 10; i++) {
+		if (warrior[i] != NULL) warrior[i]->SetTimeLevel(TimeLevel);
+	}
+	if (comingMonster != NULL)comingMonster->SetTimeLevel(TimeLevel);
+	/////////////////////////////////時間控制按鈕/////////////////////////////////////////////////
     OnEvent();
 
     if (Warning.Left() > -1280)                                    //警告圖片向左移動
     {
-        Warning.SetTopLeft(Warning.Left() - 20, Warning.Top());
+        Warning.SetTopLeft(Warning.Left() - 6*TimeLevel, Warning.Top());
     }
 
     if (comingMonster != NULL)
@@ -414,7 +422,8 @@ void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
     {
         MonsterBeingClick(&comingMonster, 4, gameRoom);
     }
-	for (int i = 0; i < 3; i++) {
+
+	for (int i = 0; i < 3; i++) {                                //時間控制按鈕
 
 		int _x = SpeedControlBtn[i].Left();
 		int _x2 = _x + SpeedControlBtn[i].Width();

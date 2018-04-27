@@ -15,8 +15,6 @@ namespace game_framework {
 	void AttackWarrior(Monster *monster,Warrior **_warrior);
 	bool HitWarrior(Monster *_monster,Warrior *_warrior);          //判斷有無碰到勇者
 	void CreateMonster_event(Monster **_monster);
-	//bool HitMonster(Monster _monster);
-	//bool HitWarrior(Warrior _warrior);
 	////////////////////////////////////////////////////////////////////////////勇者事件//////////////////////////////////////////////////////////
 	bool Moving(Warrior **_warrior, int x, int floor, Obstacle obs);
 	void CreateWarrior_event(Warrior **_warrior, warrior_type type);
@@ -30,6 +28,6 @@ namespace game_framework {
 	void BattleEnd(Room **gameRoom, int roomsize);
 	void BattleTest1(Warrior **_warrior, bool &isIntoBattle, Room **gameRoom);
 	///////////////////////////////////////////////////////////////////時間控制//////////////////////////////////////////////////////////////////
-	void timeControl_OnMove(int *timeBoost, bool  isSpeedControlOn[3]);
+	void timeControl(int *timelevel, bool  isSpeedControlOn[3]);
 
 }

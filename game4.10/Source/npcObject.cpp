@@ -127,12 +127,12 @@ void game_framework::npcObject::OnMove()
         else if (isMovingLeft)
         {
             nowMovingType = Moving_Left;
-            _x -= movingSpeed;
+            _x -= movingSpeed*timeLevel;
         }
         else if (isMovingRight)
         {
             nowMovingType = Moving_Right;
-            _x += movingSpeed;
+            _x += movingSpeed*timeLevel;
         }
 
         animation[nowMovingType]->OnMove();
@@ -220,6 +220,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 {
     /////////////////////////////////////////////////////////////////////創造魔法攻擊
     int i = 0;
+	int AttackCount_total = 20 * (4 - timeLevel);
 
     while (magicAttack[i] != NULL)
     {
@@ -228,7 +229,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
         if (i > 3) return false;
     }
 
-    if (isFirstShot || time(&nowTime) - setTime > 1)
+    if (isFirstShot || time(&nowTime) - setTime > 1 || AttackCount_total<AttackCount)
     {
         magicAttack[i] = new MagicAttack(_x, _y + 10, AttackPower, type);
         magicAttack[i]->SetTarget(target_x1, target_x2);
@@ -241,10 +242,13 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
         {
             magicAttack[i]->SetDirection(Right);
         }
-
+		AttackCount=0;
         time(&setTime);
         isFirstShot = false;
-    }
+	}
+	else {
+		AttackCount++;
+	}
 
     //////////////////////////////////////////////////////////////////////////判斷是否擊中
     for (int k = 0; k < 3; k++)
@@ -269,24 +273,31 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 
 bool game_framework::npcObject::PhysicalAttack_event(int tar_x1, int tar_x2)
 {
-    if (isFirstShot || time(&nowTime) - setTime > 1)
+	int AttackCount_total = 20 * (4-timeLevel);
+    if (isFirstShot || time(&nowTime) - setTime > 1|| AttackCount > AttackCount_total)
     {
         if (HitRectangle(tar_x1, 0, tar_x2, 0))
         {
             if (tar_x1 > _x)
             {
                 SetMovingType(Attack_Right);
+				animation[Attack_Right]->SetDelayCount(30);
             }
             else
             {
                 SetMovingType(Attack_Left);
+				animation[Attack_Left]->SetDelayCount(30);
             }
 
             isFirstShot = false;
             time(&setTime);
+			AttackCount = 0;
             return true;
-        }
-    }
+		}
+	}
+	else {
+		AttackCount++;
+	}
 
     return false;
 }
@@ -321,6 +332,16 @@ void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
         isAlive = false;
     }
 }
+
+void game_framework::npcObject::SetTimeLevel(int _timeLevel)
+{
+	timeLevel = _timeLevel;
+	for (int i = 0; i < 7; i++) {
+		animation[i]->SetDelayCount((40-10 * timeLevel));
+	}
+}
+
+
 
 int game_framework::npcObject::GetFloor()
 {

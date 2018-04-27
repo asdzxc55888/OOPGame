@@ -578,8 +578,8 @@ bool CGame::OnIdle()  // 修改功能不要修改OnIdle()，而應修改OnMove()及OnShow()
 	//
 	if (SHOW_GAME_CYCLE_TIME)
 		TRACE("Ellipse time for the %d th cycle=%d \n", CSpecialEffect::GetCurrentTimeCount(),CSpecialEffect::GetEllipseTime());
-	//CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
-	//CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
+	CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
+	CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
 	return true;
 }
 

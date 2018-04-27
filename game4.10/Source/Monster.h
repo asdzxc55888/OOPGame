@@ -21,6 +21,7 @@ namespace game_framework {
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
 		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
+		void ShowHpBar();
 		void OnShow();
 		Monster_state GetMonsterState();            //取的怪物狀態
 		string GetMonsterType();

@@ -40,6 +40,7 @@ class npcObject
         void SetIsOnBattle(bool flag);  //是否在戰鬥
         void SetBattleTemp(bool flag);
         void BeingAttack(int damge, Attack_Type type);
+		void SetTimeLevel(int _timeLevel);
         int GetFloor();
         int GetX();
         int GetY();
@@ -65,6 +66,8 @@ class npcObject
         int ApDefense;			//魔法防禦
         int AdDefense;			//物理防禦
         int AttackPower;        //攻擊力
+		int timeLevel;           //設定時間快慢
+		int AttackCount;        //攻擊判定時間
         bool isMovingDown;			// 是否正在往下移動
         bool isMovingLeft;			// 是否正在往左移動
         bool isMovingRight;			// 是否正在往右移動

@@ -107,7 +107,7 @@ class CGameStateRun : public CGameState
         Monster* comingMonster;                    //來看房子的怪物
         Warrior* warrior[10];
         time_t Settime, nowtime;
-        int TimeBoost;                            //時間快慢
+		int TimeLevel;                            //時間快慢
         int Clock;
         int houseLevele;
         int roomSize;
