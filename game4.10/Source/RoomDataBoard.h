@@ -3,12 +3,13 @@ namespace game_framework {
 	class RoomDataBoard
 	{
 	public:
-		RoomDataBoard();
+		RoomDataBoard(Room thisRoom);
 		~RoomDataBoard();
 		void Initial();
+		void OnShow();
 	private:
 		int x, y;                  //®y¼Ð
-		CMovingBitmap bmp;
+		CMovingBitmap *bmp;
 		
 	};
 

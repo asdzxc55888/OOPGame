@@ -2,13 +2,19 @@
 #include "Resource.h"
 #include <mmsystem.h>
 #include <ddraw.h>
+#include<iostream>
+#include<fstream>
+#include<vector>
 #include "audio.h"
 #include "gamelib.h"
 #include "Monster.h"
+
+using namespace std;
 namespace game_framework {
 	Monster::Monster(string _monsterTpye)
 	{
 		monsterType = _monsterTpye;
+		RandName();
 		RandBasicAbility();
 		isExist = false;
 		isMouseOn = false;
@@ -16,7 +22,7 @@ namespace game_framework {
 	}
 	Monster::Monster()
 	{
-
+		RandName();
 		RandMonsterType();
 		RandBasicAbility();
 		isExist = false;
@@ -236,5 +242,19 @@ namespace game_framework {
 			movingSpeed = 2;
 			break;
 		}
+	}
+	void Monster::RandName()
+	{
+		char line[50] = "";
+		int count = 0;
+		vector<string> nameData;
+		fstream nameFile;
+		nameFile.open("Source\\NameData.txt", ios::in);
+		while (nameFile.getline(line, sizeof(line), '\n')) {
+			nameData.push_back(line);
+			count++;
+		}
+		int randValue = rand() % count;
+		name = nameData[randValue];
 	}
 }

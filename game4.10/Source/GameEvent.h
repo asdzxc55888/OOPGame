@@ -7,7 +7,7 @@ namespace game_framework {
 	void SetObstacle(Room** gameRoom,Warrior** _warriors,Obstacle *obs, int roomSize);
 	////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
 	void MonsterFindHouse(Monster **_monster, int TaskBoard_x, int TaskBoard_y); //怪物看屋事件 
-	void MonsterGohome_event(Room *_room);                                     //怪物進房事件，等同怪物住屋事件
+	void MonsterGohome_event(Room *_room,int monsterIndex);                                     //怪物進房事件，等同怪物住屋事件
 	void MonsterBeingClick(Monster **_monster, int room_size, Room **gameroom); //怪物被點擊事件
 	bool MonsterLeave(Monster **_monster);                                      //怪物離開，直接消失的那種離開
 	bool Moving(Monster **_monster, int x, int floor,Obstacle obs);                          //怪物移動

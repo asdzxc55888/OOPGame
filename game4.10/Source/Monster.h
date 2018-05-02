@@ -16,6 +16,7 @@ namespace game_framework {
 	public:
 		Monster(string _monsterTpye);
 		Monster();
+		void Initial();
 		void operator= (Monster &obj);
 		void LoadBitmap(string monsterName);
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
@@ -30,9 +31,11 @@ namespace game_framework {
 	private:
 		void RandMonsterType();
 		void RandBasicAbility();
+		void RandName();
 		bool isMusicEffectOn;
 		bool isExist;
 		bool isMouseOn;
+		string name;
 		string monsterType;                         //怪物類型
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄

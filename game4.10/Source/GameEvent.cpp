@@ -11,15 +11,17 @@ void SetObstacle(Room** gameRoom, Warrior** _warriors, Obstacle* obs, int roomSi
 {
     for (int i = 0; i < roomSize; i++)
     {
-        if (gameRoom[i]->GetIsMonsterLiving() && gameRoom[i]->GetIsMonsterFight())
-        {
-            Monster* _monster = gameRoom[i]->GetLiveMonster();
-            int _x1 = _monster->GetX();
-            int _x2 = _monster->GetWidth() + _x1;
-            int _y1 = _monster->GetY();
-            int _y2 = _monster->GetHeight() + _y1;
-            obs->SetXY(_x1, _x2, _y1, _y2);
-        }
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+			if (gameRoom[i]->GetIsMonsterLiving() && gameRoom[i]->GetIsMonsterFight(k))
+			{
+				Monster* _monster = gameRoom[i]->GetLiveMonster(k);
+				int _x1 = _monster->GetX();
+				int _x2 = _monster->GetWidth() + _x1;
+				int _y1 = _monster->GetY();
+				int _y2 = _monster->GetHeight() + _y1;
+				obs->SetXY(_x1, _x2, _y1, _y2);
+			}
+		}
     }
 
     for (int i = 0; i < 10; i++)
@@ -48,11 +50,11 @@ void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) 
 void MonsterlivingHouse_event(Room* _room, Monster** _monster)
 {
     _room->SetMonsterlivingRoom(_monster);
-    MonsterGohome_event(_room);
+    MonsterGohome_event(_room,0);
 }
-void MonsterGohome_event(Room* _room)
+void MonsterGohome_event(Room* _room,int monsterIndex)
 {
-    _room->LetMonsterGohome();
+    _room->LetMonsterGohome(monsterIndex);
 }
 void MonsterBeingClick(Monster** _monster, int room_size, Room** gameroom)
 {
@@ -69,7 +71,7 @@ void MonsterBeingClick(Monster** _monster, int room_size, Room** gameroom)
                 if (!(gameroom)[i]->GetIsMonsterLiving())    //沒怪物住的話就分配到那間房
                 {
                     MonsterlivingHouse_event((gameroom)[i], _monster);
-					(gameroom)[i]->GetLiveMonster()->SetMonsterState(nothing);
+					(gameroom)[i]->GetLiveMonster(0)->SetMonsterState(nothing);
                     break;
                 }
             }
@@ -258,7 +260,7 @@ void WarriorAttack_event(Warrior* _warrior, Monster** target, Obstacle obs)
     switch (_warrior->GetAttackType())
     {
         case Ad:
-            if (Moving(&_warrior, (*target)->GetX(), (*target)->GetFloor(), obs) && HitMonster(_warrior, (*target)))
+            if (Moving(&_warrior, (*target)->GetX(), (*target)->GetFloor(), obs) || HitMonster(_warrior, (*target)))
             {
                 if (_warrior->PhysicalAttack_event((*target)->GetX(), (*target)->GetX() + (*target)->GetWidth()))
                 {
@@ -283,7 +285,7 @@ void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
     switch (_monster->GetAttackType())
     {
         case Ad:
-            if (Moving((&_monster), (*target)->GetX(), (*target)->GetFloor(), obs) )
+            if (Moving((&_monster), (*target)->GetX(), (*target)->GetFloor(), obs) || HitWarrior(_monster, (*target)))
             {
                 if (_monster->PhysicalAttack_event((*target)->GetX(), (*target)->GetX() + (*target)->GetWidth()))
                 {
@@ -340,22 +342,24 @@ Monster* findMonsterTarget(Warrior* _warrior, Room** gameroom, int room_size)
 
     for (int i = 0; i < room_size; i++)
     {
-        if (gameroom[i] ->GetIsMonsterLiving() && gameroom[i]->GetLiveMonster()->GetIsOnBattle())  //判斷怪物是否正在戰鬥
-        {
-            int dx = abs(_warrior->GetX() - (gameroom[i]->GetLiveMonster())->GetX());          //距離差
+		for (int k = 0; k < gameroom[i]->GetLiveMonsterSize(); k++) {
+			if ( gameroom[i]->GetLiveMonster(k)->GetIsOnBattle())  //判斷怪物是否正在戰鬥
+			{
+				int dx = abs(_warrior->GetX() - (gameroom[i]->GetLiveMonster(k))->GetX());          //距離差
 
-            if (gameroom[i]->GetLiveMonster()->GetFloor() != _warrior->GetFloor())
-            {
-                int dFloor = abs(gameroom[i]->GetLiveMonster()->GetFloor() - _warrior->GetFloor());   //樓層差
-                dx += dFloor * 400;
-            }
+				if (gameroom[i]->GetLiveMonster(k)->GetFloor() != _warrior->GetFloor())
+				{
+					int dFloor = abs(gameroom[i]->GetLiveMonster(k)->GetFloor() - _warrior->GetFloor());   //樓層差
+					dx += dFloor * 400;
+				}
 
-            if (dx < minX)
-            {
-                minX = dx;
-                result = (gameroom[i]->GetLiveMonster());
-            }
-        }
+				if (dx < minX)
+				{
+					minX = dx;
+					result = (gameroom[i]->GetLiveMonster(k));
+				}
+			}
+		}
     }
 
     return result;
@@ -391,11 +395,13 @@ void BattleEnd(Room** gameRoom, int roomsize)
 {
     for (int i = 0; i < roomsize; i++)
     {
-        if (gameRoom[i]->GetLiveMonster() != NULL && gameRoom[i]->GetLiveMonster()->GetIsOnBattle())
-        {
-            gameRoom[i]->LetMonsterGohome();
-            gameRoom[i]->GetLiveMonster()->SetIsOnBattle(false);
-        }
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+			if (gameRoom[i]->GetLiveMonster(k)->GetIsOnBattle())
+			{
+				gameRoom[i]->LetMonsterGohome(k);
+				gameRoom[i]->GetLiveMonster(k)->SetIsOnBattle(false);
+			}
+		}
     }
 }
 
