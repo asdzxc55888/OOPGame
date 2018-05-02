@@ -109,14 +109,6 @@ namespace game_framework {
 	}
 	void MonsterDataBoard::OnShow()
 	{
-		/*Board.SetTopLeft(x, y);
-		MaxHp->SetTopLeft(x + 310, y + 130);
-		Hp->SetTopLeft(x + 260, y + 130);
-		AttackPower->SetTopLeft(x + 70, y + 170);
-		AdDefense->SetTopLeft(x + 190, y + 170);
-		ApDefense->SetTopLeft(x + 300, y + 170);
-		Picture.SetTopLeft(x+35, y+20);*/
-		////////////////////////////
 		Board.ShowBitmap();
 		MaxHp->ShowBitmap();
 		Hp->ShowBitmap();

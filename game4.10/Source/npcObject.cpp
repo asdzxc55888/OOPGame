@@ -229,7 +229,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
         if (i > 3) return false;
     }
 
-    if (isFirstShot || time(&nowTime) - setTime > 1 || AttackCount_total<AttackCount)
+    if (isFirstShot ||  AttackCount_total<AttackCount)
     {
         magicAttack[i] = new MagicAttack(_x, _y + 10, AttackPower, type);
         magicAttack[i]->SetTarget(target_x1, target_x2);
@@ -243,7 +243,6 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
             magicAttack[i]->SetDirection(Right);
         }
 		AttackCount=0;
-        time(&setTime);
         isFirstShot = false;
 	}
 	else {
@@ -274,7 +273,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 bool game_framework::npcObject::PhysicalAttack_event(int tar_x1, int tar_x2)
 {
 	int AttackCount_total = 20 * (4-timeLevel);
-    if (isFirstShot || time(&nowTime) - setTime > 1|| AttackCount > AttackCount_total)
+    if (isFirstShot || AttackCount > AttackCount_total)
     {
         if (HitRectangle(tar_x1, 0, tar_x2, 0))
         {
@@ -290,7 +289,6 @@ bool game_framework::npcObject::PhysicalAttack_event(int tar_x1, int tar_x2)
             }
 
             isFirstShot = false;
-            time(&setTime);
 			AttackCount = 0;
             return true;
 		}
