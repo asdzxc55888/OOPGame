@@ -3,14 +3,19 @@ namespace game_framework {
 	class RoomDataBoard
 	{
 	public:
-		RoomDataBoard(Room thisRoom);
+		RoomDataBoard(int liveMonsterSize , string monsterType[3] ,string monsterName[3], int number);
 		~RoomDataBoard();
-		void Initial();
+		void Initialize(int liveMonsterSize, string monsterType[3], string monsterName[3], int number);
 		void OnShow();
+		void ShowName();
+		void ShowRoomNumber();
 	private:
 		int x, y;                  //®y¼Ð
-		CMovingBitmap *bmp;
-		
+		int MonsterImgSize;
+		int RoomNumber;
+		string monsterName[3];
+		CMovingBitmap bmp;
+		CMovingBitmap MonsterImg[3];
 	};
 
 }

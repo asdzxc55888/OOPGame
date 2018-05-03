@@ -22,10 +22,14 @@ namespace game_framework
 	void Room::Initial()
 	{
 		for (int i = 0; i < 3;i++)liveMonster[i] = NULL;
+		myDataBoard = NULL;
 		floor = 0; 
 		liveMonsterSize = 0;
+		RoomNumber = 100;
 		isDoorOpen = false;
 		isMonsterLiving = false;
+		isMouseOn = false;
+		isMusicEffectOn = false;
 		for (int i = 0; i < 3; i++) isMonsterIn[i] = false;
 		for (int i = 0; i < 3;i++) isMonsterGoHome[i] = false;
 		for (int i = 0; i < 3; i++) isMonsterFight[i] = false;
@@ -33,6 +37,17 @@ namespace game_framework
 	}
 	void Room::OnShow(bool flag)  //true 為讓門顯示 false試讓怪物顯示
 	{
+		if (isMouseOn) {                   //資料欄的顯示
+			if (!isMusicEffectOn) {
+				CAudio::Instance()->Play(AUDIO_DING);
+				isMusicEffectOn = true;
+			}
+			if (isMonsterLiving)myDataBoard->OnShow();
+		}
+		else {
+			isMusicEffectOn = false;
+		}
+
 		if (flag) {
 			animation.SetTopLeft(_x, _y);
 			animation.OnShow();
@@ -45,6 +60,7 @@ namespace game_framework
 	}
 	void Room::OnMove()
 	{
+		
 		for (int i = 0; i < liveMonsterSize; i++) {
 			if (isMonsterGoHome[i])isMonsterGoHome[i] = MonsterGoHome(i);// 怪物回家移動
 		}
@@ -83,7 +99,13 @@ namespace game_framework
 	}
 	int Room::GetLiveMonsterSize()
 	{
-		return liveMonsterSize;
+		int size = 0;
+		for (int i = 0; i < 3; i++) {
+			if (liveMonster[i] != NULL) {
+				size += 1;
+			}
+		}
+		return size;
 	}
 	void Room::LetMonsterGohome(int MonsterIndex)
 	{
@@ -93,8 +115,10 @@ namespace game_framework
 	bool Room::IsMouseOn(CPoint point)
 	{
 		if (point.x > _x && point.x <= _x + animation.Width() && point.y > _y && point.y <= _y + animation.Height()) {
+			isMouseOn = true;
 			return true;
 		}
+		isMouseOn = false;
 		return false;
 	}
 	bool Room::MovingLR(int x,int MonsterIndex)
@@ -196,5 +220,16 @@ namespace game_framework
 		if (liveMonsterSize >= 3)return;
 		liveMonster[liveMonsterSize++] = *_monster;
 		*_monster = NULL;
+		////////////////////////////////////////////////////////////
+		if (myDataBoard != NULL) {
+			delete myDataBoard;
+			myDataBoard = NULL;
+		}
+		string _monsterType[3],_monsterName[3];
+		for (int i = 0; i < liveMonsterSize; i++) {
+			_monsterType[i] = liveMonster[i]->GetMonsterType();
+			_monsterName[i] = liveMonster[i]->GetMonsterName();
+		}
+		myDataBoard = new RoomDataBoard(liveMonsterSize, _monsterType, _monsterName, RoomNumber);
 	}
 }

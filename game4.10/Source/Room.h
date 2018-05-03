@@ -1,5 +1,6 @@
 #pragma once
 #include "Monster.h"
+#include "RoomDataBoard.h"
 namespace game_framework
 {
 class Room
@@ -27,7 +28,9 @@ class Room
         int _x, _y; //座標
         int floor;
 		int liveMonsterSize;     //居住怪物個數
+		int RoomNumber;
         Monster* liveMonster[3];	//居住怪物
+		RoomDataBoard *myDataBoard;
         CAnimation animation;  //動畫
         void SetMonsterIntohome(int monsterIndex); //怪物進門的動作
 		void ResortLiveMonster();
@@ -37,6 +40,8 @@ class Room
         bool isDoorOpen;		//門有沒有開
         bool isMonsterGoHome[3];	//怪物是否正在移動進屋
         bool isMonsterFight[3];    //怪物是否戰鬥
+		bool isMouseOn;
+		bool isMusicEffectOn;
 };
 }
 

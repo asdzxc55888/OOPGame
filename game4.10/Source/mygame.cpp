@@ -450,6 +450,7 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
     for (int i = 0; i < 4; i++) {                            //處理介面顯示
+		gameRoom[i]->IsMouseOn(point);
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
 			gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point);
 		}

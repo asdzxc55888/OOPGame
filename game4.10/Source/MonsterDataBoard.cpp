@@ -6,22 +6,23 @@
 #include "gamelib.h"
 #include "MonsterDataBoard.h"
 namespace game_framework {
-	MonsterDataBoard::MonsterDataBoard(int MaxHp, int ApD, int AdD, int dps, string MonsterType,bool flag)
+	MonsterDataBoard::MonsterDataBoard(int MaxHp, int ApD, int AdD, int dps, string MonsterType,bool flag,  string _name)
 	{
 		isLoadBitmaps = false;
-		Initialize(MaxHp, ApD, AdD, dps, MonsterType,flag);
+		Initialize(MaxHp, ApD, AdD, dps, MonsterType,flag,_name);
 	}
 	MonsterDataBoard::MonsterDataBoard()
 	{
 		isLoadBitmaps = false;
-		Initialize(10, 10, 10, 10, "tentacle",true);
+		Initialize(10, 10, 10, 10, "tentacle",true," ");
 	}
 	MonsterDataBoard::~MonsterDataBoard()
 	{
 		delete Hp,MaxHp,AttackPower,AdDefense,ApDefense;
 	}
-	void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string MonsterType,bool flag)
+	void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string MonsterType,bool flag, string _name)
 	{
+		name = _name;
 		Hp= new CInteger(GetDigit(maxHp));
 		MaxHp = new CInteger(GetDigit(maxHp));
 		AttackPower = new CInteger(GetDigit(dps));
@@ -99,6 +100,20 @@ namespace game_framework {
 		pDC->SelectObject(pp);						// 釋放 pen
 		CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 	}
+	void MonsterDataBoard::ShowName()
+	{
+		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+		CFont f, *fp;
+		f.CreatePointFont(120, "Arial");	// 產生 font f; 160表示16 point的字
+		fp = pDC->SelectObject(&f);					// 選用 font f
+		pDC->SetBkColor(RGB(254, 233, 189));
+		pDC->SetTextColor(RGB(0,0, 0));
+		char str[80];								// Demo 數字對字串的轉換
+		sprintf(str, name.c_str());
+		pDC->TextOut(x+130, y+88, str);
+		pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
+		CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+	}
 	void MonsterDataBoard::SetData(int hp, int maxHp, int ApD, int AdD, int dps)
 	{
 		Hp->SetInteger(hp);
@@ -117,6 +132,7 @@ namespace game_framework {
 		ApDefense->ShowBitmap();
 		Picture.ShowBitmap(1.2);
 
+		ShowName();
 		ShowHpBar(Hp->GetInteger()*100/MaxHp->GetInteger());
 	}
 
