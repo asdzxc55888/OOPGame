@@ -569,17 +569,17 @@ void CGameStateRun::OnEvent()
     /////////////////////////////////////////////////////////////////////////////勇者攻擊事件
     if (isOnBattle && difftime(time(&nowtime), Clock) > 5)
     {
-        if (warrior[0] != NULL)
+        if (warrior[1] != NULL)
         {
-            Monster* target = findMonsterTarget(warrior[0], gameRoom, roomSize);
+            Monster* target = findMonsterTarget(warrior[1], gameRoom, roomSize);
 
             if (target != NULL)
             {
-                WarriorAttack_event(warrior[0], &target, mapObstacle);
+                WarriorAttack_event(warrior[1], &target, mapObstacle);
             }
             else
             {
-                Moving(&(warrior[0]), 700, 1, mapObstacle);
+                Moving(&(warrior[1]), 700, 1, mapObstacle);
             }
         }
     }
@@ -612,7 +612,7 @@ void CGameStateRun::OnEvent()
 
 					if (target != NULL)
 					{
-						MonsterAttack_event(_monster, &warrior[0], mapObstacle);
+						MonsterAttack_event(_monster, &warrior[1], mapObstacle);
 					}
 					else                                           //結束戰鬥
 					{
