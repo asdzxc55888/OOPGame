@@ -30,6 +30,7 @@ namespace game_framework {
 		Monster_state GetMonsterState();            //取的怪物狀態
 		string GetMonsterType();
 		string GetMonsterName();
+		int GetMonsterGender();
 		bool GetIsExist();							//取得怪物是否顯示在地圖上
 		bool IsMouseOn(CPoint point);
 	private:

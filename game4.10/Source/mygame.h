@@ -114,6 +114,7 @@ class CGameStateRun : public CGameState
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
 		bool isSpeedControlOn[3];
+		bool isMonsterDataBoardShow;
         bool WarningQuit;
 };
 

@@ -287,6 +287,7 @@ void CGameStateRun::OnBeginState()
     isOnBattle = false;
     isIntoBattle = false;
     WarningQuit = false;
+	isMonsterDataBoardShow = false;
 	///////////////////////////時間設定/////////////////////
 	TimeLevel = 1;
 	isSpeedControlOn[0] = true;
@@ -450,11 +451,18 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
     for (int i = 0; i < 4; i++) {                            //處理介面顯示
-		gameRoom[i]->IsMouseOn(point);
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point);
+			if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point)) {
+				isMonsterDataBoardShow = true;
+				break;
+			}
+			isMonsterDataBoardShow = false;
 		}
     }
+	for (int i = 0; i < 4; i++) {                            //處理介面顯示
+		if (!isMonsterDataBoardShow)gameRoom[i]->IsMouseOn(point);
+	}
+
 	if (comingMonster != NULL) {                            //處理介面顯示
 		comingMonster->IsMouseOn(point);
 	}
@@ -641,7 +649,10 @@ void CGameStateRun::OnEvent()
                 if (randvalue < 5)
                 {
                     comingMonster->SetMonsterState(leave);
-                }
+				}
+				else if (randvalue >= 5 && randvalue <= 100) {
+					ComingMonsterFallInLoveEvent(&comingMonster, gameRoom, roomSize);
+				}
 
                 break;
 

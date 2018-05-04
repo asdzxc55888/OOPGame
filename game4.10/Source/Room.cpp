@@ -226,10 +226,12 @@ namespace game_framework
 			myDataBoard = NULL;
 		}
 		string _monsterType[3],_monsterName[3];
+		int _monsterGender[3];
 		for (int i = 0; i < liveMonsterSize; i++) {
 			_monsterType[i] = liveMonster[i]->GetMonsterType();
 			_monsterName[i] = liveMonster[i]->GetMonsterName();
+			_monsterGender[i] = liveMonster[i]->GetMonsterGender();
 		}
-		myDataBoard = new RoomDataBoard(liveMonsterSize, _monsterType, _monsterName, RoomNumber);
+		myDataBoard = new RoomDataBoard(liveMonsterSize, _monsterType, _monsterGender, _monsterName, RoomNumber);
 	}
 }

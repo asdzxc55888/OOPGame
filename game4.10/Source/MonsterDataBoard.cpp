@@ -6,21 +6,21 @@
 #include "gamelib.h"
 #include "MonsterDataBoard.h"
 namespace game_framework {
-	MonsterDataBoard::MonsterDataBoard(int MaxHp, int ApD, int AdD, int dps, string MonsterType,bool flag,  string _name)
+	MonsterDataBoard::MonsterDataBoard(int MaxHp, int ApD, int AdD, int dps, string MonsterType,int gneder,bool flag,  string _name)
 	{
 		isLoadBitmaps = false;
-		Initialize(MaxHp, ApD, AdD, dps, MonsterType,flag,_name);
+		Initialize(MaxHp, ApD, AdD, dps, MonsterType, gneder,flag,_name);
 	}
 	MonsterDataBoard::MonsterDataBoard()
 	{
 		isLoadBitmaps = false;
-		Initialize(10, 10, 10, 10, "tentacle",true," ");
+		Initialize(10, 10, 10, 10, "tentacle",0,true," ");
 	}
 	MonsterDataBoard::~MonsterDataBoard()
 	{
 		delete Hp,MaxHp,AttackPower,AdDefense,ApDefense;
 	}
-	void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string MonsterType,bool flag, string _name)
+	void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string MonsterType, int gender,bool flag, string _name)
 	{
 		name = _name;
 		Hp= new CInteger(GetDigit(maxHp));
@@ -32,6 +32,8 @@ namespace game_framework {
 			Board.LoadBitmap("Bitmaps\\gameRun\\MonsterBoard.bmp", RGB(255, 255, 255));
 			if (flag) {                                                                    //flag=true為怪物 FALSE為勇士
 				char temp[100] = "Bitmaps\\monster\\monster_";
+				if (gender == 0)strcat(temp, "m_");
+				else strcat(temp, "w_");
 				strcat(temp, MonsterType.c_str());
 				strcat(temp, ".bmp");
 				Picture.LoadBitmap(temp, RGB(255, 255, 255));
@@ -104,13 +106,13 @@ namespace game_framework {
 	{
 		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
 		CFont f, *fp;
-		f.CreatePointFont(120, "Arial");	// 產生 font f; 160表示16 point的字
+		f.CreatePointFont(120, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
 		fp = pDC->SelectObject(&f);					// 選用 font f
 		pDC->SetBkColor(RGB(254, 233, 189));
 		pDC->SetTextColor(RGB(0,0, 0));
 		char str[80];								// Demo 數字對字串的轉換
 		sprintf(str, name.c_str());
-		pDC->TextOut(x+130, y+88, str);
+		pDC->TextOut(x+130, y+85, str);
 		pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
 		CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 	}

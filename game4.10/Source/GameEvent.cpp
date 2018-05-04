@@ -50,7 +50,6 @@ void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) 
 void MonsterlivingHouse_event(Room* _room, Monster** _monster)
 {
     _room->SetMonsterlivingRoom(_monster);
-    MonsterGohome_event(_room,0);
 }
 void MonsterGohome_event(Room* _room,int monsterIndex)
 {
@@ -72,6 +71,7 @@ void MonsterBeingClick(Monster** _monster, int room_size, Room** gameroom)
                 {
                     MonsterlivingHouse_event((gameroom)[i], _monster);
 					(gameroom)[i]->GetLiveMonster(0)->SetMonsterState(nothing);
+					MonsterGohome_event(gameroom[i], 0);
                     break;
                 }
             }
@@ -335,6 +335,18 @@ void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
             break;
     }
 }
+void MonsterPositionFix(Room ** gameRoom, Obstacle obs,int roomSize)
+{
+	for (int i = 0; i < roomSize; i++) {
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+			int x1= gameRoom[i]->GetLiveMonster(k)->GetX();
+			int x2 = x1 + gameRoom[i]->GetLiveMonster(k)->GetWidth();
+			int y1 = gameRoom[i]->GetLiveMonster(k)->GetY();
+			int y2 = y1 + gameRoom[i]->GetLiveMonster(k)->GetHeight();
+
+		}
+	}
+}
 Monster* findMonsterTarget(Warrior* _warrior, Room** gameroom, int room_size)
 {
     Monster* result = NULL;
@@ -416,6 +428,22 @@ void timeControl(int * timelevel, bool isSpeedControlOn[3])
 	if (isSpeedControlOn[1]) *timelevel = 2;
 	if (isSpeedControlOn[2]) *timelevel = 3;
 }
+
+void ComingMonsterFallInLoveEvent(Monster **_monster, Room ** gameRoom, int roomSize)
+{
+	for (int i = 0; i < roomSize; i++) {
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+			if (gameRoom[i]->GetLiveMonsterSize()==1  && (*_monster)->GetMonsterType() == gameRoom[i]->GetLiveMonster(k)->GetMonsterType() && (gameRoom[i]->GetLiveMonster(k)->GetMonsterGender()!= (*_monster)->GetMonsterGender())) {
+				MonsterlivingHouse_event(gameRoom[i], _monster);
+				gameRoom[i]->GetLiveMonster(gameRoom[i]->GetLiveMonsterSize()-1)->SetMonsterState(nothing);
+				MonsterGohome_event(gameRoom[i], 1);
+				return;
+			}
+		}
+	}
+}
+
+
 
 
 }

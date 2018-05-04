@@ -3,10 +3,10 @@ namespace game_framework {
 	class MonsterDataBoard
 	{
 	public:
-		MonsterDataBoard(int MaxHp ,int ApD, int AdD ,int dps,string MonsterType,bool flag,string name);
+		MonsterDataBoard(int MaxHp ,int ApD, int AdD ,int dps,string MonsterType, int gneder,bool flag,string name);
 		MonsterDataBoard();	
 		~MonsterDataBoard();
-		void Initialize(int MaxHp, int ApD, int AdD, int dps, string MonsterType, bool flag, string name);
+		void Initialize(int MaxHp, int ApD, int AdD, int dps, string MonsterType, int gneder, bool flag, string name);
 		void ShowHpBar(int percent);
 		void ShowName();
 		void SetData(int hp,int maxHp, int ApD, int AdD, int dps);

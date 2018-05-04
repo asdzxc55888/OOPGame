@@ -29,7 +29,7 @@ namespace game_framework {
 		isExist = false;
 		isMouseOn = false;
 		isMusicEffectOn = false;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, true,name);
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true,name);
 	}
 	void Monster::operator=(Monster &obj)
 	{
@@ -49,7 +49,7 @@ namespace game_framework {
 		isAlive = obj.isAlive;
 		LoadBitmap(monsterType);
 		isExist = true;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, true,name);
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,(int)monsterGender, true,name);
 
 	}
 
@@ -199,6 +199,10 @@ namespace game_framework {
 	string Monster::GetMonsterName()
 	{
 		return name;
+	}
+	int Monster::GetMonsterGender()
+	{
+		return monsterGender;
 	}
 	bool Monster::GetIsExist()
 	{

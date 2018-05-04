@@ -3,9 +3,9 @@ namespace game_framework {
 	class RoomDataBoard
 	{
 	public:
-		RoomDataBoard(int liveMonsterSize , string monsterType[3] ,string monsterName[3], int number);
+		RoomDataBoard(int liveMonsterSize , string monsterType[3],int monsterGender[3] ,string monsterName[3], int number);
 		~RoomDataBoard();
-		void Initialize(int liveMonsterSize, string monsterType[3], string monsterName[3], int number);
+		void Initialize(int liveMonsterSize, string monsterType[3],int monsterGender[3], string monsterName[3], int number);
 		void OnShow();
 		void ShowName();
 		void ShowRoomNumber();

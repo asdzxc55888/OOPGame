@@ -23,11 +23,14 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////////戰鬥事件/////////////////////////////////////////////////////
 	void WarriorAttack_event(Warrior *_warrior, Monster **target, Obstacle obs);
 	void MonsterAttack_event(Monster *_monster, Warrior ** target, Obstacle obs);
+	void MonsterPositionFix(Room **gameRoom, Obstacle obs, int roomSize);
 	Monster* findMonsterTarget(Warrior *_warrior, Room **gameroom,int room_size);
 	Warrior* findWarriorTarget(Monster *_monster, Warrior **_warrior);
 	void BattleEnd(Room **gameRoom, int roomsize);
 	void BattleTest1(Warrior **_warrior, bool &isIntoBattle, Room **gameRoom);
 	///////////////////////////////////////////////////////////////////時間控制//////////////////////////////////////////////////////////////////
 	void timeControl(int *timelevel, bool  isSpeedControlOn[3]);
+	//////////////////////////////////////////////////////////////////////戀愛事件///////////////////////////////////////////////////
+	void ComingMonsterFallInLoveEvent(Monster **_monster,Room **gameRoom ,int roomSize);             //拜訪怪物戀愛事件
 
 }

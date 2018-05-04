@@ -20,7 +20,7 @@ namespace game_framework {
 		}
 		LoadBitmap(LoadBmpString);
 		RandBasicAbility();
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,false," ");
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,0,false," ");
 	}
 	Warrior::Warrior(warrior_type type)
 	{
@@ -36,7 +36,7 @@ namespace game_framework {
 		}
 		LoadBitmap(LoadBmpString);
 		RandBasicAbility();
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,false," ");
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString,0,false," ");
 	}
 	Warrior::~Warrior()
 	{
