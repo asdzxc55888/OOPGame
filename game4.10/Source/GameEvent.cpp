@@ -337,18 +337,13 @@ void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
 }
 void MonsterPositionFix(Room ** gameRoom, Obstacle obs,int roomSize)
 {
-	bool isfix = false;
 	for (int i = 0; i < roomSize; i++) {
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
 			int x1= gameRoom[i]->GetLiveMonster(k)->GetX();
 			int x2 = x1 + gameRoom[i]->GetLiveMonster(k)->GetWidth();
 			int y1 = gameRoom[i]->GetLiveMonster(k)->GetY();
 			int y2 = y1 + gameRoom[i]->GetLiveMonster(k)->GetHeight();
-			if (obs.isHit(x1, x2, y1, y2)) 
-			{
-				gameRoom[i]->GetLiveMonster(k)->SetMovingLeft(true);
-				isfix = true;
-			}
+
 		}
 	}
 }
