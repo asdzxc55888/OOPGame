@@ -343,7 +343,7 @@ void MonsterPositionFix(Room ** gameRoom, Obstacle obs,int roomSize)
 			int x2 = x1 + gameRoom[i]->GetLiveMonster(k)->GetWidth();
 			int y1 = gameRoom[i]->GetLiveMonster(k)->GetY();
 			int y2 = y1 + gameRoom[i]->GetLiveMonster(k)->GetHeight();
-
+			
 		}
 	}
 }
