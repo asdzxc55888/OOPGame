@@ -15,6 +15,9 @@ namespace game_framework {
 		case game_framework::villager:
 			LoadBmpString = "villager";
 			break;
+		case game_framework::firemagic:
+			LoadBmpString = "firemagic";
+			break;
 		default:
 			break;
 		}
@@ -31,6 +34,10 @@ namespace game_framework {
 			LoadBmpString = "villager";
 			warriorType = villager;
 			break; 
+		case game_framework::firemagic:
+			LoadBmpString = "firemagic";
+			warriorType = firemagic;
+			break;
 		default:
 			break;
 		}
@@ -105,6 +112,9 @@ namespace game_framework {
 		case game_framework::villager:
 			return "villager";
 			break;
+		case game_framework::firemagic:
+			return "firemagic";
+			break;
 		default:
 			break;
 		}
@@ -129,6 +139,13 @@ namespace game_framework {
 			AdDefense = 3;			//物理防禦
 			AttackPower = 10;         //攻擊力
 			AttackType = Ad;			//攻擊模式
+			break;
+		case game_framework::firemagic:
+			Hp = 100;
+			ApDefense = 3;
+			AdDefense = 3;
+			AttackPower = 10;
+			AttackType = Ap;
 			break;
 		default:
 			break;

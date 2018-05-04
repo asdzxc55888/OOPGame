@@ -273,11 +273,36 @@ void WarriorAttack_event(Warrior* _warrior, Monster** target, Obstacle obs)
             break;
 
         case Ap:
-            if (_warrior->GetX() > (*target)->GetX())    //
-            {
-            }
+			int targetX = (*target)->GetX();
 
-            break;
+			if (_warrior->GetX() > targetX)    // 敵人在左
+			{
+				targetX += 200;
+
+				if (targetX > 1150)targetX = 1100;
+
+				_warrior->SetMovingType(Moving_Left);
+			}
+			else                              //敵人在右
+			{
+				targetX -= 200;
+
+				if (targetX < 50)targetX = 50;
+
+				_warrior->SetMovingType(Moving_Right);
+			}
+
+			if (Moving((&_warrior), targetX, (*target)->GetFloor(), obs) || (abs((*target)->GetX() - _warrior->GetX()) < 200 && (*target)->GetFloor() == _warrior->GetFloor()))
+			{
+				_warrior->SetMovingLeft(false);
+				_warrior->SetMovingRight(false);
+
+				if (_warrior->MagicAttack_event((*target)->GetX(), (*target)->GetX() + (*target)->GetWidth(), _warrior->GetWarriorType()))
+				{
+					(*target)->BeingAttack(_warrior->GetAttackPower(), _warrior->GetAttackType());  //受到攻擊
+				}
+			}
+			break;
     }
 }
 void MonsterAttack_event(Monster* _monster, Warrior** target, Obstacle obs)
@@ -420,7 +445,7 @@ void BattleEnd(Room** gameRoom, int roomsize)
 void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
 {
     isIntoBattle = true;
-    CreateWarrior_event(&_warrior[0], villager);
+    CreateWarrior_event(&_warrior[1],firemagic);
 }
 void timeControl(int * timelevel, bool isSpeedControlOn[3])
 {

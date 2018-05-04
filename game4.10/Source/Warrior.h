@@ -4,7 +4,8 @@
 namespace game_framework {
 #define warrior_type_size 1
 	enum warrior_type {
-		villager
+		villager,
+		firemagic
 	};
 	class Warrior :public npcObject
 	{
