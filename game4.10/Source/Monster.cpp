@@ -22,6 +22,7 @@ namespace game_framework {
 	}
 	Monster::Monster()
 	{
+		RandGender();
 		RandName();
 		RandMonsterType();
 		RandBasicAbility();
@@ -55,39 +56,47 @@ namespace game_framework {
 	void Monster::LoadBitmap(string monsterName)
 	{
 		monsterName += ".bmp";
+		string strGender = "";
+		if (monsterGender == male) {
+			strGender = "m_";
+		}
+		else {
+			strGender = "w_";
+		}
 		string root = "Bitmaps\\monster\\monster_";
+		root += strGender;
 		root += monsterName;
 		char test[100];
 		strcpy(test, root.c_str());
 		animation[Forward]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterBack1_" + monsterName;
+		root = "Bitmaps\\monster\\monsterBack1_"+ strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Back]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterBack2_" + monsterName;
+		root = "Bitmaps\\monster\\monsterBack2_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Back]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterLeft1_" + monsterName;
+		root = "Bitmaps\\monster\\monsterLeft1_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterLeft2_" + monsterName;
+		root = "Bitmaps\\monster\\monsterLeft2_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterRight1_" + monsterName;
+		root = "Bitmaps\\monster\\monsterRight1_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterRight2_" + monsterName;
+		root = "Bitmaps\\monster\\monsterRight2_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackLeft1_" + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackLeft1_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackLeft2_" + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackLeft2_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackRight1_" + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackRight1_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackRight2_" + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackRight2_" + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
@@ -260,5 +269,10 @@ namespace game_framework {
 		}
 		int randValue = rand() % count;
 		name = nameData[randValue];
+	}
+	void Monster::RandGender()
+	{
+		int randValue = rand() % 2;
+		monsterGender = (Gender)randValue;
 	}
 }

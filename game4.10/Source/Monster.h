@@ -11,6 +11,10 @@ namespace game_framework {
 		lookHouse,
 		findHouse
 	};
+	enum Gender {
+		male,
+		female
+	};
 	class Monster :public npcObject
 	{
 	public:
@@ -32,11 +36,13 @@ namespace game_framework {
 		void RandMonsterType();
 		void RandBasicAbility();
 		void RandName();
+		void RandGender();
 		bool isMusicEffectOn;
 		bool isExist;
 		bool isMouseOn;
 		string name;
 		string monsterType;                         //怪物類型
+		Gender monsterGender;
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
 		CMovingBitmap headImg[2];                      //頭上符號
