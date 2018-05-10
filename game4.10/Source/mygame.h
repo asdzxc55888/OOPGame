@@ -53,25 +53,26 @@ namespace game_framework
 // 每個Member function的Implementation都要弄懂
 /////////////////////////////////////////////////////////////////////////////
 
-	class CGameStateInit : public CGameState {
-	public:
-		CGameStateInit(CGame *g);
-		~CGameStateInit();
-		void OnInit();  								// 遊戲的初值及圖形設定
-		void OnBeginState();							// 設定每次重玩所需的變數
-		void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
-		void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
-		void OnMouseMove(UINT nFlags, CPoint point);
-	protected:
-		void OnShow();									// 顯示這個狀態的遊戲畫面
-	private:
-		CMovingBitmap Background;                       // 背景
-		CAnimation *menuBtn[4];			
-		CInteger temp;
-		bool isMouseOn[4];
-		bool isLoadingBitmaps;
-		bool isPlayAudio;
-	};
+class CGameStateInit : public CGameState
+{
+    public:
+        CGameStateInit(CGame* g);
+        ~CGameStateInit();
+        void OnInit();  								// 遊戲的初值及圖形設定
+        void OnBeginState();							// 設定每次重玩所需的變數
+        void OnKeyUp(UINT, UINT, UINT); 				// 處理鍵盤Up的動作
+        void OnLButtonDown(UINT nFlags, CPoint point);  // 處理滑鼠的動作
+        void OnMouseMove(UINT nFlags, CPoint point);
+    protected:
+        void OnShow();									// 顯示這個狀態的遊戲畫面
+    private:
+        CMovingBitmap Background;                       // 背景
+        CAnimation* menuBtn[4];
+        CInteger temp;
+        bool isMouseOn[4];
+        bool isLoadingBitmaps;
+        bool isPlayAudio;
+};
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -107,14 +108,14 @@ class CGameStateRun : public CGameState
         Monster* comingMonster;                    //來看房子的怪物
         Warrior* warrior[10];
         time_t Settime, nowtime;
-		int TimeLevel;                            //時間快慢
+        int TimeLevel;                            //時間快慢
         int Clock;
         int houseLevele;
         int roomSize;
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
-		bool isSpeedControlOn[3];
-		bool isMonsterDataBoardShow;
+        bool isSpeedControlOn[3];
+        bool isMonsterDataBoardShow;
         bool WarningQuit;
 };
 
