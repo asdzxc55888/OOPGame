@@ -25,6 +25,7 @@ namespace game_framework
 		myDataBoard = NULL;
 		floor = 0; 
 		liveMonsterSize = 0;
+		timecount = 0;
 		RoomNumber = 100;
 		isDoorOpen = false;
 		isMonsterLiving = false;
@@ -33,6 +34,7 @@ namespace game_framework
 		for (int i = 0; i < 3; i++) isMonsterIn[i] = false;
 		for (int i = 0; i < 3;i++) isMonsterGoHome[i] = false;
 		for (int i = 0; i < 3; i++) isMonsterFight[i] = false;
+		for (int i = 0; i < 3; i++) monsterGoOutsideTemp[i] = false;
 		animation.SetDelayCount(10);
 	}
 	void Room::OnShow(bool flag)  //true 為讓門顯示 false試讓怪物顯示
@@ -80,6 +82,20 @@ namespace game_framework
 				if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
 			}
 		}
+		for (int i = 0; i < liveMonsterSize; i++) {  ///////////////怪物出門緩沖
+			if (timecount >200 && monsterGoOutsideTemp[i]) {
+				liveMonster[i]->SetIsGoOutside(true);
+				isMonsterIn[i] = false;
+				isDoorOpen = true;
+				monsterGoOutsideTemp[i] = false;
+				timecount = 0;
+				break;
+			}
+			else {
+				timecount++;
+			}
+		}
+		
 	}
 	Monster* Room::GetLiveMonster(int index)
 	{
@@ -111,6 +127,7 @@ namespace game_framework
 	{
 		isMonsterGoHome[MonsterIndex] = true;
 		isMonsterLiving = true;
+		isMonsterFight[MonsterIndex] = false;
 	}
 	bool Room::IsMouseOn(CPoint point)
 	{
@@ -123,7 +140,7 @@ namespace game_framework
 	}
 	bool Room::MovingLR(int x,int MonsterIndex)
 	{
-		if (liveMonster[MonsterIndex]->GetX() > x -40)
+		if (liveMonster[MonsterIndex]->GetX() > x -35)
 		{
 			liveMonster[MonsterIndex]->SetMovingLeft(true);
 			liveMonster[MonsterIndex]->SetMovingRight(false);
@@ -156,14 +173,14 @@ namespace game_framework
 			isMonsterLiving = false;
 		}
 	}
-	void Room::SetMonsterFight(bool flag)
+	void Room::SetMonsterFight(bool flag)  //怪物戰鬥
 	{
-		for (int i = 0; i < liveMonsterSize;i++)isMonsterFight[i] = flag;
-		for (int i = 0; i < liveMonsterSize;i++)isMonsterIn[i] = false;
-		isDoorOpen = true;
 		for (int i = 0; i < liveMonsterSize; i++) {
-			liveMonster[i]->SetIsGoOutside(true);
-			liveMonster[i]->SetBattleTemp(true);
+			if (!liveMonster[i]->GetIsOnBattle()) {
+				monsterGoOutsideTemp[i] = true;
+				liveMonster[i]->SetBattleTemp(true);
+				isMonsterFight[i] = true;
+			}
 		}
 	}
 	void Room::SetIsMonsterIn(bool flag,int monsterIndex)
@@ -177,7 +194,7 @@ namespace game_framework
 		isDoorOpen = true;
 		isMonsterFight[monsterIndex] = false;
 	}
-	void Room::ResortLiveMonster()
+	void Room::ResortLiveMonster()     //重新排列怪物順序
 	{
 		for (int i = 0; i < 2; i++) {
 			if (liveMonster[i] == NULL) {

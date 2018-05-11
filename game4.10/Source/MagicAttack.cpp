@@ -7,14 +7,16 @@
 #include "MagicAttack.h"
 
 namespace game_framework {
-	MagicAttack::MagicAttack(int _x, int _y, int _damge,string type)
+	MagicAttack::MagicAttack(int _x, int _y, int _damge,int _timelevel,string type)
 	{
 		nowDirection = Left;
 		x = _x;
 		y = _y;
+		dx = 0;
 		tx1 = 0;
 		tx2 = 0;
 		damge = _damge;
+		timelevel = _timelevel;
 		LoadBitmap(type);
 	}
 	MagicAttack::~MagicAttack()
@@ -42,9 +44,9 @@ namespace game_framework {
 	}
 	bool MagicAttack::HitTarget()
 	{
-		int x1 = x;
-		int x2 = x + bmp[0].Width();
-		return (tx2-10 >= x1 && tx1+10 <= x2);
+		int x1 = x+dx;
+		int x2 = x1 + bmp[0].Width();
+		return (tx2-15 >= x1 && tx1+15 <= x2);
 	}
 	int MagicAttack::GetX()
 	{
@@ -53,6 +55,10 @@ namespace game_framework {
 	int MagicAttack::GetY()
 	{
 		return y;
+	}
+	int MagicAttack::Getdx()
+	{
+		return dx;
 	}
 	int MagicAttack::GetDamge()
 	{
@@ -63,13 +69,13 @@ namespace game_framework {
 		switch (nowDirection)
 		{
 		case game_framework::Left:
-			x -= 5;
+			dx -= 3*timelevel;
 			break;
 		case game_framework::Right:
-			x += 5;
+			dx += 3 * timelevel;
 			break;
 		}
-		bmp[nowDirection].SetTopLeft(x, y);
+		bmp[nowDirection].SetTopLeft(x+dx, y);
 	}
 	void MagicAttack::OnShow()
 	{

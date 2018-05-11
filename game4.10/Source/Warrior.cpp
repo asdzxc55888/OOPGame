@@ -134,14 +134,14 @@ namespace game_framework {
 		switch (warriorType)
 		{
 		case game_framework::villager:
-			Hp = 100;					//血量
+			Hp = 200;					//血量
 			ApDefense = 3;			//魔法防禦
 			AdDefense = 3;			//物理防禦
 			AttackPower = 10;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 			break;
 		case game_framework::firemagic:
-			Hp = 100;
+			Hp = 200;
 			ApDefense = 3;
 			AdDefense = 3;
 			AttackPower = 10;

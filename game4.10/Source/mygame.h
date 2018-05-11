@@ -115,6 +115,7 @@ class CGameStateRun : public CGameState
         bool isOnBattle;						  //¬O§_¦b¾Ô°«
 		bool isSpeedControlOn[3];
 		bool isMonsterDataBoardShow;
+		bool isMonsterGoingOut;
         bool WarningQuit;
 };
 

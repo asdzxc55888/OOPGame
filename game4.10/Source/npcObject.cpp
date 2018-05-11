@@ -19,6 +19,7 @@ game_framework::npcObject::npcObject()
     _x = 0;
     _y = 530;
     floor = 0;
+	timecount = 0;
     isMovingDown = false;			// 是否正在往下移動
     isMovingLeft = false;			// 是否正在往左移動
     isMovingRight = false;			// 是否正在往右移動
@@ -94,16 +95,16 @@ void game_framework::npcObject::OnMove()
     }
     else if (isGoOutside)                           //出門動畫
     {
-        if (abs(time(&nowTime) - setTime) >= 2)              //
+        if (timecount >= 60)              //
         {
             nowMovingType = Forward;
             isGoOutside = false;
-
+			timecount = 0;
             if (BattleTemp = true)isOnBattle = true;
 
             animation[nowMovingType]->OnMove();
         }
-        else if (abs(time(&nowTime) - setTime) >= 1)        //
+        else if (timecount >= 30)        //
         {
             nowMovingType = Forward;
             animation[nowMovingType]->OnMove();
@@ -113,6 +114,7 @@ void game_framework::npcObject::OnMove()
             nowMovingType = Hide;
             animation[nowMovingType]->OnMove();
         }
+		timecount++;
     }
     else
     {
@@ -142,7 +144,11 @@ void game_framework::npcObject::OnMove()
     {
         if (magicAttack[i] != NULL)
         {
-            magicAttack[i]->OnMove();
+            magicAttack[i]->OnMove(); 
+			if (magicAttack[i]->Getdx()>250|| magicAttack[i]->Getdx()<-250) {
+				delete magicAttack[i];
+				magicAttack[i] = NULL;
+			}
         }
     }
 }
@@ -231,7 +237,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 
     if (isFirstShot ||  AttackCount_total<AttackCount)
     {
-        magicAttack[i] = new MagicAttack(_x, _y + 10, AttackPower, type);
+        magicAttack[i] = new MagicAttack(_x+GetWidth()/2-10, _y + 10, AttackPower, timeLevel, type);
         magicAttack[i]->SetTarget(target_x1, target_x2);
 
         if (target_x1 < _x)
@@ -414,6 +420,11 @@ bool game_framework::npcObject::IsMouseOn(CPoint point)
 game_framework::Attack_Type game_framework::npcObject::GetAttackType()
 {
     return AttackType;
+}
+
+game_framework::MovingAnimation_Type game_framework::npcObject::GetMovingType()
+{
+	return nowMovingType;
 }
 
 bool game_framework::npcObject::HitRectangle(int tx1, int ty1, int tx2, int ty2)

@@ -29,11 +29,13 @@ class Room
         int floor;
 		int liveMonsterSize;     //居住怪物個數
 		int RoomNumber;
+		int timecount;
         Monster* liveMonster[3];	//居住怪物
 		RoomDataBoard *myDataBoard;
         CAnimation animation;  //動畫
         void SetMonsterIntohome(int monsterIndex); //怪物進門的動作
 		void ResortLiveMonster();
+		bool monsterGoOutsideTemp[3];
         bool MonsterGoHome(int monsterIndex); //若還沒到達家裡得坐標，回傳 true ，到達了回傳false
         bool isMonsterLiving; //是否居住怪物
         bool isMonsterIn[3];		//居住的怪物是否在裡面

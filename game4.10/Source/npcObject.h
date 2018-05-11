@@ -57,6 +57,7 @@ class npcObject
         bool GetIsAlive();
         bool IsMouseOn(CPoint point);
         Attack_Type GetAttackType();
+		MovingAnimation_Type GetMovingType();
     protected:
         int _x, _y;				//座標
         int movingSpeed;     //移動速度
@@ -68,6 +69,7 @@ class npcObject
         int AttackPower;        //攻擊力
 		int timeLevel;           //設定時間快慢
 		int AttackCount;        //攻擊判定時間
+		int timecount;
         bool isMovingDown;			// 是否正在往下移動
         bool isMovingLeft;			// 是否正在往左移動
         bool isMovingRight;			// 是否正在往右移動
@@ -79,6 +81,7 @@ class npcObject
         bool isOnBattle;
         bool isMusicEffectOn;
         bool isMouseOn;
+		bool isKid;                 //是否為小孩(怪物)
         bool BattleTemp;
         Attack_Type AttackType; //攻擊模式
         MovingAnimation_Type nowMovingType;

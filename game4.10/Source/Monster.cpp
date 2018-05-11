@@ -29,6 +29,7 @@ namespace game_framework {
 		isExist = false;
 		isMouseOn = false;
 		isMusicEffectOn = false;
+		isKid = false;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true,name);
 	}
 	void Monster::operator=(Monster &obj)
@@ -47,6 +48,7 @@ namespace game_framework {
 		nowMovingType = obj.nowMovingType;			//移動模式
 		monsterType = obj.monsterType;				//怪物種類
 		isAlive = obj.isAlive;
+		isKid = obj.isKid;
 		LoadBitmap(monsterType);
 		isExist = true;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType,(int)monsterGender, true,name);
@@ -55,6 +57,9 @@ namespace game_framework {
 
 	void Monster::LoadBitmap(string monsterName)
 	{
+		delete *animation;
+		for(int i=0;i<7;i++)animation[i]= new CAnimation;
+
 		monsterName += ".bmp";
 		string strGender = "";
 		if (monsterGender == male) {
@@ -64,39 +69,41 @@ namespace game_framework {
 			strGender = "w_";
 		}
 		string root = "Bitmaps\\monster\\monster_";
+		string childStr = "";
+		if (isKid)childStr = "child_";
 		root += strGender;
 		root += monsterName;
 		char test[100];
 		strcpy(test, root.c_str());
 		animation[Forward]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterBack1_"+ strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterBack1_"+ childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Back]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterBack2_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterBack2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Back]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterLeft1_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterLeft1_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterLeft2_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterLeft2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterRight1_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterRight1_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterRight2_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterRight2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Moving_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackLeft1_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackLeft1_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackLeft2_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackLeft2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Left]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackRight1_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackRight1_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
-		root = "Bitmaps\\monster\\monsterAttackRight2_" + strGender + monsterName;
+		root = "Bitmaps\\monster\\monsterAttackRight2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
@@ -104,6 +111,7 @@ namespace game_framework {
 
 		headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
 		headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
+		headImg[2].LoadBitmap("Bitmaps\\headimg\\love.bmp", RGB(255, 255, 255));
 	}
 
 	void Monster::SetMonsterType(string _monsterType)
@@ -118,15 +126,21 @@ namespace game_framework {
 	{
 		isExist = flag;
 	}
+	void Monster::SetIsChild(bool flag)
+	{
+		_y -= 10; //高度修正
+		isKid = flag;
+		LoadBitmap(monsterType);
+	}
 	void Monster::ShowHpBar()
 	{
 		if (isOnBattle) {
 			if (!SHOW_LOAD_PROGRESS)
 				return;
 			int percent = Hp * 100 / MaxHp;
-			const int bar_width = 50;
+			const int bar_width = 40;
 			const int bar_height = 8;
-			const int x1 = _x ;
+			const int x1 = _x+5 ;
 			const int x2 = x1 + bar_width;
 			const int y1 = _y ;
 			const int y2 = y1 + bar_height;
@@ -184,9 +198,14 @@ namespace game_framework {
 			headImg[1].SetTopLeft(_x + 5, _y - 20);
 			headImg[1].ShowBitmap();
 			break;
+		case game_framework::fallInLove:
+			headImg[2].SetTopLeft(_x + 5, _y - 20);
+			headImg[2].ShowBitmap();
+			break;
 		}
 
 		ShowHpBar();             //顯示血條
+		if (isIntoHouse)nowMonsterState = nothing;
 	}
 	Monster_state Monster::GetMonsterState()
 	{

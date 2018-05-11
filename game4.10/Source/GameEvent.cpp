@@ -12,7 +12,7 @@ void SetObstacle(Room** gameRoom, Warrior** _warriors, Obstacle* obs, int roomSi
     for (int i = 0; i < roomSize; i++)
     {
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			if (gameRoom[i]->GetIsMonsterLiving() && gameRoom[i]->GetIsMonsterFight(k))
+			if (gameRoom[i]->GetIsMonsterFight(k) && gameRoom[i]->GetLiveMonster(k)->GetMovingType()!=Hide)
 			{
 				Monster* _monster = gameRoom[i]->GetLiveMonster(k);
 				int _x1 = _monster->GetX();
@@ -41,7 +41,13 @@ void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) 
     if (Moving(_monster, TaskBoard_x + 60, 0, Obstacle()))
     {
         (*_monster)->SetMovingType(Back);
-        (*_monster)->SetMonsterState(findHouse);
+		int randvalue = rand() % 2000;
+		if (randvalue < 10) {
+			(*_monster)->SetMonsterState(findHouse);
+		}else if (randvalue > 1997 )
+		{
+			(*_monster)->SetMonsterState(leave);
+		}
 	}
 	else {
 		(*_monster)->SetMonsterState(lookHouse);
@@ -99,17 +105,24 @@ bool Moving(Monster** _monster, int x, int floor, Obstacle obs = Obstacle())
     int _monsterFloor = (*_monster)->GetFloor();
     int x1 = (*_monster)->GetX();
     int x2 = x1 + (*_monster)->GetWidth();
-
-    if (obs.isHit(x1, x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight()))
+	bool obsDirection = false,monsterMovingDirection=false; //在左為TRUE 在右為FALSE
+    if (obs.isHit(x1, x2, (*_monster)->GetY(), (*_monster)->GetY() + (*_monster)->GetHeight(),&obsDirection))
     {
         if ((x1 > x && x1 <= x + 20) || (x2 > x && x2 <= x + 20) && _monsterFloor == floor)
         {
-            return true;
+            return true;       //抵達目的
         }
-
-        (*_monster)->SetMovingLeft(false);
-        (*_monster)->SetMovingRight(false);
-        return false;
+		if ((*_monster)->GetMovingType() == Moving_Left) {
+			monsterMovingDirection = true;
+		}
+		else {
+			monsterMovingDirection = false;
+		}
+		if (monsterMovingDirection == obsDirection) {
+			(*_monster)->SetMovingLeft(false);
+			(*_monster)->SetMovingRight(false);
+			return false;
+		}
     }
 
     if (_monsterFloor == floor)
@@ -202,7 +215,7 @@ bool Moving(Warrior** _warrior, int x, int floor, Obstacle obs = Obstacle())
     int _warriorFloor = (*_warrior)->GetFloor();
     int x1 = (*_warrior)->GetX();
     int x2 = x1 + (*_warrior)->GetWidth();
-
+	bool obsDirection = false, monsterMovingDirection = false; //在左為TRUE 在右為FALSE
     if (obs.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
     {
         if ((x1 > x && x1 <= x + 20) || (x2 > x && x2 <= x + 20) && _warriorFloor == floor)   //防卡住
@@ -210,9 +223,17 @@ bool Moving(Warrior** _warrior, int x, int floor, Obstacle obs = Obstacle())
             return true;
         }
 
-        (*_warrior)->SetMovingLeft(false);
-        (*_warrior)->SetMovingRight(false);
-        return false;
+		if ((*_warrior)->GetMovingType() == Moving_Left) {
+			monsterMovingDirection = true;
+		}
+		else {
+			monsterMovingDirection = false;
+		}
+		if (monsterMovingDirection == obsDirection) {
+			(*_warrior)->SetMovingLeft(false);
+			(*_warrior)->SetMovingRight(false);
+			return false;
+		}
     }
 
     if (_warriorFloor == floor)
@@ -244,10 +265,10 @@ void CreateWarrior_event(Warrior** _warrior, warrior_type type)
 }
 void DeleteWarrior_event(Warrior** _warrior)
 {
-    if ((*_warrior) != NULL)
+    if (*_warrior != NULL)
     {
         delete *_warrior;
-        (*_warrior) = NULL;
+        *_warrior = NULL;
     }
 }
 bool HitMonster(Warrior* _warrior, Monster* _monster)
@@ -364,11 +385,19 @@ void MonsterPositionFix(Room ** gameRoom, Obstacle obs,int roomSize)
 {
 	for (int i = 0; i < roomSize; i++) {
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			int x1= gameRoom[i]->GetLiveMonster(k)->GetX();
-			int x2 = x1 + gameRoom[i]->GetLiveMonster(k)->GetWidth();
-			int y1 = gameRoom[i]->GetLiveMonster(k)->GetY();
-			int y2 = y1 + gameRoom[i]->GetLiveMonster(k)->GetHeight();
-			
+			Monster *_monster = gameRoom[i]->GetLiveMonster(k);
+			int x1= _monster->GetX();
+			int x2 = x1 + _monster->GetWidth();
+			int y1 = _monster->GetY();
+			int y2 = y1 + _monster->GetHeight();
+			bool obsDirection = false; //true 為在左
+			if(_monster->GetIsOnBattle() && obs.isOverlapping(x1, x2, y1, y2,&obsDirection))
+			{
+				if (obsDirection) {
+					_monster->SetPoint(x1 + 10, y1);
+				}else _monster->SetPoint(x1 - 10, y1);
+				return;
+			}
 		}
 	}
 }
@@ -445,7 +474,11 @@ void BattleEnd(Room** gameRoom, int roomsize)
 void BattleTest1(Warrior** _warrior, bool& isIntoBattle, Room** gameRoom)
 {
     isIntoBattle = true;
+//	CreateWarrior_event(&_warrior[0], villager);
     CreateWarrior_event(&_warrior[1],firemagic);
+	for (int i = 0; _warrior[i] != NULL; i++) {
+		_warrior[i]->SetPoint(-100-(60*i), 540);
+	}
 }
 void timeControl(int * timelevel, bool isSpeedControlOn[3])
 {
@@ -460,7 +493,7 @@ void ComingMonsterFallInLoveEvent(Monster **_monster, Room ** gameRoom, int room
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
 			if (gameRoom[i]->GetLiveMonsterSize()==1  && (*_monster)->GetMonsterType() == gameRoom[i]->GetLiveMonster(k)->GetMonsterType() && (gameRoom[i]->GetLiveMonster(k)->GetMonsterGender()!= (*_monster)->GetMonsterGender())) {
 				MonsterlivingHouse_event(gameRoom[i], _monster);
-				gameRoom[i]->GetLiveMonster(gameRoom[i]->GetLiveMonsterSize()-1)->SetMonsterState(nothing);
+				gameRoom[i]->GetLiveMonster(gameRoom[i]->GetLiveMonsterSize()-1)->SetMonsterState(fallInLove);
 				MonsterGohome_event(gameRoom[i], 1);
 				return;
 			}

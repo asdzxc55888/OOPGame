@@ -23,7 +23,7 @@ namespace game_framework {
 	/////////////////////////////////////////////////////////////////////////////////戰鬥事件/////////////////////////////////////////////////////
 	void WarriorAttack_event(Warrior *_warrior, Monster **target, Obstacle obs);
 	void MonsterAttack_event(Monster *_monster, Warrior ** target, Obstacle obs);
-	void MonsterPositionFix(Room **gameRoom, Obstacle obs, int roomSize);
+	void MonsterPositionFix(Room **gameRoom, Obstacle obs, int roomSize);        //怪物位置修正
 	Monster* findMonsterTarget(Warrior *_warrior, Room **gameroom,int room_size);
 	Warrior* findWarriorTarget(Monster *_monster, Warrior **_warrior);
 	void BattleEnd(Room **gameRoom, int roomsize);
