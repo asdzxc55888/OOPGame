@@ -114,14 +114,9 @@ class CGameStateRun : public CGameState
         int roomSize;
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
-<<<<<<< HEAD
 		bool isSpeedControlOn[3];
 		bool isMonsterDataBoardShow;
 		bool isMonsterGoingOut;
-=======
-        bool isSpeedControlOn[3];
-        bool isMonsterDataBoardShow;
->>>>>>> 26649ed981c6cb6bfb15df6dfc017b13c47b6ef2
         bool WarningQuit;
 };
 
