@@ -32,5 +32,7 @@ namespace game_framework {
 	void timeControl(int *timelevel, bool  isSpeedControlOn[3]);
 	//////////////////////////////////////////////////////////////////////戀愛事件///////////////////////////////////////////////////
 	void ComingMonsterFallInLoveEvent(Monster **_monster,Room **gameRoom ,int roomSize);             //拜訪怪物戀愛事件
+	void MonsterMatingEvent(Room **gameRoom, int roomSize);    //怪物交配事件
+	void MonsterBorn(Room **gameRoom, int roomSize);  //怪物出身
 
 }

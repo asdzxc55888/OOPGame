@@ -42,9 +42,9 @@ void MonsterFindHouse(Monster** _monster, int TaskBoard_x, int TaskBoard_Width) 
     {
         (*_monster)->SetMovingType(Back);
 		int randvalue = rand() % 2000;
-		if (randvalue < 10) {
+		if (randvalue < 20) {
 			(*_monster)->SetMonsterState(findHouse);
-		}else if (randvalue > 1997 )
+		}else if (randvalue > 1990 )
 		{
 			(*_monster)->SetMonsterState(leave);
 		}
@@ -501,7 +501,34 @@ void ComingMonsterFallInLoveEvent(Monster **_monster, Room ** gameRoom, int room
 	}
 }
 
+void MonsterMatingEvent(Room ** gameRoom, int roomSize)
+{
+	for(int i=0;i<roomSize;i++)
+	{
+		int randValue = rand() % 1000;
+		if (randValue<2 && gameRoom[i]->GetLiveMonsterSize() == 2 && gameRoom[i]->GetIsMonsterIn(0) && gameRoom[i]->GetIsMonsterIn(1)) {
+			gameRoom[i]->GetLiveMonster(0)->SetMonsterState(fallInLove);
+			gameRoom[i]->GetLiveMonster(0)->SetTimecount(0);
+			int childRandvalue= rand() % 1000;
+			if (childRandvalue < 500)MonsterBorn(&gameRoom[i],roomSize);  //怪物出生
+		}
+	}
+}
 
+void MonsterBorn(Room ** gameRoom, int roomSize)
+{
+	Monster *newMonster;
+	newMonster = new Monster((*gameRoom)->GetLiveMonster(0)->GetMonsterType());
+	newMonster->SetIsChild(true);
+	newMonster->LoadBitmap(newMonster->GetMonsterType());
+	newMonster->SetMonsterIsExist(false);
+	newMonster->SetMonsterState(nothing);
 
+	(*gameRoom)->SetMonsterlivingRoom(&newMonster);
+	(*gameRoom)->GetLiveMonster(2)->SetPoint((*gameRoom)->GetX(), (*gameRoom)->GetLiveMonster(2)->GetY()+20); //高度修正
+	(*gameRoom)->GetLiveMonster(2)->SetIsGoOutside(false);
+	(*gameRoom)->GetLiveMonster(2)->SetMovingType(Hide);
+	(*gameRoom)->SetIsMonsterIn(true, 2);
+}
 
 }

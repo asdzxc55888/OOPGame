@@ -27,6 +27,7 @@ namespace game_framework {
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
 		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
 		void SetIsChild(bool flag);
+		void SetTimecount(int time);
 		void ShowHpBar();
 		void OnShow();
 		Monster_state GetMonsterState();            //取的怪物狀態

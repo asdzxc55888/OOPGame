@@ -382,7 +382,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_1.bmp", RGB(255, 255, 255));
     SpeedControlBtn[0].SetTopLeft(1035, 675);
     SpeedControlBtn[1].SetTopLeft(1122, 675);
-    SpeedControlBtn[2].SetTopLeft(1207, 675);
+    SpeedControlBtn[2].SetTopLeft(1209, 675);
     ///////////////////////////////////////////////////////////////////
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
@@ -664,7 +664,7 @@ void CGameStateRun::OnEvent()
 	}
 
 	MonsterPositionFix(gameRoom, mapObstacle, roomSize);
-
+	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件
     if (comingMonster != NULL)
     {
         Monster_state comingMonsterState = comingMonster->GetMonsterState();
@@ -701,6 +701,8 @@ void CGameStateRun::OnEvent()
     {
         if (!isOnBattle)CreateMonster_event(&comingMonster);
     }
+
+	if(!isOnBattle)	MonsterMatingEvent(gameRoom, roomSize);   //怪物交配事件
 
     ///////////////////////////////////////////////////////////////////////////
 }

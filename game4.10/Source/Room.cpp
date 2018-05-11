@@ -97,6 +97,10 @@ namespace game_framework
 		}
 		
 	}
+	int Room::GetX()
+	{
+		return _x;
+	}
 	Monster* Room::GetLiveMonster(int index)
 	{
 		return liveMonster[index];

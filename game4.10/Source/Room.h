@@ -12,6 +12,7 @@ class Room
         void Initial();
         void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
         void OnMove();
+		int GetX();
         Monster* GetLiveMonster(int index);
         bool GetIsMonsterLiving();
         bool GetIsMonsterIn(int monsterIndex);

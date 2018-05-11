@@ -14,11 +14,14 @@ namespace game_framework {
 	Monster::Monster(string _monsterTpye)
 	{
 		monsterType = _monsterTpye;
+		RandGender();
 		RandName();
 		RandBasicAbility();
 		isExist = false;
 		isMouseOn = false;
 		isMusicEffectOn = false;
+		isKid = false;
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 	Monster::Monster()
 	{
@@ -128,9 +131,11 @@ namespace game_framework {
 	}
 	void Monster::SetIsChild(bool flag)
 	{
-		_y -= 10; //高度修正
 		isKid = flag;
-		LoadBitmap(monsterType);
+	}
+	void Monster::SetTimecount(int time)
+	{
+		timecount = time;
 	}
 	void Monster::ShowHpBar()
 	{
@@ -205,7 +210,10 @@ namespace game_framework {
 		}
 
 		ShowHpBar();             //顯示血條
-		if (isIntoHouse)nowMonsterState = nothing;
+		if (isIntoHouse ||(nowMonsterState==fallInLove && timecount >300)) {
+			nowMonsterState = nothing;
+		}
+		else timecount++;
 	}
 	Monster_state Monster::GetMonsterState()
 	{
