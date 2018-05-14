@@ -618,6 +618,7 @@ void CGameStateRun::OnEvent()
                 if (!_monster->GetIsAlive())
                 {
                     gameRoom[i]->MonsterDeath(k);
+					gameRoom[i]->SetRoomBoard();
                 }
             }
         }

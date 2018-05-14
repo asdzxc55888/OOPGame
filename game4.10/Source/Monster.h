@@ -37,10 +37,12 @@ namespace game_framework {
 		bool GetIsExist();							//取得怪物是否顯示在地圖上
 		bool IsMouseOn(CPoint point);
 	private:
+		int monsterAge;
 		void RandMonsterType();
 		void RandBasicAbility();
 		void RandName();
 		void RandGender();
+		void GrowUp();  //怪物長大
 		bool isMusicEffectOn;
 		bool isExist;
 		bool isMouseOn;

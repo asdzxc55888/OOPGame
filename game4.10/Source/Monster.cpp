@@ -13,6 +13,7 @@ using namespace std;
 namespace game_framework {
 	Monster::Monster(string _monsterTpye)
 	{
+		monsterAge = 0;
 		monsterType = _monsterTpye;
 		RandGender();
 		RandName();
@@ -25,6 +26,7 @@ namespace game_framework {
 	}
 	Monster::Monster()
 	{
+		monsterAge = 0;
 		RandGender();
 		RandName();
 		RandMonsterType();
@@ -214,6 +216,12 @@ namespace game_framework {
 			nowMonsterState = nothing;
 		}
 		else timecount++;
+
+		if (isKid && monsterAge > 10000) {
+			GrowUp();
+		}
+		else if (isKid) monsterAge++;
+
 	}
 	Monster_state Monster::GetMonsterState()
 	{
@@ -305,5 +313,10 @@ namespace game_framework {
 	{
 		int randValue = rand() % 2;
 		monsterGender = (Gender)randValue;
+	}
+	void Monster::GrowUp()
+	{
+		isKid = false;
+		LoadBitmap(monsterType);
 	}
 }

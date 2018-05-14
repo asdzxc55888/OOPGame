@@ -25,6 +25,7 @@ class Room
         void SetMonsterFight(bool flag);
         void SetIsMonsterIn(bool flag, int monsterIndex);
         void SetMonsterlivingRoom(Monster** _monster); //讓怪物住進房子，回傳NULL指標將原本的怪物抹去
+		void SetRoomBoard(); //設置房屋資料版
     private:
         int _x, _y; //座標
         int floor;

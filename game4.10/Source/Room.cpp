@@ -246,7 +246,11 @@ namespace game_framework
 			delete myDataBoard;
 			myDataBoard = NULL;
 		}
-		string _monsterType[3],_monsterName[3];
+		SetRoomBoard();
+	}
+	void Room::SetRoomBoard()
+	{
+		string _monsterType[3], _monsterName[3];
 		int _monsterGender[3];
 		for (int i = 0; i < liveMonsterSize; i++) {
 			_monsterType[i] = liveMonster[i]->GetMonsterType();
