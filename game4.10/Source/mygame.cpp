@@ -115,7 +115,7 @@ void CGameStateInit::OnBeginState()
 {
     for (int i = 0; i < 4; i++)isMouseOn[i] = false;
 	BGM = false;
-    isLoadingBitmaps = true;
+    isLoadingBitmaps = false;
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)

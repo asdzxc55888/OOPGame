@@ -22,7 +22,6 @@ GameEvent::~GameEvent()
 
 void GameEvent::OnBeginState()
 {
-	TaskBoard.SetTopLeft(330, 485);   //設定任務版座標
 	Warning.SetTopLeft(-1280, 100);
 	roomSize = 4;
 	Clock = int(time(&nowtime)) + 60000;
@@ -45,8 +44,8 @@ void GameEvent::OnBeginState()
 void GameEvent::OnInit()
 {
 	Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
-	TaskBoard.LoadBitmap("Bitmaps\\TaskBoard.bmp", RGB(255, 255, 255));
 	Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
+	myTaskBoard.LoadBitmap();
 	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
 	SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
@@ -62,6 +61,7 @@ void GameEvent::OnInit()
 	CAudio::Instance()->Load(AUDIO_WARNING, "Sounds\\battle.mp3");
 
 	for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
+	myTaskBoard.Initial();
 }
 
 void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -112,6 +112,7 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+	myTaskBoard.IsTaskOnClick(point);
 }
 
 void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
@@ -140,6 +141,7 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
 			warrior[i]->IsMouseOn(point);
 		}
 	}
+	myTaskBoard.IsMouseOnTaskBoard(point);
 }
 
 void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
@@ -235,7 +237,6 @@ void GameEvent::OnMove()
 void GameEvent::OnShow()
 {
 	Background.ShowBitmap();
-	TaskBoard.ShowBitmap();
 	SpeedControlBtn[0].OnShow();
 	SpeedControlBtn[1].OnShow();
 	SpeedControlBtn[2].OnShow();
@@ -258,6 +259,7 @@ void GameEvent::OnShow()
 	}
 
 	Warning.ShowBitmap();
+	myTaskBoard.OnShow();
 }
 
 void GameEvent::OnEvent()
@@ -460,7 +462,7 @@ bool GameEvent::GetIsRoomFull()
 
 void GameEvent::MonsterFindHouse(Monster **_monster)
 {
-	if (Moving(_monster, TaskBoard.Left() + 60, 0))
+	if (Moving(_monster, myTaskBoard.GetTaskBoardX() + 60, 0))
 	{
 		(*_monster)->SetMovingType(Back);
 		int randvalue = rand() % 2000;

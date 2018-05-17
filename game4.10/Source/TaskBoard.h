@@ -1,11 +1,12 @@
 #pragma once
+#include "TaskBlock.h"
 enum TaskList{
 	nothing,
 	FirstTask
 };
 #define TaskSize 2
-#define TaskBoardInterface_x 20
-#define TaskBoardInterface_y 20
+#define TaskBoardInterface_x 125
+#define TaskBoardInterface_y 10
 #define TaskBoard_x 330
 #define TaskBoard_y 485
 namespace game_framework {
@@ -24,7 +25,6 @@ namespace game_framework {
 		int  GetTaskBoardX();
 		TaskList GetNowTask();
 	private:
-		int  TaskShowIndex[3];
 		bool IsTaskShow[TaskSize];       //任務是否出現在介面板
 		bool IsInterfaceOnShow;
 		TaskList nowTask;

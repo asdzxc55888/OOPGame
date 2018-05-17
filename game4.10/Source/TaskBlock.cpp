@@ -18,6 +18,8 @@ namespace game_framework {
 	}
 	void TaskBlock::Initial(int Index)
 	{
+		isMouseOn = false;
+
 		char line[50] = "";
 		int count = 0;
 		vector<string> Data;       //¦WºÙ ¤º®e ¼úÀy
@@ -35,10 +37,12 @@ namespace game_framework {
 		TaskName = Data[0];
 		Content = Data[1];
 		reward_str = Data[2];
+		TaskContentBackGround.SetTopLeft(TaskContent_x, TaskContent_y);
 	}
 	void TaskBlock::LoadBitmap()
 	{
 		TaskBlockBackGround.LoadBitmap("Bitmaps\\TaskBlock.bmp", RGB(255, 255, 255));
+		TaskContentBackGround.LoadBitmap("Bitmaps\\Instruction.bmp", RGB(255, 255, 255));
 	}
 	void TaskBlock::OnShow()
 	{

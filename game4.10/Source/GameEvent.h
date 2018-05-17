@@ -54,10 +54,10 @@ namespace game_framework {
 		void MonsterBorn(int roomNum);  //怪物出身
 	private:
 		CMovingBitmap Background;                  //背景圖
-		CMovingBitmap TaskBoard;				  //任務版
 		CMovingBitmap Warning;                    //警告圖
 		CAnimation SpeedControlBtn[3];            //速度控制圖
 		CInteger Money;
+		TaskBoard myTaskBoard;
 		Obstacle mapObstacle;
 		Room* gameRoom[4];
 		Monster* comingMonster;                    //來看房子的怪物

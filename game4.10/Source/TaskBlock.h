@@ -1,4 +1,6 @@
 #pragma once
+#define TaskContent_x 600
+#define TaskContent_y 160
 #define TaskName_x 200
 #define TaskName_y 200
 #define Content_x 200
