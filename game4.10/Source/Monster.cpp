@@ -22,6 +22,7 @@ namespace game_framework {
 		isMouseOn = false;
 		isMusicEffectOn = false;
 		isKid = false;
+		isHeadImgRoad = false;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 	Monster::Monster()
@@ -35,6 +36,7 @@ namespace game_framework {
 		isMouseOn = false;
 		isMusicEffectOn = false;
 		isKid = false;
+		isHeadImgRoad = false;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 	void Monster::operator=(Monster &obj)
@@ -113,10 +115,25 @@ namespace game_framework {
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
 		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
 		/////////////////////////////////////////////////////////////////////////////////////
+		if (!isHeadImgRoad) {
+			headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
+			headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
+			headImg[2].LoadBitmap("Bitmaps\\headimg\\love.bmp", RGB(255, 255, 255));
+			isHeadImgRoad = true;
+		}
+	}
 
-		headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
-		headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
-		headImg[2].LoadBitmap("Bitmaps\\headimg\\love.bmp", RGB(255, 255, 255));
+	void Monster::InheritAbility(Monster *father, Monster *mother)
+	{
+		int randValue[4];
+		randValue[0] = rand() % 10;
+		for (int i = 1; i < 4; i++)randValue[i] = rand() % 4;
+		//基礎能力
+		Hp = (father->Hp+mother->Hp)/2 + randValue[0];					//血量
+		MaxHp = Hp;
+		ApDefense = (father->ApDefense + mother->ApDefense) / 4 + randValue[1];			//魔法防禦
+		AdDefense = (father->AdDefense + mother->AdDefense) / 4 + randValue[2];			//物理防禦
+		AttackPower = (father->AttackPower + mother->AttackPower) / 4 + randValue[3];         //攻擊力
 	}
 
 	void Monster::SetMonsterType(string _monsterType)
@@ -217,7 +234,7 @@ namespace game_framework {
 		}
 		else timecount++;
 
-		if (isKid && monsterAge > 10000) {
+		if (isKid && monsterAge > GrowupTime) { //成長時間
 			GrowUp();
 		}
 		else if (isKid) monsterAge++;
@@ -226,6 +243,10 @@ namespace game_framework {
 	Monster_state Monster::GetMonsterState()
 	{
 		return nowMonsterState;
+	}
+	Gender Monster::GetMonsterGendet()
+	{
+		return monsterGender;
 	}
 	string Monster::GetMonsterType()
 	{
@@ -242,6 +263,10 @@ namespace game_framework {
 	bool Monster::GetIsExist()
 	{
 		return isExist;
+	}
+	bool Monster::GetIsKid()
+	{
+		return isKid;
 	}
 	bool Monster::IsMouseOn(CPoint point)
 	{
@@ -318,5 +343,11 @@ namespace game_framework {
 	{
 		isKid = false;
 		LoadBitmap(monsterType);
+		_y -= 20; //高度修正
+		Hp *=2;					//血量
+		MaxHp *=2;
+		ApDefense*=2;			//魔法防禦
+		AdDefense*=2;			//物理防禦
+		AttackPower *=2;         //攻擊力
 	}
 }

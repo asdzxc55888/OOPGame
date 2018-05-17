@@ -72,6 +72,7 @@ class CGameStateInit : public CGameState
         bool isMouseOn[4];
         bool isLoadingBitmaps;
         bool isPlayAudio;
+		bool BGM;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,28 +97,8 @@ class CGameStateRun : public CGameState
     protected:
         void OnMove();									// 移動遊戲元素
         void OnShow();									// 顯示這個狀態的遊戲畫面
-        void OnEvent();                                 // 事件處理
     private:
-        CMovingBitmap Background;                  //背景圖
-        CMovingBitmap TaskBoard;				  //任務版
-        CMovingBitmap Warning;                    //警告圖
-        CAnimation SpeedControlBtn[3];            //速度控制圖
-        CInteger Money;
-        Obstacle mapObstacle;
-        Room* gameRoom[4];
-        Monster* comingMonster;                    //來看房子的怪物
-        Warrior* warrior[10];
-        time_t Settime, nowtime;
-        int TimeLevel;                            //時間快慢
-        int Clock;
-        int houseLevele;
-        int roomSize;
-        bool isIntoBattle;                        //是否剛進入戰鬥
-        bool isOnBattle;						  //是否在戰鬥
-		bool isSpeedControlOn[3];
-		bool isMonsterDataBoardShow;
-		bool isMonsterGoingOut;
-        bool WarningQuit;
+		GameEvent *myGame;
 };
 
 /////////////////////////////////////////////////////////////////////////////

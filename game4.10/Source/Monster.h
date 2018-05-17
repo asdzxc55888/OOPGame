@@ -3,6 +3,7 @@
 class Warrior;
 #include"Warrior.h"
 #define totalMonsterType_size  2
+#define GrowupTime 3000
 namespace game_framework {
 	enum Monster_state {
 		leave,
@@ -23,6 +24,7 @@ namespace game_framework {
 		Monster();
 		void operator= (Monster &obj);
 		void LoadBitmap(string monsterName);
+		void InheritAbility(Monster *father,Monster *mother);
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
 		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
@@ -31,10 +33,12 @@ namespace game_framework {
 		void ShowHpBar();
 		void OnShow();
 		Monster_state GetMonsterState();            //取的怪物狀態
+		Gender GetMonsterGendet();
 		string GetMonsterType();
 		string GetMonsterName();
 		int GetMonsterGender();
 		bool GetIsExist();							//取得怪物是否顯示在地圖上
+		bool GetIsKid();
 		bool IsMouseOn(CPoint point);
 	private:
 		int monsterAge;
@@ -46,6 +50,7 @@ namespace game_framework {
 		bool isMusicEffectOn;
 		bool isExist;
 		bool isMouseOn;
+		bool isHeadImgRoad;
 		string name;
 		string monsterType;                         //怪物類型
 		Gender monsterGender;

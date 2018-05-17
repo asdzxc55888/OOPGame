@@ -100,7 +100,9 @@ void CGameStateInit::OnInit()
     menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit1.bmp", RGB(255, 255, 255));
     CAudio::Instance()->Load(AUDIO_DING, "Sounds\\Ding.mp3");
     CAudio::Instance()->Load(AUDIO_DECISION, "Sounds\\decision.mp3");
-    Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
+	CAudio::Instance()->Load(AUDIO_MENUBGM, "Sounds\\menuBGM.mp3");
+	CAudio::Instance()->Load(AUDIO_GAMEBGM, "Sounds\\GameBGM.mp3");
+    //Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
@@ -110,10 +112,8 @@ void CGameStateInit::OnInit()
 void CGameStateInit::OnBeginState()
 {
     for (int i = 0; i < 4; i++)isMouseOn[i] = false;
-
+	BGM = false;
     isLoadingBitmaps = false;
-    CAudio::Instance()->Load(AUDIO_MENUBGM, "Sounds\\menuBGM.mp3");
-    CAudio::Instance()->Play(AUDIO_MENUBGM);
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -133,7 +133,6 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
     {
         CAudio::Instance()->Play(AUDIO_DECISION);
         GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
-        CAudio::Instance()->Load(AUDIO_GAMEBGM, "Sounds\\GameBGM.mp3");
         CAudio::Instance()->Play(AUDIO_GAMEBGM);
         CAudio::Instance()->Stop(AUDIO_MENUBGM);
     }
@@ -170,6 +169,11 @@ void CGameStateInit::OnShow()
     //
     // 貼上logo
     //
+
+	if (!BGM) {
+		CAudio::Instance()->Play(AUDIO_MENUBGM);
+		BGM = true;
+	}
     Background.ShowBitmap();
 
     for (int i = 0; i < 4; i++)
@@ -267,11 +271,7 @@ void CGameStateOver::OnShow()
 
 CGameStateRun::CGameStateRun(CGame* g) : CGameState(g)
 {
-    comingMonster = NULL;
-    Clock = NULL;
-    int room_x = 650, room_y = 510;
-
-    for (int i = 0; i < 4; i++)gameRoom[i] = new Room(room_x + i * 115, room_y);
+	myGame = new GameEvent();
 }
 
 CGameStateRun::~CGameStateRun()
@@ -280,85 +280,13 @@ CGameStateRun::~CGameStateRun()
 
 void CGameStateRun::OnBeginState()
 {
-    TaskBoard.SetTopLeft(330, 485);   //設定任務版座標
-    Warning.SetTopLeft(-1280, 100);
-    roomSize = 4;
-    Clock = int(time(&nowtime)) + 60000;
-    isOnBattle = false;
-    isIntoBattle = false;
-	isMonsterGoingOut = false;
-    WarningQuit = false;
-    isMonsterDataBoardShow = false;
-    ///////////////////////////時間設定/////////////////////
-    TimeLevel = 1;
-    isSpeedControlOn[0] = true;
-
-    for (int i = 1; i < 3; i++)isSpeedControlOn[i] = false;
-
-    ////////////////////////////////////////////////////////
-    for (int i = 0; i < 10; i++)warrior[i] = NULL;
+	myGame->OnBeginState();
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-    /////////////////////////////////時間控制按鈕////////////////////////////////////////////
-    for (int i = 0; i < 3; i++)
-    {
-        if (isSpeedControlOn[i])
-        {
-            if (!SpeedControlBtn[i].IsFinalBitmap())
-            {
-                SpeedControlBtn[i].OnMove();
-            }
-        }
-        else
-        {
-            SpeedControlBtn[i].Reset();
-        }
-    }
-
-    timeControl(&TimeLevel, isSpeedControlOn);
-
-    for (int i = 0; i < roomSize; i++)
-    {
-        for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
-        {
-            gameRoom[i]->GetLiveMonster(k)->SetTimeLevel(TimeLevel);
-        }
-    }
-
-    for (int i = 0; i < 10; i++)
-    {
-        if (warrior[i] != NULL) warrior[i]->SetTimeLevel(TimeLevel);
-    }
-
-    if (comingMonster != NULL)comingMonster->SetTimeLevel(TimeLevel);
-
-    /////////////////////////////////時間控制按鈕/////////////////////////////////////////////////
-    OnEvent();
-
-    if (Warning.Left() > -1280)                                    //警告圖片向左移動
-    {
-        Warning.SetTopLeft(Warning.Left() - 6 * TimeLevel, Warning.Top());
-    }
-
-    if (comingMonster != NULL)
-    {
-        comingMonster->OnMove();
-    }
-
-    for (int i = 0; i < 10; i++)
-    {
-        if (warrior[i] != NULL)
-        {
-            warrior[i]->OnMove();
-        }
-    }
-
-    for (int i = 0; i < 4; i++)
-    {
-        gameRoom[i]->OnMove();
-    }
+	myGame->OnMove();
+	if (myGame->GameOver())GotoGameState(GAME_STATE_INIT);
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -371,25 +299,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
     //
     // 開始載入資料
     //
-    Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
-    TaskBoard.LoadBitmap("Bitmaps\\TaskBoard.bmp", RGB(255, 255, 255));
-    Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_1.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_2.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[2].AddBitmap("Bitmaps\\gameRun\\SpeedButton3_1.bmp", RGB(255, 255, 255));
-    SpeedControlBtn[0].SetTopLeft(1035, 675);
-    SpeedControlBtn[1].SetTopLeft(1122, 675);
-    SpeedControlBtn[2].SetTopLeft(1209, 675);
-    ///////////////////////////////////////////////////////////////////
-    CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
-    CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
-    CAudio::Instance()->Load(AUDIO_WARNING, "Sounds\\battle.mp3");
-
-    for (int i = 0; i < 4; i++)gameRoom[i]->LoadBitmap();
-
+	myGame->OnInit();
     //
     // 此OnInit動作會接到CGameStaterOver::OnInit()，所以進度還沒到100%
     //
@@ -397,24 +307,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    const char KEY_LEFT = 0x25; // keyboard左箭頭
-    const char KEY_UP = 0x26; // keyboard上箭頭
-    const char KEY_RIGHT = 0x27; // keyboard右箭頭
-    const char KEY_DOWN = 0x28; // keyboard下箭頭
-
-    if (nChar == KEY_LEFT)
-    {
-    }
-    else if (nChar == KEY_RIGHT)
-    {
-    }
-    else if (nChar == KEY_UP)
-    {
-        BattleTest1(warrior, isIntoBattle, gameRoom);
-    }
-    else if (nChar == KEY_DOWN)
-    {
-    }
+	myGame->OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -434,30 +327,7 @@ void CGameStateRun::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateRun::OnLButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-    if (comingMonster != NULL && comingMonster->IsMouseOn(point)) //若點選到拜訪的怪物
-    {
-        MonsterBeingClick(&comingMonster, 4, gameRoom);
-    }
-
-    for (int i = 0; i < 3; i++)                                  //時間控制按鈕
-    {
-        int _x = SpeedControlBtn[i].Left();
-        int _x2 = _x + SpeedControlBtn[i].Width();
-        int _y = SpeedControlBtn[i].Top();
-        int _y2 = SpeedControlBtn[i].Height() + _y;
-
-        if (point.x > _x && point.x <= _x2 && point.y > _y && point.y <= _y2)
-        {
-            if (!isSpeedControlOn[i])
-            {
-                CAudio::Instance()->Play(AUDIO_DING);
-
-                for (int k = 0; k < 3; k++)isSpeedControlOn[k] = false;
-
-                isSpeedControlOn[i] = true;
-            }
-        }
-    }
+	myGame->OnLButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -466,57 +336,13 @@ void CGameStateRun::OnLButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnMouseMove(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
-    for (int i = 0; i < 4; i++) {                            //處理介面顯示
-		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point) && gameRoom[i]->GetLiveMonster(k)->GetMovingType()!=Hide){
-				isMonsterDataBoardShow = true;
-				i = 5;
-				break;
-			}
-			isMonsterDataBoardShow = false;
-		}
-    }
-	for (int i = 0; i < 4; i++) {                            //處理介面顯示
-		if (!isMonsterDataBoardShow)gameRoom[i]->IsMouseOn(point);
-	}
-
-	if (comingMonster != NULL) {                            //處理介面顯示
-		comingMonster->IsMouseOn(point);
-	}
-	for (int i = 0; i < 10; i++) {                          //處理介面顯示
-		if (warrior[i]!= NULL) {
-			warrior[i]->IsMouseOn(point);
-		}
-	}
+	myGame->OnMouseMove(nFlags, point);
 	
 }
 
 void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 {
-    if (isOnBattle)
-    {
-        for (int i = 0; i < roomSize; i++)
-        {
-			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-				Monster* _monster = gameRoom[i]->GetLiveMonster(k);
-
-				if (_monster->GetIsOnBattle() && _monster->IsMouseOn(point))  //怪物被點擊的事件，怪物回家
-				{
-					MonsterGohome_event(gameRoom[i], k);
-					_monster->SetIsOnBattle(false);
-					return;
-				}
-			}
-			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {	
-				if (gameRoom[i]->IsMouseOn(point) && gameRoom[i]->GetIsMonsterIn(k))//房屋被點擊的事件，怪物戰鬥
-				{
-					gameRoom[i]->SetMonsterFight(true);
-					isMonsterGoingOut = true;
-				}
-				
-			}
-        }
-    }
+	myGame->OnRButtonDown(nFlags, point);
 }
 
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
@@ -530,182 +356,7 @@ void CGameStateRun::OnShow()
     //        否則當視窗重新繪圖時(OnDraw)，物件就會移動，看起來會很怪。換個術語
     //        說，Move負責MVC中的Model，Show負責View，而View不應更動Model。
     //
-    Background.ShowBitmap();
-    TaskBoard.ShowBitmap();
-    SpeedControlBtn[0].OnShow();
-    SpeedControlBtn[1].OnShow();
-    SpeedControlBtn[2].OnShow();
-
-    for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(true);
-
-    for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(false);
-
-    for (int i = 0; i < 10; i++)
-    {
-        if (warrior[i] != NULL)
-        {
-            warrior[i]->OnShow();
-        }
-    }
-
-    if (comingMonster != NULL)
-    {
-        comingMonster->OnShow();
-    }
-
-    Warning.ShowBitmap();
-}
-void CGameStateRun::OnEvent()
-{
-    if (isIntoBattle)  ////////////////////////////////////////////////進入戰鬥時的事件
-    {
-        Warning.SetTopLeft(1280, 100); //警告圖片
-        CAudio::Instance()->Stop(AUDIO_GAMEBGM);
-        CAudio::Instance()->Play(AUDIO_WARNING);
-
-        if (comingMonster != NULL)comingMonster->SetMonsterState(leave); //拜訪怪物離開
-
-        for (int i = 0; i < roomSize; i++)
-        {
-            for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
-            {
-                if (gameRoom[i]->GetIsMonsterLiving() && !gameRoom[i]->GetIsMonsterIn(k))
-                {
-                    MonsterGohome_event(gameRoom[i], k);
-                }
-            }
-        }
-
-        Clock = int(time(&nowtime));
-        isIntoBattle = false;
-        isOnBattle = true;
-    }
-	//////////////////////////////////////////////////////////////////////////設置障礙物
-    if (isOnBattle)
-    {
-        mapObstacle.Initial();
-        SetObstacle(gameRoom, warrior, &mapObstacle, roomSize);
-    }
-
-    /////////////////////////////////////////////////////////////////////////////勇者攻擊事件
-    if (isOnBattle && difftime(time(&nowtime), Clock) > 5)
-    {
-		for (int i = 0; i < 10; i++) {
-			if (warrior[i] != NULL)
-			{
-				Monster* target = findMonsterTarget(warrior[i], gameRoom, roomSize);
-
-				if (target != NULL)
-				{
-					WarriorAttack_event(warrior[i], &target, mapObstacle);
-				}
-				else
-				{
-					Moving(&(warrior[i]), 700, 1, mapObstacle);
-				}
-			}
-		}
-    }
-
-    for (int i = 0; i < roomSize; i++)                        //判斷怪物是否活著
-    {
-        for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
-        {
-            Monster* _monster = gameRoom[i]->GetLiveMonster(k);
-
-            if (_monster != NULL)
-            {
-                if (!_monster->GetIsAlive())
-                {
-                    gameRoom[i]->MonsterDeath(k);
-					gameRoom[i]->SetRoomBoard();
-                }
-            }
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////////怪物攻擊事件
-    if (isOnBattle)
-    {
-        for (int i = 0; i < roomSize; i++)
-        {
-			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-				if (gameRoom[i]->GetLiveMonster(k) != NULL && gameRoom[i]->GetLiveMonster(k)->GetIsOnBattle())
-				{
-					Monster* _monster = gameRoom[i]->GetLiveMonster(k);
-					Warrior* target = findWarriorTarget(_monster, warrior);
-					Warrior* temp = target;
-					if (target != NULL)
-					{
-						MonsterAttack_event(_monster, &target, mapObstacle);
-						if (target == NULL) {                   //刪除勇士記憶體
-							for (int n = 0; n < 10; n++) {
-								if (temp == warrior[n])
-								{
-									warrior[n] = NULL;
-									break;
-								}
-							}
-						}
-					}
-					else                                           //結束戰鬥
-					{
-						//BattleEnd(gameRoom, roomSize);
-						CAudio::Instance()->Stop(AUDIO_WARNING);
-						CAudio::Instance()->Play(AUDIO_GAMEBGM);
-						isOnBattle = false;
-						break;
-					}
-				}
-			}
-        }
-    }
-	if (!isOnBattle) {
-		BattleEnd(gameRoom, roomSize);
-	}
-
-	MonsterPositionFix(gameRoom, mapObstacle, roomSize);
-	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件
-    if (comingMonster != NULL)
-    {
-        Monster_state comingMonsterState = comingMonster->GetMonsterState();
-        int randvalue = rand() % 2000;
-
-        switch (comingMonsterState)
-        {
-            case game_framework::leave:
-                MonsterLeave(&comingMonster);
-                break;
-
-            case game_framework::nothing:
-                MonsterFindHouse(&comingMonster, TaskBoard.Left(), TaskBoard.Width());
-                break;
-
-			case game_framework::lookHouse:
-				MonsterFindHouse(&comingMonster, TaskBoard.Left(), TaskBoard.Width());    //怪物找房
-				break;
-
-            case game_framework::findHouse:
-                if (randvalue < 5*TimeLevel)
-                {
-                    comingMonster->SetMonsterState(leave);
-				}else if (randvalue >= 5 && randvalue <= 100) {                                 //怪物戀愛
-					ComingMonsterFallInLoveEvent(&comingMonster, gameRoom, roomSize);
-				}
-                break;
-
-            default:
-                break;
-        }
-    }
-    else
-    {
-        if (!isOnBattle)CreateMonster_event(&comingMonster);
-    }
-
-	if(!isOnBattle)	MonsterMatingEvent(gameRoom, roomSize);   //怪物交配事件
-
-    ///////////////////////////////////////////////////////////////////////////
+	myGame->OnShow();
 }
 
 }

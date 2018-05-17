@@ -7,14 +7,14 @@
 #include "RoomDataBoard.h"
 
 namespace game_framework {
-	RoomDataBoard::RoomDataBoard(int liveMonsterSize, string monsterType[3], int monsterGender[3], string monsterName[3], int number)
+	RoomDataBoard::RoomDataBoard(int liveMonsterSize, string monsterType[3], int monsterGender[3], string monsterName[3], bool monsterIsKid[3], int number)
 	{
-		Initialize(liveMonsterSize, monsterType, monsterGender, monsterName,number);
+		Initialize(liveMonsterSize, monsterType, monsterGender, monsterName ,monsterIsKid,number);
 	}
 	RoomDataBoard::~RoomDataBoard()
 	{
 	}
-	void RoomDataBoard::Initialize(int liveMonsterSize, string monsterType[3], int monsterGender[3], string _monsterName[3], int number)
+	void RoomDataBoard::Initialize(int liveMonsterSize, string monsterType[3], int monsterGender[3], string _monsterName[3], bool monsterIsKid[3], int number)
 	{
 		MonsterImgSize = liveMonsterSize;
 		RoomNumber = number;
@@ -25,12 +25,18 @@ namespace game_framework {
 		for (int i = 0; i < liveMonsterSize; i++) {
 			string _monsterType= monsterType[i];
 			char path[100] = "Bitmaps\\monster\\monster_";
+			if(monsterIsKid[i])strcat(path, "child_");
 			if(monsterGender[i]==0)strcat(path, "m_");
 			else strcat(path, "w_");
 			strcat(path, _monsterType.c_str());
 			strcat(path, ".bmp");
 			MonsterImg[i].LoadBitmap(path, RGB(255, 255, 255));
-			MonsterImg[i].SetTopLeft(x+25, y+40+(i*65));
+			if (monsterIsKid[i]) {
+				MonsterImg[i].SetTopLeft(x + 30, y + 40 + (i * 65));
+			}
+			else {
+				MonsterImg[i].SetTopLeft(x + 25, y + 40 + (i * 65));
+			}
 			monsterName[i] = _monsterName[i];
 		}
 	}
