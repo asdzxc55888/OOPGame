@@ -153,6 +153,9 @@
     <ClCompile Include="Source\TaskBoard.cpp">
       <Filter>MyGame</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TaskBlock.cpp">
+      <Filter>MyGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\audio.h">
@@ -213,6 +216,9 @@
       <Filter>MyGame</Filter>
     </ClInclude>
     <ClInclude Include="Source\TaskBoard.h">
+      <Filter>MyGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TaskBlock.h">
       <Filter>MyGame</Filter>
     </ClInclude>
   </ItemGroup>

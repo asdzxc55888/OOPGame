@@ -17,12 +17,17 @@ namespace game_framework {
 		void Initial();
 		void LoadBitmap();
 		void OnShow();
+		void SetTaskShow(TaskList _task, bool flag);     //設定介面上的任務
 		bool IsMouseOnTaskBoard(CPoint point);
+		bool IsTaskOnClick(CPoint point);
+		int  GetShowTaskSize();
 		int  GetTaskBoardX();
 		TaskList GetNowTask();
 	private:
 		bool IsTaskShow[TaskSize];       //任務是否出現在介面板
+		bool IsInterfaceOnShow;
 		TaskList nowTask;
 		CMovingBitmap TaskBoardInterface,TaskBoardImg;
+		CMovingBitmap TaskBlock[3];        //任務方塊
 	};
 }

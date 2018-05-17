@@ -309,6 +309,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Source\TaskBlock.cpp" />
     <ClCompile Include="Source\TaskBoard.cpp" />
     <ClCompile Include="Source\Warrior.cpp" />
   </ItemGroup>
@@ -331,6 +332,7 @@
     <ClInclude Include="Source\StdAfx.h" />
     <ClInclude Include="Source\gamelib.h" />
     <ClInclude Include="Source\mygame.h" />
+    <ClInclude Include="Source\TaskBlock.h" />
     <ClInclude Include="Source\TaskBoard.h" />
     <ClInclude Include="Source\Warrior.h" />
   </ItemGroup>
