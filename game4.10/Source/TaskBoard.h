@@ -24,10 +24,12 @@ namespace game_framework {
 		int  GetTaskBoardX();
 		TaskList GetNowTask();
 	private:
+		int  TaskShowIndex[3];
 		bool IsTaskShow[TaskSize];       //任務是否出現在介面板
 		bool IsInterfaceOnShow;
 		TaskList nowTask;
+		TaskBlock *myTaskBlock[3];
 		CMovingBitmap TaskBoardInterface,TaskBoardImg;
-		CMovingBitmap TaskBlock[3];        //任務方塊
+
 	};
 }
