@@ -42,10 +42,12 @@ namespace game_framework {
 		bool IsMouseOn(CPoint point);
 	private:
 		int monsterAge;
+		int HpCount;          //生命回復計數
 		void RandMonsterType();
 		void RandBasicAbility();
 		void RandName();
 		void RandGender();
+		void HpResume();
 		void GrowUp();  //怪物長大
 		bool isMusicEffectOn;
 		bool isExist;

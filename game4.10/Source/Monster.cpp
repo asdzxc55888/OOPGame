@@ -23,6 +23,7 @@ namespace game_framework {
 		isMusicEffectOn = false;
 		isKid = false;
 		isHeadImgRoad = false;
+		HpCount = 0;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 	Monster::Monster()
@@ -37,6 +38,7 @@ namespace game_framework {
 		isMusicEffectOn = false;
 		isKid = false;
 		isHeadImgRoad = false;
+		HpCount = 0;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 	void Monster::operator=(Monster &obj)
@@ -199,7 +201,7 @@ namespace game_framework {
 	void Monster::OnShow()
 	{
 		npcObject::OnShow();
-
+		HpResume();
 		if (isMouseOn && nowMovingType != Hide) {                   //資料欄的顯示
 			if (!isMusicEffectOn) {
 				CAudio::Instance()->Play(AUDIO_DING);
@@ -338,6 +340,16 @@ namespace game_framework {
 	{
 		int randValue = rand() % 2;
 		monsterGender = (Gender)randValue;
+	}
+	void Monster::HpResume()
+	{
+		if (Hp < MaxHp) {
+			if (HpCount > (200) - (timeLevel * 50)) {
+				Hp += MaxHp / 50;
+				if (Hp > MaxHp)Hp = MaxHp;
+			}
+			else HpCount++;
+		}
 	}
 	void Monster::GrowUp()
 	{

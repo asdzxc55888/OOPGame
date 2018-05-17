@@ -392,9 +392,6 @@ void GameEvent::OnEvent()
 			{
 				comingMonster->SetMonsterState(leave);
 			}
-			else if (randvalue >= 5 && randvalue <= 100) {                                 //怪物戀愛
-				ComingMonsterFallInLoveEvent();
-			}
 			break;
 
 		default:
@@ -413,8 +410,11 @@ bool GameEvent::GameOver()
 {
 	if (GameOverFlag) {
 		for (int i = 0; i < roomSize; i++) {
-			if (gameRoom[i]->GetLiveMonsterSize() > 0)return false;
+			if (gameRoom[i]->GetLiveMonsterSize() > 0) {
+				return false;
+			}
 		}
+		CAudio::Instance()->Stop(AUDIO_WARNING);
 		return true;
 	}
 	return false;
@@ -450,18 +450,29 @@ void GameEvent::SetObstacle()
 	}
 }
 
+bool GameEvent::GetIsRoomFull()
+{
+	for (int i = 0; i < roomSize; i++) {
+		if (gameRoom[i]->GetLiveMonsterSize() == 0)return false;
+	}
+	return true;
+}
+
 void GameEvent::MonsterFindHouse(Monster **_monster)
 {
 	if (Moving(_monster, TaskBoard.Left() + 60, 0))
 	{
 		(*_monster)->SetMovingType(Back);
 		int randvalue = rand() % 2000;
-		if (randvalue < 30) {
+		if (randvalue < 30 && !GetIsRoomFull()) {
 			(*_monster)->SetMonsterState(findHouse);
 		}
 		else if (randvalue > 1990)
 		{
 			(*_monster)->SetMonsterState(leave);
+		}
+		else if (randvalue >= 30 && randvalue <= 100) {                                 //怪物戀愛
+			ComingMonsterFallInLoveEvent();
 		}
 	}
 	else {

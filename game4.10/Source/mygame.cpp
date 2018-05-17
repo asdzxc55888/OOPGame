@@ -71,6 +71,8 @@ CGameStateInit::CGameStateInit(CGame* g)
 {
     for (int i = 0; i < 4; i++)
         menuBtn[i] = new CAnimation(3);
+
+	isLoadingBitmaps = false;
 }
 
 CGameStateInit::~CGameStateInit()
@@ -106,14 +108,14 @@ void CGameStateInit::OnInit()
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
-    isLoadingBitmaps = true;
+	isLoadingBitmaps = true;
 }
 
 void CGameStateInit::OnBeginState()
 {
     for (int i = 0; i < 4; i++)isMouseOn[i] = false;
 	BGM = false;
-    isLoadingBitmaps = false;
+    isLoadingBitmaps = true;
 }
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)

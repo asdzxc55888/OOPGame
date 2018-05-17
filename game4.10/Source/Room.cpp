@@ -182,8 +182,10 @@ namespace game_framework
 		for (int i = 0; i < liveMonsterSize; i++) {
 			if (!liveMonster[i]->GetIsOnBattle()) {
 				monsterGoOutsideTemp[i] = true;
+				liveMonster[i]->SetPoint(liveMonster[i]->GetX() + 1, liveMonster[i]->GetY());
 				liveMonster[i]->SetBattleTemp(true);
 				isMonsterFight[i] = true;
+
 			}
 		}
 	}
