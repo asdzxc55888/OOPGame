@@ -6,7 +6,7 @@ enum TaskList{
 };
 #define TaskSize 2
 #define TaskBoardInterface_x 125
-#define TaskBoardInterface_y 10
+#define TaskBoardInterface_y 20
 #define TaskBoard_x 330
 #define TaskBoard_y 485
 namespace game_framework {
@@ -19,6 +19,8 @@ namespace game_framework {
 		void LoadBitmap();
 		void OnShow();
 		void SetTaskShow(TaskList _task, bool flag);     //設定介面上的任務
+		void ShowTaskName();
+		bool OnRButtonDown(UINT nFlags, CPoint point);
 		bool IsMouseOnTaskBoard(CPoint point);
 		bool IsTaskOnClick(CPoint point);
 		int  GetShowTaskSize();
@@ -27,9 +29,11 @@ namespace game_framework {
 	private:
 		bool IsTaskShow[TaskSize];       //任務是否出現在介面板
 		bool IsInterfaceOnShow;
+		bool isMouseOn;
+		string TaskTitle;
 		TaskList nowTask;
 		TaskBlock *myTaskBlock[3];
 		CMovingBitmap TaskBoardInterface,TaskBoardImg;
-
+		CMovingBitmap TaskInformation;
 	};
 }

@@ -12,13 +12,14 @@
 namespace game_framework {
 	TaskBlock::TaskBlock()
 	{
+		isMouseOn = false;
+		isMusicEffectOn = false;
 	}
 	TaskBlock::~TaskBlock()
 	{
 	}
 	void TaskBlock::Initial(int Index)
 	{
-		isMouseOn = false;
 
 		char line[50] = "";
 		int count = 0;
@@ -46,14 +47,24 @@ namespace game_framework {
 	}
 	void TaskBlock::OnShow()
 	{
+		TaskBlockBackGround.SetTopLeft(x, y);
 		TaskBlockBackGround.ShowBitmap();
-		ShowTitle();
 		if (isMouseOn) {
+			TaskBlockBackGround.SetTopLeft(x-7 , y );
+			TaskBlockBackGround.ShowBitmap(1.05);
 			TaskContentBackGround.ShowBitmap();
 			ShowTaskName();
 			ShowContent();
 			ShowReward_str();
+			if (!isMusicEffectOn) {
+				CAudio::Instance()->Play(AUDIO_DING);
+				isMusicEffectOn = true;
+			}
 		}
+		else {
+			isMusicEffectOn = false;
+		}
+		ShowTitle();
 	}
 	void TaskBlock::SetPoint(int _x, int _y)
 	{
@@ -65,9 +76,11 @@ namespace game_framework {
 	{
 		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
 		CFont f, *fp;
-		f.CreatePointFont(120, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
+		if (isMouseOn) {
+			f.CreatePointFont(180, "Yu Gothic UI Semibold");
+		}else f.CreatePointFont(160, "Yu Gothic UI Semibold");
 		fp = pDC->SelectObject(&f);					// 選用 font f
-		pDC->SetBkColor(RGB(254, 233, 189));
+		pDC->SetBkColor(RGB(156, 123, 66));
 		pDC->SetTextColor(RGB(0, 0, 0));
 		char str[80];								// Demo 數字對字串的轉換
 		sprintf(str, TaskName.c_str());
@@ -79,9 +92,9 @@ namespace game_framework {
 	{
 		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
 		CFont f, *fp;
-		f.CreatePointFont(120, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
+		f.CreatePointFont(140, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
 		fp = pDC->SelectObject(&f);					// 選用 font f
-		pDC->SetBkColor(RGB(254, 233, 189));
+		pDC->SetBkColor(RGB(224, 223, 210));
 		pDC->SetTextColor(RGB(0, 0, 0));
 		char str[80];								// Demo 數字對字串的轉換
 		sprintf(str, TaskName.c_str());
@@ -93,9 +106,9 @@ namespace game_framework {
 	{
 		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
 		CFont f, *fp;
-		f.CreatePointFont(120, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
+		f.CreatePointFont(140, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
 		fp = pDC->SelectObject(&f);					// 選用 font f
-		pDC->SetBkColor(RGB(254, 233, 189));
+		pDC->SetBkColor(RGB(224, 223, 210));
 		pDC->SetTextColor(RGB(0, 0, 0));
 		char str[80];								// Demo 數字對字串的轉換
 		sprintf(str, Content.c_str());
@@ -107,9 +120,9 @@ namespace game_framework {
 	{
 		CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
 		CFont f, *fp;
-		f.CreatePointFont(120, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
+		f.CreatePointFont(140, "Yu Gothic UI Semibold");	// 產生 font f; 160表示16 point的字
 		fp = pDC->SelectObject(&f);					// 選用 font f
-		pDC->SetBkColor(RGB(254, 233, 189));
+		pDC->SetBkColor(RGB(224, 223, 210));
 		pDC->SetTextColor(RGB(0, 0, 0));
 		char str[80];								// Demo 數字對字串的轉換
 		sprintf(str, reward_str.c_str());
@@ -122,6 +135,25 @@ namespace game_framework {
 		if (point.x > x && point.x <= x + TaskBlockBackGround.Width() && point.y > y && point.y <= y + TaskBlockBackGround.Height()) {
 			isMouseOn = true;
 		}
-		else isMouseOn = false;
+		else {
+			isMouseOn = false;
+		}
+	}
+	bool TaskBlock::IsMouseClick(CPoint point)
+	{
+		if (point.x > x && point.x <= x + TaskBlockBackGround.Width() && point.y > y && point.y <= y + TaskBlockBackGround.Height()) {
+			CAudio::Instance()->Play(AUDIO_DECISION);
+			TaskBlockBackGround.SetTopLeft(x + 5, y + 5);
+			isMouseOn = true;
+			return true;
+		}
+		else {
+			isMouseOn = false;
+			return false;
+		}
+	}
+	string TaskBlock::GetTaskName()
+	{
+		return TaskName;
 	}
 }

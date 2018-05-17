@@ -344,9 +344,10 @@ namespace game_framework {
 	void Monster::HpResume()
 	{
 		if (Hp < MaxHp) {
-			if (HpCount > (1000) - (timeLevel * 150)) {
+			if (HpCount > (500) - (timeLevel * 150)) {
 				Hp += MaxHp / 50;
 				if (Hp > MaxHp)Hp = MaxHp;
+				HpCount = 0;
 			}
 			else HpCount++;
 		}

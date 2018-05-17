@@ -24,7 +24,9 @@ void GameEvent::OnBeginState()
 {
 	Warning.SetTopLeft(-1280, 100);
 	roomSize = 4;
+	battleCount = 0;
 	Clock = int(time(&nowtime)) + 60000;
+	isGamePause = false;
 	GameOverFlag = false;
 	isOnBattle = false;
 	isIntoBattle = false;
@@ -112,7 +114,7 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
-	myTaskBoard.IsTaskOnClick(point);
+	if(myTaskBoard.IsTaskOnClick(point))isGamePause=true;
 }
 
 void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
@@ -170,67 +172,70 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+	if(myTaskBoard.OnRButtonDown(nFlags, point))isGamePause=false;
 }
 
 void GameEvent::OnMove()
 {
-	/////////////////////////////////時間控制按鈕////////////////////////////////////////////
-	for (int i = 0; i < 3; i++)
-	{
-		if (isSpeedControlOn[i])
+	if (!isGamePause) {
+		/////////////////////////////////時間控制按鈕////////////////////////////////////////////
+		for (int i = 0; i < 3; i++)
 		{
-			if (!SpeedControlBtn[i].IsFinalBitmap())
+			if (isSpeedControlOn[i])
 			{
-				SpeedControlBtn[i].OnMove();
+				if (!SpeedControlBtn[i].IsFinalBitmap())
+				{
+					SpeedControlBtn[i].OnMove();
+				}
+			}
+			else
+			{
+				SpeedControlBtn[i].Reset();
 			}
 		}
-		else
+
+		timeControl();
+
+		for (int i = 0; i < roomSize; i++)
 		{
-			SpeedControlBtn[i].Reset();
+			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
+			{
+				gameRoom[i]->GetLiveMonster(k)->SetTimeLevel(TimeLevel);
+			}
 		}
-	}
 
-	timeControl();
-
-	for (int i = 0; i < roomSize; i++)
-	{
-		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
+		for (int i = 0; i < 10; i++)
 		{
-			gameRoom[i]->GetLiveMonster(k)->SetTimeLevel(TimeLevel);
+			if (warrior[i] != NULL) warrior[i]->SetTimeLevel(TimeLevel);
 		}
-	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		if (warrior[i] != NULL) warrior[i]->SetTimeLevel(TimeLevel);
-	}
+		if (comingMonster != NULL)comingMonster->SetTimeLevel(TimeLevel);
 
-	if (comingMonster != NULL)comingMonster->SetTimeLevel(TimeLevel);
+		/////////////////////////////////時間控制按鈕/////////////////////////////////////////////////
+		OnEvent();
 
-	/////////////////////////////////時間控制按鈕/////////////////////////////////////////////////
-	OnEvent();
-
-	if (Warning.Left() > -1280)                                    //警告圖片向左移動
-	{
-		Warning.SetTopLeft(Warning.Left() - 6 * TimeLevel, Warning.Top());
-	}
-
-	if (comingMonster != NULL)
-	{
-		comingMonster->OnMove();
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		if (warrior[i] != NULL)
+		if (Warning.Left() > -1280)                                    //警告圖片向左移動
 		{
-			warrior[i]->OnMove();
+			Warning.SetTopLeft(Warning.Left() - 6 * TimeLevel, Warning.Top());
 		}
-	}
 
-	for (int i = 0; i < 4; i++)
-	{
-		gameRoom[i]->OnMove();
+		if (comingMonster != NULL)
+		{
+			comingMonster->OnMove();
+		}
+
+		for (int i = 0; i < 10; i++)
+		{
+			if (warrior[i] != NULL)
+			{
+				warrior[i]->OnMove();
+			}
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			gameRoom[i]->OnMove();
+		}
 	}
 }
 
@@ -264,6 +269,7 @@ void GameEvent::OnShow()
 
 void GameEvent::OnEvent()
 {
+	SeleteTaskBattle();
 	if (isIntoBattle)  ////////////////////////////////////////////////進入戰鬥時的事件
 	{
 		Warning.SetTopLeft(1280, 100); //警告圖片
@@ -834,9 +840,9 @@ void GameEvent::MonsterPositionFix()
 			if (_monster->GetIsOnBattle() && mapObstacle.isOverlapping(x1, x2, y1, y2, &obsDirection))
 			{
 				if (obsDirection) {
-					_monster->SetPoint(x1 + 5, y1);
+					_monster->SetPoint(x1 + 1, y1);
 				}
-				else _monster->SetPoint(x1 - 5, y1);
+				else _monster->SetPoint(x1 - 2, y1);
 				//return;
 			}
 		}
@@ -852,9 +858,9 @@ void GameEvent::MonsterPositionFix()
 			if (_warrior->GetIsOnBattle() && mapObstacle.isOverlapping(x1, x2, y1, y2, &obsDirection))
 			{
 				if (obsDirection) {
-					_warrior->SetPoint(x1 + 5, y1);
+					_warrior->SetPoint(x1 + 2, y1);
 				}
-				else _warrior->SetPoint(x1 - 5, y1);
+				else _warrior->SetPoint(x1 - 1, y1);
 				return;
 			}
 		}
@@ -930,6 +936,39 @@ void GameEvent::BattleEnd()
 				gameRoom[i]->GetLiveMonster(k)->SetIsOnBattle(false);
 			}
 		}
+	}
+}
+
+void GameEvent::SeleteTaskBattle()
+{	
+	if (!isOnBattle) {
+		switch (myTaskBoard.GetNowTask())
+		{
+		case TaskList::nothing:
+			if (battleCount > 4000 - (TimeLevel * 500)) {
+				isIntoBattle = true;
+				CreateWarrior_event(&warrior[0], villager);
+				for (int i = 0; warrior[i] != NULL; i++) {
+					warrior[i]->SetPoint(-100 - (60 * i), 540);
+				}
+				battleCount = 0;
+			}
+			break;
+		case TaskList::FirstTask:
+			if (battleCount > 3000 - (TimeLevel * 500)) {
+				isIntoBattle = true;
+				CreateWarrior_event(&warrior[0], villager);
+				CreateWarrior_event(&warrior[1], firemagic);
+				for (int i = 0; warrior[i] != NULL; i++) {
+					warrior[i]->SetPoint(-100 - (60 * i), 540);
+				}
+				battleCount = 0;
+			}
+			break;
+		default:
+			break;
+		}
+		battleCount++;
 	}
 }
 

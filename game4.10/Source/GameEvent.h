@@ -45,6 +45,7 @@ namespace game_framework {
 		Monster* findMonsterTarget(Warrior *_warrior);
 		Warrior* findWarriorTarget(Monster *_monster);
 		void BattleEnd();
+		void SeleteTaskBattle();
 		void BattleTest1();
 		///////////////////////////////////////////////////////////////////時間控制//////////////////////////////////////////////////////////////////
 		void timeControl();
@@ -67,6 +68,8 @@ namespace game_framework {
 		int Clock;
 		int houseLevele;
 		int roomSize;
+		int battleCount;
+		bool isGamePause;
 		bool isIntoBattle;                        //是否剛進入戰鬥
 		bool isOnBattle;						  //是否在戰鬥
 		bool isSpeedControlOn[3];
