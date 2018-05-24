@@ -25,6 +25,7 @@ void GameEvent::OnBeginState()
 	Warning.SetTopLeft(-1280, 100);
 	roomSize = 4;
 	battleCount = 0;
+	riseMoney = 0;
 	Clock = int(time(&nowtime)) + 60000;
 	isGamePause = false;
 	GameOverFlag = false;
@@ -33,6 +34,7 @@ void GameEvent::OnBeginState()
 	isMonsterGoingOut = false;
 	WarningQuit = false;
 	isMonsterDataBoardShow = false;
+	myMoney.SetValue(1000);
 	///////////////////////////時間設定/////////////////////
 	TimeLevel = 1;
 	isSpeedControlOn[0] = true;
@@ -237,6 +239,7 @@ void GameEvent::OnMove()
 			gameRoom[i]->OnMove();
 		}
 	}
+	myMoney.OnMove();
 }
 
 void GameEvent::OnShow()
@@ -262,7 +265,7 @@ void GameEvent::OnShow()
 	{
 		comingMonster->OnShow();
 	}
-
+	myMoney.OnShow();
 	Warning.ShowBitmap();
 	myTaskBoard.OnShow();
 }
@@ -364,15 +367,16 @@ void GameEvent::OnEvent()
 						CAudio::Instance()->Stop(AUDIO_WARNING);
 						CAudio::Instance()->Play(AUDIO_GAMEBGM);
 						isOnBattle = false;
+						BattleEnd();
 						break;
 					}
 				}
 			}
 		}
 	}
-	if (!isOnBattle) {
+	/*if (!isOnBattle) {
 		BattleEnd();
-	}
+	}*/
 
 	MonsterPositionFix();
 	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件
@@ -936,6 +940,20 @@ void GameEvent::BattleEnd()
 				gameRoom[i]->GetLiveMonster(k)->SetIsOnBattle(false);
 			}
 		}
+	}
+	switch (myTaskBoard.GetNowTask())
+	{
+	case FirstTask:
+		riseMoney = 0;
+		addMoney = 100;
+		myTaskBoard.
+		break;
+	default:
+		break;
+	}
+	if (riseMoney < addMoney) {
+		myMoney.SetValue(myMoney.GetValue() + 1);
+		riseMoney++;
 	}
 }
 

@@ -63,6 +63,10 @@ namespace game_framework {
 	{
 		IsTaskShow[_task] = flag;
 	}
+	void TaskBoard::SetNowTask(TaskList _task)
+	{
+		nowTask = _task;
+	}
 	void TaskBoard::ShowTaskName()
 	{
 			CDC* pDC = CDDraw::GetBackCDC();			// ¨ú±o Back Plain ªº CDC

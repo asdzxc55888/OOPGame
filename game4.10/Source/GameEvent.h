@@ -3,6 +3,7 @@
 #include "Warrior.h"
 #include "obstacle.h"
 #include "TaskBoard.h"
+#include "GMoney.h"
 namespace game_framework {
 	class GameEvent
 	{
@@ -57,7 +58,7 @@ namespace game_framework {
 		CMovingBitmap Background;                  //背景圖
 		CMovingBitmap Warning;                    //警告圖
 		CAnimation SpeedControlBtn[3];            //速度控制圖
-		CInteger Money;
+		GMoney myMoney;
 		TaskBoard myTaskBoard;
 		Obstacle mapObstacle;
 		Room* gameRoom[4];
@@ -69,6 +70,8 @@ namespace game_framework {
 		int houseLevele;
 		int roomSize;
 		int battleCount;
+		int riseMoney;
+		int addMoney;
 		bool isGamePause;
 		bool isIntoBattle;                        //是否剛進入戰鬥
 		bool isOnBattle;						  //是否在戰鬥

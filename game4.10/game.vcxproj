@@ -277,6 +277,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnitTest|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Source\GMoney.cpp" />
     <ClCompile Include="Source\MagicAttack.cpp" />
     <ClCompile Include="Source\MainFrm.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -315,6 +316,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GameEvent.h" />
+    <ClInclude Include="Source\GMoney.h" />
     <ClInclude Include="Source\MagicAttack.h" />
     <ClInclude Include="Source\Monster.h" />
     <ClInclude Include="Source\MonsterDataBoard.h" />

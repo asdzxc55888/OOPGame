@@ -8,6 +8,11 @@
 #define reward_str_x 740
 #define reward_str_y 480
 namespace game_framework {
+	enum TaskState {
+		normal,
+		doing,
+		finish
+	};
 	class TaskBlock
 	{
 	public:
@@ -28,6 +33,7 @@ namespace game_framework {
 		int x, y;
 		bool isMouseOn;
 		bool isMusicEffectOn;
+		TaskState state;
 		string TaskName;
 		string Content;
 		string reward_str;

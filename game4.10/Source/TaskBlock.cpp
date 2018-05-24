@@ -35,6 +35,7 @@ namespace game_framework {
 				break;
 			}
 		}
+		state = normal;
 		TaskName = Data[0];
 		Content = Data[1];
 		reward_str = Data[2];

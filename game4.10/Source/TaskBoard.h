@@ -19,6 +19,7 @@ namespace game_framework {
 		void LoadBitmap();
 		void OnShow();
 		void SetTaskShow(TaskList _task, bool flag);     //設定介面上的任務
+		void SetNowTask(TaskList _task);
 		void ShowTaskName();
 		bool OnRButtonDown(UINT nFlags, CPoint point);
 		bool IsMouseOnTaskBoard(CPoint point);
