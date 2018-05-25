@@ -2,7 +2,7 @@
 #include "npcObject.h"
 class Warrior;
 #include"Warrior.h"
-#define totalMonsterType_size  2
+#define totalMonsterType_size  3
 #define GrowupTime 3000
 namespace game_framework {
 	enum Monster_state {

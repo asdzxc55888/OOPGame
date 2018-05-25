@@ -22,6 +22,7 @@ namespace game_framework {
 		void LoadBitmap();
 		void OnShow();
 		void SetPoint(int x,int y);
+		void SetTaskState(TaskState _state);
 		void ShowTitle();
 		void ShowTaskName();
 		void ShowContent();
@@ -37,7 +38,7 @@ namespace game_framework {
 		string TaskName;
 		string Content;
 		string reward_str;
-		CMovingBitmap TaskBlockBackGround;
+		CMovingBitmap TaskBlockBackGround[3];
 		CMovingBitmap TaskContentBackGround;            //»¡©ú­I´º
 	};
 }

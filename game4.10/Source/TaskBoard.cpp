@@ -39,6 +39,7 @@ namespace game_framework {
 	}
 	void TaskBoard::OnShow()
 	{
+
 		if (isMouseOn) {
 			TaskInformation.ShowBitmap();
 			ShowTaskName();
@@ -66,6 +67,7 @@ namespace game_framework {
 	void TaskBoard::SetNowTask(TaskList _task)
 	{
 		nowTask = _task;
+
 	}
 	void TaskBoard::ShowTaskName()
 	{
@@ -105,6 +107,14 @@ namespace game_framework {
 			if (myTaskBlock[i]->IsMouseClick(point)) {
 				nowTask = (TaskList)i;   //¥¼§¹¦¨
 				TaskTitle = myTaskBlock[i]->GetTaskName();
+			}
+		}
+		for (int i = 0; i < GetShowTaskSize(); i++) {
+			if ((TaskList)i == nowTask) {
+				myTaskBlock[i]->SetTaskState(doing);
+			}
+			else {
+				myTaskBlock[i]->SetTaskState(normal);
 			}
 		}
 		if (point.x > TaskBoard_x && point.x <= TaskBoard_x + TaskBoardImg.Width() && point.y > TaskBoard_y && point.y <= TaskBoard_y + TaskBoardImg.Height()) {

@@ -25,6 +25,7 @@ void GameEvent::OnBeginState()
 	Warning.SetTopLeft(-1280, 100);
 	roomSize = 4;
 	battleCount = 0;
+	addMoney = 0;
 	riseMoney = 0;
 	Clock = int(time(&nowtime)) + 60000;
 	isGamePause = false;
@@ -85,8 +86,10 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	{
 		BattleTest1();
 	}
-	else if (nChar == KEY_DOWN)
+	else if (nChar == KEY_DOWN)  //測試
 	{
+		riseMoney = 0;
+		addMoney = -100;
 	}
 }
 
@@ -367,16 +370,16 @@ void GameEvent::OnEvent()
 						CAudio::Instance()->Stop(AUDIO_WARNING);
 						CAudio::Instance()->Play(AUDIO_GAMEBGM);
 						isOnBattle = false;
-						BattleEnd();
+						BattleFinish();
 						break;
 					}
 				}
 			}
 		}
 	}
-	/*if (!isOnBattle) {
+	if (!isOnBattle) {
 		BattleEnd();
-	}*/
+	}
 
 	MonsterPositionFix();
 	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件
@@ -941,19 +944,24 @@ void GameEvent::BattleEnd()
 			}
 		}
 	}
+	if (riseMoney != addMoney) {
+		int add = addMoney / 100;
+		myMoney.SetValue(myMoney.GetValue() + add);
+		riseMoney+= add;
+	}
+}
+
+void GameEvent::BattleFinish()
+{
 	switch (myTaskBoard.GetNowTask())
 	{
 	case FirstTask:
 		riseMoney = 0;
-		addMoney = 100;
-		myTaskBoard.
+		addMoney = 10000;
+		myTaskBoard.SetNowTask(TaskList::nothing);
 		break;
 	default:
 		break;
-	}
-	if (riseMoney < addMoney) {
-		myMoney.SetValue(myMoney.GetValue() + 1);
-		riseMoney++;
 	}
 }
 

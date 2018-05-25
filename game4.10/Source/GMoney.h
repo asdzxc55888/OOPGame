@@ -1,6 +1,6 @@
 #pragma once
 namespace game_framework {
-#define Money_x 280
+#define Money_x 310
 #define Money_y 630
 	class GMoney
 	{

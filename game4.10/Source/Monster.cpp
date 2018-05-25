@@ -281,7 +281,7 @@ namespace game_framework {
 	}
 	void Monster::RandMonsterType()
 	{
-		string totalMonsterType[totalMonsterType_size] = { "tentacle","kappa" };
+		string totalMonsterType[totalMonsterType_size] = { "tentacle","kappa","eye" };
 		int result = rand() % totalMonsterType_size;
 		monsterType = totalMonsterType[result];
 	}
@@ -304,6 +304,13 @@ namespace game_framework {
 			ApDefense = 2;			//魔法防禦
 			AdDefense = 3;			//物理防禦
 			AttackPower = 12;         //攻擊力
+			AttackType = Ad;			//攻擊模式
+		}
+		else if (monsterType == "eye") {
+			Hp = 140;					//血量
+			ApDefense = 4;			//魔法防禦
+			AdDefense = 3;			//物理防禦
+			AttackPower = 14;         //攻擊力
 			AttackType = Ad;			//攻擊模式
 		}
 		//隨機能力

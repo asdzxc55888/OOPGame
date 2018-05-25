@@ -33,7 +33,7 @@ namespace game_framework {
 	void GMoney::OnMove()
 	{
 		int digit = GetDigit(value);
-		money->SetTopLeft(Money_x+digit-20, Money_y);
+		money->SetTopLeft(Money_x-digit*11, Money_y);
 	}
 	void GMoney::SetValue(int _value)
 	{

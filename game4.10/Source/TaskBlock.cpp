@@ -14,6 +14,7 @@ namespace game_framework {
 	{
 		isMouseOn = false;
 		isMusicEffectOn = false;
+		state = normal;
 	}
 	TaskBlock::~TaskBlock()
 	{
@@ -35,7 +36,6 @@ namespace game_framework {
 				break;
 			}
 		}
-		state = normal;
 		TaskName = Data[0];
 		Content = Data[1];
 		reward_str = Data[2];
@@ -43,16 +43,18 @@ namespace game_framework {
 	}
 	void TaskBlock::LoadBitmap()
 	{
-		TaskBlockBackGround.LoadBitmap("Bitmaps\\TaskBlock.bmp", RGB(255, 255, 255));
+		TaskBlockBackGround[0].LoadBitmap("Bitmaps\\TaskBlock.bmp", RGB(255, 255, 255));
+		TaskBlockBackGround[1].LoadBitmap("Bitmaps\\Tasking.bmp", RGB(255, 255, 255));
+		TaskBlockBackGround[2].LoadBitmap("Bitmaps\\Taskfinish.bmp", RGB(255, 255, 255));
 		TaskContentBackGround.LoadBitmap("Bitmaps\\Instruction.bmp", RGB(255, 255, 255));
 	}
 	void TaskBlock::OnShow()
 	{
-		TaskBlockBackGround.SetTopLeft(x, y);
-		TaskBlockBackGround.ShowBitmap();
+		TaskBlockBackGround[state].SetTopLeft(x, y);
+		TaskBlockBackGround[state].ShowBitmap();
 		if (isMouseOn) {
-			TaskBlockBackGround.SetTopLeft(x-7 , y );
-			TaskBlockBackGround.ShowBitmap(1.05);
+			TaskBlockBackGround[state].SetTopLeft(x-7 , y );
+			TaskBlockBackGround[state].ShowBitmap(1.05);
 			TaskContentBackGround.ShowBitmap();
 			ShowTaskName();
 			ShowContent();
@@ -71,7 +73,11 @@ namespace game_framework {
 	{
 		x = _x;
 		y = _y;
-		TaskBlockBackGround.SetTopLeft(x, y);
+		TaskBlockBackGround[0].SetTopLeft(x, y);
+	}
+	void TaskBlock::SetTaskState(TaskState _state)
+	{
+		state = _state;
 	}
 	void TaskBlock::ShowTitle()
 	{
@@ -133,7 +139,7 @@ namespace game_framework {
 	}
 	void TaskBlock::IsMouseOn(CPoint point)
 	{
-		if (point.x > x && point.x <= x + TaskBlockBackGround.Width() && point.y > y && point.y <= y + TaskBlockBackGround.Height()) {
+		if (point.x > x && point.x <= x + TaskBlockBackGround[0].Width() && point.y > y && point.y <= y + TaskBlockBackGround[0].Height()) {
 			isMouseOn = true;
 		}
 		else {
@@ -142,9 +148,9 @@ namespace game_framework {
 	}
 	bool TaskBlock::IsMouseClick(CPoint point)
 	{
-		if (point.x > x && point.x <= x + TaskBlockBackGround.Width() && point.y > y && point.y <= y + TaskBlockBackGround.Height()) {
+		if (point.x > x && point.x <= x + TaskBlockBackGround[0].Width() && point.y > y && point.y <= y + TaskBlockBackGround[0].Height()) {
 			CAudio::Instance()->Play(AUDIO_DECISION);
-			TaskBlockBackGround.SetTopLeft(x + 5, y + 5);
+			TaskBlockBackGround[0].SetTopLeft(x + 5, y + 5);
 			isMouseOn = true;
 			return true;
 		}

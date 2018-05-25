@@ -46,6 +46,7 @@ namespace game_framework {
 		Monster* findMonsterTarget(Warrior *_warrior);
 		Warrior* findWarriorTarget(Monster *_monster);
 		void BattleEnd();
+		void BattleFinish();
 		void SeleteTaskBattle();
 		void BattleTest1();
 		///////////////////////////////////////////////////////////////////®É¶¡±±¨î//////////////////////////////////////////////////////////////////
