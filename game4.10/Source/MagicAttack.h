@@ -1,10 +1,7 @@
 #pragma once
 
 namespace game_framework {
-	enum Direction {
-		Left,
-		Right
-	};
+	enum Direction {Left,Right};
 	class MagicAttack
 	{
 	public:

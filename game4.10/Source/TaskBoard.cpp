@@ -18,6 +18,10 @@ namespace game_framework {
 	{
 		TaskTitle = "µL¨Æ";
 		IsInterfaceOnShow = false;
+		completionPercent = new CInteger(3);
+		completionPercent ->SetInteger(0);
+		completionPercent->SetTopLeft(170, 205);
+		completionPercent->SetIsBmpLoaded();
 		nowTask = nothing;
 		isMouseOn = false;
 		IsTaskShow[nothing] = true;
@@ -39,10 +43,10 @@ namespace game_framework {
 	}
 	void TaskBoard::OnShow()
 	{
-
 		if (isMouseOn) {
 			TaskInformation.ShowBitmap();
 			ShowTaskName();
+			completionPercent->ShowBitmap();
 		}
 		if (IsInterfaceOnShow) {
 			TaskBoardInterface.ShowBitmap();
@@ -58,7 +62,6 @@ namespace game_framework {
 		else {
 			TaskBoardImg.ShowBitmap();
 		}
-		
 	}
 	void TaskBoard::SetTaskShow(TaskList _task, bool flag)
 	{
@@ -68,6 +71,10 @@ namespace game_framework {
 	{
 		nowTask = _task;
 
+	}
+	void TaskBoard::SetCompletionPercent(int percent)
+	{
+		completionPercent->SetInteger(percent);
 	}
 	void TaskBoard::ShowTaskName()
 	{

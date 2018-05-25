@@ -23,6 +23,7 @@ namespace game_framework {
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void SetObstacle();
 		bool GetIsRoomFull();     //房屋是否客滿
+		void CollectRent();            //收取房租
 		////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
 		void MonsterFindHouse(Monster **_monster); //怪物看屋事件 
 		void MonsterlivingHouse_event(Room* _room, Monster** _monster);
@@ -42,12 +43,12 @@ namespace game_framework {
 		/////////////////////////////////////////////////////////////////////////////////戰鬥事件/////////////////////////////////////////////////////
 		void WarriorAttack_event(Warrior *_warrior, Monster **target);
 		void MonsterAttack_event(Monster *_monster, Warrior ** target);
-		void MonsterPositionFix();        //怪物位置修正
+		void MonsterPositionFix();                                                      //怪物位置修正
 		Monster* findMonsterTarget(Warrior *_warrior);
 		Warrior* findWarriorTarget(Monster *_monster);
-		void BattleEnd();
-		void BattleFinish();
-		void SeleteTaskBattle();
+		void BattleEnd();                                                                        //戰鬥結束
+		void BattleFinish();																	//戰鬥完成
+		void SeleteTaskBattle();															//依任務選擇出場勇者
 		void BattleTest1();
 		///////////////////////////////////////////////////////////////////時間控制//////////////////////////////////////////////////////////////////
 		void timeControl();
@@ -66,6 +67,7 @@ namespace game_framework {
 		Monster* comingMonster;                    //來看房子的怪物
 		Warrior* warrior[10];
 		time_t Settime, nowtime;
+		int CollectRentTime;
 		int TimeLevel;                            //時間快慢
 		int Clock;
 		int houseLevele;

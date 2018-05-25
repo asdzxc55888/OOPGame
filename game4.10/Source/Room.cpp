@@ -26,6 +26,7 @@ namespace game_framework
 		floor = 0; 
 		liveMonsterSize = 0;
 		timecount = 0;
+		rent = 15;
 		RoomNumber = 100;
 		isDoorOpen = false;
 		isMonsterLiving = false;
@@ -55,7 +56,7 @@ namespace game_framework
 			animation.OnShow();
 		}
 		else {
-			for (int i = 0; i < liveMonsterSize;i++)if (liveMonster[i] != NULL)liveMonster[i]->OnShow();  //怪物存在地圖上與否
+			for (int i = 0; i < liveMonsterSize;i++)if (liveMonster[i] != NULL)liveMonster[i]->OnShow();                            //怪物存在地圖上與否
 		}
 
 
@@ -82,8 +83,8 @@ namespace game_framework
 				if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
 			}
 		}
-		for (int i = 0; i < liveMonsterSize; i++) {  ///////////////怪物出門緩沖
-			if (timecount >200 && monsterGoOutsideTemp[i]) {
+		for (int i = 0; i < liveMonsterSize; i++) {                                                            ///////////////怪物出門緩沖
+			if (timecount >150 && monsterGoOutsideTemp[i]) {
 				liveMonster[i]->SetIsGoOutside(true);
 				isMonsterIn[i] = false;
 				isDoorOpen = true;
@@ -132,6 +133,10 @@ namespace game_framework
 		isMonsterGoHome[MonsterIndex] = true;
 		isMonsterLiving = true;
 		isMonsterFight[MonsterIndex] = false;
+	}
+	int Room::GetRent()
+	{
+		return rent;
 	}
 	bool Room::IsMouseOn(CPoint point)
 	{

@@ -5,11 +5,7 @@
 using namespace std;
 namespace game_framework
 {
-enum Attack_Type
-{
-    Ad,		//物理攻擊 0
-    Ap		//魔法攻擊 1
-};
+enum Attack_Type{ Ad,	 Ap};
 enum MovingAnimation_Type   //移動狀態
 {
     Forward,       //向前

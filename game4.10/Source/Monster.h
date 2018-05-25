@@ -13,10 +13,7 @@ namespace game_framework {
 		findHouse,
 		fallInLove
 	};
-	enum Gender {
-		male,
-		female
-	};
+	enum Gender {male,female};
 	class Monster :public npcObject
 	{
 	public:
@@ -24,7 +21,7 @@ namespace game_framework {
 		Monster();
 		void operator= (Monster &obj);
 		void LoadBitmap(string monsterName);
-		void InheritAbility(Monster *father,Monster *mother);
+		void InheritAbility(Monster *father,Monster *mother);    //怪物繼承能力
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
 		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
@@ -48,14 +45,14 @@ namespace game_framework {
 		void RandName();
 		void RandGender();
 		void HpResume();
-		void GrowUp();  //怪物長大
+		void GrowUp();                                        //怪物長大
 		bool isMusicEffectOn;
 		bool isExist;
 		bool isMouseOn;
 		bool isHeadImgRoad;
-		string name;
+		string name;                                         //怪物名稱
 		string monsterType;                         //怪物類型
-		Gender monsterGender;
+		Gender monsterGender;                //怪物性別
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
 		CMovingBitmap headImg[3];                      //頭上符號
