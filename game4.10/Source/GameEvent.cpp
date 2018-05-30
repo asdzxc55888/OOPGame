@@ -51,6 +51,7 @@ void GameEvent::OnBeginState()
 
 void GameEvent::OnInit()
 {
+	CollectRentTime = 0;
 	Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
 	Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
 	myTaskBoard.LoadBitmap();
@@ -280,6 +281,7 @@ void GameEvent::OnShow()
 void GameEvent::OnEvent()
 {
 	SeleteTaskBattle();
+	CollectRent();
 	if (isIntoBattle)  ////////////////////////////////////////////////進入戰鬥時的事件
 	{
 		Warning.SetTopLeft(1280, 100); //警告圖片
@@ -491,6 +493,18 @@ bool GameEvent::GetIsRoomFull()
 		if (gameRoom[i]->GetLiveMonsterSize() == 0)return false;
 	}
 	return true;
+}
+
+void GameEvent::CollectRent()
+{
+	if (CollectRentTime > 3500) {
+		for (int i = 0; i < roomSize; i++) {
+			if(gameRoom[i]->GetIsMonsterLiving())addMoney+=gameRoom[i]->GetRent();
+		}
+		riseMoney = 0;
+		CollectRentTime = 0;
+	}
+	else CollectRentTime++;
 }
 
 void GameEvent::MonsterFindHouse(Monster **_monster)
@@ -869,7 +883,7 @@ void GameEvent::MonsterPositionFix()
 				if (obsDirection) {
 					_monster->SetPoint(x1 + 1, y1);
 				}
-				else _monster->SetPoint(x1 - 2, y1);
+				else _monster->SetPoint(x1 - 1, y1);
 				//return;
 			}
 		}
@@ -882,12 +896,13 @@ void GameEvent::MonsterPositionFix()
 			int y1 = _warrior->GetY();
 			int y2 = y1 + _warrior->GetHeight();
 			bool obsDirection = false; //true 為在左
-			if (_warrior->GetIsOnBattle() && mapObstacle.isOverlapping(x1, x2, y1, y2, &obsDirection))
+			if ( mapObstacle.isOverlapping(x1, x2, y1, y2, &obsDirection))
 			{
 				if (obsDirection) {
-					_warrior->SetPoint(x1 + 2, y1);
+					_warrior->SetPoint(x1 + 1, y1);
 				}
 				else _warrior->SetPoint(x1 - 1, y1);
+
 				return;
 			}
 		}
@@ -966,8 +981,14 @@ void GameEvent::BattleEnd()
 	}
 	if (riseMoney != addMoney) {
 		int add = addMoney / 100;
+		if (add == 0)add = 1;
 		myMoney.SetValue(myMoney.GetValue() + add);
 		riseMoney+= add;
+
+		if (riseMoney > addMoney) {                                                                                                //金錢修正
+			riseMoney -= riseMoney - addMoney;
+			myMoney.SetValue(myMoney.GetValue() + riseMoney- addMoney);
+		}
 	}
 }
 
@@ -977,8 +998,15 @@ void GameEvent::BattleFinish()
 	{
 	case FirstTask:
 		riseMoney = 0;
-		addMoney = 10000;
+		addMoney = 100;
 		myTaskBoard.SetNowTask(TaskList::nothing);
+		myTaskBoard.SetTaskShow(Boss, true);
+		break;
+	case Boss:
+		riseMoney = 0;
+		addMoney = 1500;
+		myTaskBoard.SetNowTask(TaskList::nothing);
+		myTaskBoard.SetTaskShow(Boss, false);
 		break;
 	default:
 		break;
@@ -1011,6 +1039,17 @@ void GameEvent::SeleteTaskBattle()
 				battleCount = 0;
 			}
 			break;
+		case TaskList::Boss:
+			if (battleCount > 3000 - (TimeLevel * 500)) {
+				isIntoBattle = true;
+				CreateWarrior_event(&warrior[0], villager);
+				CreateWarrior_event(&warrior[1], firemagic);
+				CreateWarrior_event(&warrior[2], villager);
+				for (int i = 0; warrior[i] != NULL; i++) {
+					warrior[i]->SetPoint(-100 - (60 * i), 540);
+				}
+				battleCount = 0;
+			}
 		default:
 			break;
 		}

@@ -2,9 +2,10 @@
 #include "TaskBlock.h"
 enum TaskList{
 	nothing,
-	FirstTask
+	FirstTask,
+	Boss
 };
-#define TaskSize 2
+#define TaskSize 3
 #define TaskBoardInterface_x 125
 #define TaskBoardInterface_y 20
 #define TaskBoard_x 330
@@ -20,6 +21,7 @@ namespace game_framework {
 		void OnShow();
 		void SetTaskShow(TaskList _task, bool flag);     //設定介面上的任務
 		void SetNowTask(TaskList _task);
+		void SetCompletionPercent(int percent);                                //設定任務完成度
 		void ShowTaskName();
 		bool OnRButtonDown(UINT nFlags, CPoint point);
 		bool IsMouseOnTaskBoard(CPoint point);
@@ -34,6 +36,7 @@ namespace game_framework {
 		string TaskTitle;
 		TaskList nowTask;
 		TaskBlock *myTaskBlock[3];
+		CInteger    *completionPercent;     //完成度
 		CMovingBitmap TaskBoardInterface,TaskBoardImg;
 		CMovingBitmap TaskInformation;
 	};

@@ -131,7 +131,7 @@ namespace game_framework {
 		randValue[0] = rand() % 10;
 		for (int i = 1; i < 4; i++)randValue[i] = rand() % 4;
 		//基礎能力
-		Hp = (father->Hp+mother->Hp)/2 + randValue[0];					//血量
+		Hp = (father->Hp+mother->Hp)/4 + randValue[0];					//血量
 		MaxHp = Hp;
 		ApDefense = (father->ApDefense + mother->ApDefense) / 4 + randValue[1];			//魔法防禦
 		AdDefense = (father->AdDefense + mother->AdDefense) / 4 + randValue[2];			//物理防禦
