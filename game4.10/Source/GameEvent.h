@@ -20,18 +20,19 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 		void OnEvent();                                 // 事件處理
 		bool GameOver();
+		bool SaveGame(string saveName);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void SetObstacle();
 		bool GetIsRoomFull();     //房屋是否客滿
 		////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
 		void MonsterFindHouse(Monster **_monster); //怪物看屋事件 
 		void MonsterlivingHouse_event(Room* _room, Monster** _monster);
-		void MonsterGohome_event(Room *_room, int monsterIndex);                  //怪物進房事件，等同怪物住屋事件
-		void MonsterBeingClick(Monster **_monster); //怪物被點擊事件
-		bool MonsterLeave(Monster **_monster);                                      //怪物離開，直接消失的那種離開
-		bool Moving(Monster **_monster, int x, int floor);                          //怪物移動
+		void MonsterGohome_event(Room *_room, int monsterIndex);             //怪物進房事件，等同怪物住屋事件
+		void MonsterBeingClick(Monster **_monster);                          //怪物被點擊事件
+		bool MonsterLeave(Monster **_monster);                               //怪物離開，直接消失的那種離開
+		bool Moving(Monster **_monster, int x, int floor);                   //怪物移動
 		bool MovingLR(Monster **_monster, int x);
-		bool HitWarrior(Monster* _monster, Warrior* _warrior);          //判斷有無碰到勇者
+		bool HitWarrior(Monster* _monster, Warrior* _warrior);               //判斷有無碰到勇者
 		void CreateMonster_event(Monster **_monster);
 		////////////////////////////////////////////////////////////////////////////勇者事件//////////////////////////////////////////////////////////
 		bool Moving(Warrior **_warrior, int x, int floor);

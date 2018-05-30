@@ -1,0 +1,4 @@
+Money
+1000
+RoomSize
+4

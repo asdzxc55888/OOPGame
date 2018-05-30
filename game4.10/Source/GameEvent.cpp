@@ -5,6 +5,9 @@
 #include "audio.h"
 #include "gamelib.h"
 #include "GameEvent.h"
+#include <fstream>
+#include <sstream>
+
 namespace game_framework
 {
 GameEvent::GameEvent()
@@ -81,6 +84,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	else if (nChar == KEY_RIGHT)
 	{
+		SaveGame("save1");
 	}
 	else if (nChar == KEY_UP)
 	{
@@ -432,6 +436,22 @@ bool GameEvent::GameOver()
 		CAudio::Instance()->Stop(AUDIO_WARNING);
 		return true;
 	}
+	return false;
+}
+
+bool GameEvent::SaveGame(string saveName)
+{
+	fstream saveFile;
+	std::stringstream ss;
+	string saveRoot= "Save\\" + saveName +".txt";
+	saveFile.open(saveRoot,ios::out);
+
+	ss << "Money\n" << myMoney.GetValue() << "\n";                      //金錢
+	ss << "RoomSize\n" << roomSize << "\n";                      //房間SIZE
+
+	saveFile << ss.str();
+
+	saveFile.close();
 	return false;
 }
 
@@ -967,7 +987,7 @@ void GameEvent::BattleFinish()
 
 void GameEvent::SeleteTaskBattle()
 {	
-	if (!isOnBattle) {
+	if (!isOnBattle && GameOverFlag) {
 		switch (myTaskBoard.GetNowTask())
 		{
 		case TaskList::nothing:
