@@ -379,7 +379,7 @@ int game_framework::npcObject::GetHeight()
 
 int game_framework::npcObject::GetHp()
 {
-    return Hp;
+    return MaxHp;
 }
 
 int game_framework::npcObject::GetApDefense()

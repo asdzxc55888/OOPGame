@@ -246,6 +246,10 @@ namespace game_framework {
 	{
 		return nowMonsterState;
 	}
+	MonsterDataBoard Monster::GetMonsterDataBoard()
+	{
+		return *MyBoard;
+	}
 	Gender Monster::GetMonsterGendet()
 	{
 		return monsterGender;

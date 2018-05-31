@@ -4,6 +4,7 @@
 #include "obstacle.h"
 #include "TaskBoard.h"
 #include "GMoney.h"
+#include "RoomInterface.h"
 namespace game_framework {
 	class GameEvent
 	{
@@ -21,6 +22,7 @@ namespace game_framework {
 		void OnEvent();                                 // 事件處理
 		bool GameOver();
 		bool SaveGame(string saveName);
+		bool LoadGame(string saveName);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void SetObstacle();
 		bool GetIsRoomFull();     //房屋是否客滿

@@ -82,6 +82,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	if (nChar == KEY_LEFT)
 	{
+		LoadGame("save1");
 	}
 	else if (nChar == KEY_RIGHT)
 	{
@@ -448,10 +449,59 @@ bool GameEvent::SaveGame(string saveName)
 	string saveRoot= "Save\\" + saveName +".txt";
 	saveFile.open(saveRoot,ios::out);
 
-	ss << "Money\n" << myMoney.GetValue() << "\n";                      //金錢
+	ss << "Money\n" << myMoney.GetValue() << "\n";               //金錢
 	ss << "RoomSize\n" << roomSize << "\n";                      //房間SIZE
-
+	for(int i=0;i<roomSize;i++)
+	{
+		ss << "gameRoomMonster"<< i <<"\n" ;
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
+		{
+			ss << "Monster" << k <<"\n" ;
+			ss << "MonsterType" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterType() << "\n";
+			ss << "MonsterName" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterName() << "\n";
+			ss << "MaxHp" <<  "\n" << gameRoom[i]->GetLiveMonster(k)->GetHp() << "\n";
+			ss << "AttackPower" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAttackPower() << "\n";
+			ss << "AdDenfense" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAdDefense() << "\n";
+			ss << "ApDenfense" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetApDefense() << "\n";
+		}
+	}
 	saveFile << ss.str();
+
+	saveFile.close();
+	return false;
+}
+
+bool GameEvent::LoadGame(string saveName)
+{
+	fstream saveFile;
+	char buf[1024];
+	char *str;        //字串位置
+	string saveRoot = "Save\\" + saveName + ".txt";
+	saveFile.open(saveRoot, ios::in);
+	saveFile.read(buf,sizeof(buf));
+
+	str=strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
+	str = strstr(buf, "RoomSize");
+	str += 9;
+	roomSize=(atoi(str));
+
+	str = strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
+	str = strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
+	str = strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
+	str = strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
+	str = strstr(buf, "Money");
+	str += 6;
+	myMoney.SetValue(atoi(str));
 
 	saveFile.close();
 	return false;
@@ -677,7 +727,7 @@ bool GameEvent::Moving(Warrior ** _warrior, int x, int floor)
 	int x1 = (*_warrior)->GetX();
 	int x2 = x1 + (*_warrior)->GetWidth();
 	bool obsDirection = false, monsterMovingDirection = false; //在左為TRUE 在右為FALSE
-	if (mapObstacle.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight()))
+	if (mapObstacle.isHit(x1, x2, (*_warrior)->GetY(), (*_warrior)->GetY() + (*_warrior)->GetHeight(), &obsDirection))
 	{
 		if ((x1 > x && x1 <= x + 20) || (x2 > x && x2 <= x + 20) && _warriorFloor == floor)   //防卡住
 		{
@@ -985,9 +1035,9 @@ void GameEvent::BattleEnd()
 		myMoney.SetValue(myMoney.GetValue() + add);
 		riseMoney+= add;
 
-		if (riseMoney > addMoney) {                                                                                                //金錢修正
-			riseMoney -= riseMoney - addMoney;
-			myMoney.SetValue(myMoney.GetValue() + riseMoney- addMoney);
+		if (abs(riseMoney) > abs(addMoney)) {                                                                                                //金錢修正
+			riseMoney -= abs(riseMoney) - abs(addMoney);
+			myMoney.SetValue(myMoney.GetValue() + abs(riseMoney) - abs(addMoney));
 		}
 	}
 }

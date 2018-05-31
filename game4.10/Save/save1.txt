@@ -1,4 +1,8 @@
 Money
-1000
+986
 RoomSize
 4
+gameRoomMonster0
+gameRoomMonster1
+gameRoomMonster2
+gameRoomMonster3
