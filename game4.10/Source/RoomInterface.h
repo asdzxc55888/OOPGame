@@ -3,14 +3,14 @@
 namespace game_framework {
 #define RoomInterface_bg_x 100
 #define RoomInterface_bg_y 0
-#define RoomInterface_Increase_x 20
-#define RoomInterface_Increase_y 20
-#define RoomInterface_Decrease_x 20
-#define RoomInterface_Decrease_y 20
-#define RoomInterface_Right_x 20
-#define RoomInterface_Right_y 20
-#define RoomInterface_Left_x 20
-#define RoomInterface_Left_y 20
+#define RoomInterface_Increase_x 425
+#define RoomInterface_Increase_y 252
+#define RoomInterface_Decrease_x 272
+#define RoomInterface_Decrease_y 252
+#define RoomInterface_Right_x 335
+#define RoomInterface_Right_y 70
+#define RoomInterface_Left_x 117
+#define RoomInterface_Left_y 70
 	class RoomInterface
 	{
 	public:
