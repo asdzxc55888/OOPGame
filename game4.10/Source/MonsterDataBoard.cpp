@@ -124,6 +124,11 @@ namespace game_framework {
 		AdDefense->SetInteger(AdD);
 		ApDefense->SetInteger(ApD);
 	}
+	void MonsterDataBoard::SetPoint(int _x, int _y)
+	{
+		x = _x;
+		y = _y;
+	}
 	void MonsterDataBoard::OnShow()
 	{
 		Board.ShowBitmap();

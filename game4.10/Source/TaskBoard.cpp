@@ -110,18 +110,20 @@ namespace game_framework {
 	}
 	bool TaskBoard::IsTaskOnClick(CPoint point)
 	{
-		for (int i = 0; i < GetShowTaskSize(); i++) {
-			if (myTaskBlock[i]->IsMouseClick(point)) {
-				nowTask = (TaskList)i;   //未完成
-				TaskTitle = myTaskBlock[i]->GetTaskName();
+		if (IsInterfaceOnShow) {
+			for (int i = 0; i < GetShowTaskSize(); i++) {
+				if (myTaskBlock[i]->IsMouseClick(point)) {            //任務方塊
+					nowTask = (TaskList)i;   //未完成
+					TaskTitle = myTaskBlock[i]->GetTaskName();
+				}
 			}
-		}
-		for (int i = 0; i < GetShowTaskSize(); i++) {
-			if ((TaskList)i == nowTask) {
-				myTaskBlock[i]->SetTaskState(doing);
-			}
-			else {
-				myTaskBlock[i]->SetTaskState(normal);
+			for (int i = 0; i < GetShowTaskSize(); i++) {            //設定任務狀態
+				if ((TaskList)i == nowTask) {
+					myTaskBlock[i]->SetTaskState(doing);
+				}
+				else {
+					myTaskBlock[i]->SetTaskState(normal);
+				}
 			}
 		}
 		if (point.x > TaskBoard_x && point.x <= TaskBoard_x + TaskBoardImg.Width() && point.y > TaskBoard_y && point.y <= TaskBoard_y + TaskBoardImg.Height()) {

@@ -25,6 +25,7 @@ GameEvent::~GameEvent()
 
 void GameEvent::OnBeginState()
 {
+	myRoomInterface = new RoomInterface(gameRoom);
 	Warning.SetTopLeft(-1280, 100);
 	roomSize = 4;
 	battleCount = 0;
@@ -183,6 +184,15 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+	else {
+		for (int i = 0; i < roomSize; i++)
+		{
+			if (gameRoom[i]->IsMouseOn(point)) {
+				myRoomInterface->SetInterfaceShow(true);
+				myRoomInterface->SetRoomSelector(i);
+			}
+		}
+	}
 	if(myTaskBoard.OnRButtonDown(nFlags, point))isGamePause=false;
 }
 
@@ -249,6 +259,7 @@ void GameEvent::OnMove()
 		}
 	}
 	myMoney.OnMove();
+	myRoomInterface->OnMove();
 }
 
 void GameEvent::OnShow()
@@ -277,6 +288,7 @@ void GameEvent::OnShow()
 	myMoney.OnShow();
 	Warning.ShowBitmap();
 	myTaskBoard.OnShow();
+	myRoomInterface->OnShow();
 }
 
 void GameEvent::OnEvent()

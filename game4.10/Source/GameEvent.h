@@ -67,6 +67,7 @@ namespace game_framework {
 		TaskBoard myTaskBoard;
 		Obstacle mapObstacle;
 		Room* gameRoom[4];
+		RoomInterface *myRoomInterface;
 		Monster* comingMonster;                    //來看房子的怪物
 		Warrior* warrior[10];
 		time_t Settime, nowtime;

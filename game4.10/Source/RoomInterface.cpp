@@ -7,15 +7,15 @@
 #include "RoomInterface.h"
 #include "MonsterDataBoard.h"
 namespace game_framework {
-	RoomIterface::RoomIterface(Room **_gameRoom)
+	RoomInterface::RoomInterface(Room **_gameRoom)
 	{
 		gameRoom = _gameRoom;
 		Initial();
 	}
-	RoomIterface::~RoomIterface()
+	RoomInterface::~RoomInterface()
 	{
 	}
-	void RoomIterface::Initial()
+	void RoomInterface::Initial()
 	{
 		bg.LoadBitmap("Bitmaps\\gameRun\\Room_interface.bmp", RGB(255, 255, 255));
 		Increase_btn.LoadBitmap("Bitmaps\\gameRun\\increase_button.bmp", RGB(255, 255, 255));
@@ -32,7 +32,7 @@ namespace game_framework {
 		monsterSelector = 0;
 		RoomSelector = 0;
 	}
-	void RoomIterface::OnShow()
+	void RoomInterface::OnShow()
 	{
 		if (isOnShow) 
 		{
@@ -43,11 +43,26 @@ namespace game_framework {
 			Left_btn.ShowBitmap();
 		}
 	}
-	void RoomIterface::SetInterfaceShow(bool flag)
+	void RoomInterface::OnMove()
+	{
+		if (gameRoom[RoomSelector]->GetLiveMonster(monsterSelector) != NULL) {
+			MonsterBoard = gameRoom[RoomSelector]->GetLiveMonster(monsterSelector)->GetMonsterDataBoard();
+		}
+		MonsterBoard.SetPoint(500, 250);
+	}
+	void RoomInterface::SetInterfaceShow(bool flag)
 	{
 		isOnShow = flag;
 	}
-	bool RoomIterface::IsMouseOn(CPoint point)
+	void RoomInterface::SetRoomSelector(int index)
+	{
+		RoomSelector = index;
+	}
+	void RoomInterface::SetMonsterSelector(int index)
+	{
+		monsterSelector = index;
+	}
+	bool RoomInterface::IsMouseOn(CPoint point)
 	{
 		return false;
 	}

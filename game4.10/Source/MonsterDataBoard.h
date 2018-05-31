@@ -10,6 +10,7 @@ namespace game_framework {
 		void ShowHpBar(int percent);
 		void ShowName();
 		void SetData(int hp,int maxHp, int ApD, int AdD, int dps);
+		void SetPoint(int _x, int _y);
 		void OnShow();
 	private:
 		int GetDigit(int x);
