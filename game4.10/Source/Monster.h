@@ -30,7 +30,7 @@ namespace game_framework {
 		void ShowHpBar();
 		void OnShow();
 		Monster_state GetMonsterState();            //¨úªº©Çª«ª¬ºA
-		MonsterDataBoard GetMonsterDataBoard();
+		MonsterDataBoard* GetMonsterDataBoard();
 		Gender GetMonsterGendet();
 		string GetMonsterType();
 		string GetMonsterName();

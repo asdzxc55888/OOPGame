@@ -31,6 +31,9 @@ namespace game_framework {
 		isOnShow = false;
 		monsterSelector = 0;
 		RoomSelector = 0;
+		for (int i = 0; i < 3; i++) {
+			monster[i] = NULL;
+		}
 	}
 	void RoomInterface::OnShow()
 	{
@@ -41,17 +44,54 @@ namespace game_framework {
 			Decrease_btn.ShowBitmap();
 			Right_btn.ShowBitmap();
 			Left_btn.ShowBitmap();
+			if(gameRoom[RoomSelector]->GetLiveMonsterSize()>0 && isMouseOn)MonsterBoard->OnShow();
+			for (int i = 0; i < 3; i++) {
+				if (monster[i] != NULL)
+				{
+					monster[i]->ShowBitmap();
+				}
+			}
 		}
 	}
 	void RoomInterface::OnMove()
 	{
-		if (gameRoom[RoomSelector]->GetLiveMonster(monsterSelector) != NULL) {
-			MonsterBoard = gameRoom[RoomSelector]->GetLiveMonster(monsterSelector)->GetMonsterDataBoard();
-		}
-		MonsterBoard.SetPoint(500, 250);
+
 	}
 	void RoomInterface::SetInterfaceShow(bool flag)
 	{
+		if (flag) {
+			for (int i = 0; i < 3; i++) if (monster[i] != NULL) {
+				delete monster[i];   //­«·sLOAD¹Ï
+				monster[i] = NULL;
+			}
+			for (int i = 0; i < gameRoom[RoomSelector]->GetLiveMonsterSize(); i++)
+			{
+				monster[i] = new CMovingBitmap();
+				Monster *_thisM=gameRoom[RoomSelector]->GetLiveMonster(i);
+				string _monsterType = _thisM->GetMonsterType();
+				_monsterType += ".bmp";
+				if (_thisM->GetMonsterGender() == male) {
+					_monsterType = "m_" + _monsterType;
+				}
+				else {
+					_monsterType = "w_" + _monsterType;
+				}
+				if(_thisM->GetIsKid()) _monsterType = "child_" + _monsterType;
+				_monsterType = "Bitmaps\\monster\\monster_" + _monsterType;
+				char root[200] ;
+				strcpy(root, _monsterType.c_str());
+				monster[i]->LoadBitmap(root, RGB(255, 255, 255));
+				monster[i]->SetTopLeft(monsterBmp_x + i * 60, monsterBmp_y);
+			}
+
+			if (gameRoom[RoomSelector]->GetLiveMonster(monsterSelector) != NULL) {
+				MonsterBoard = gameRoom[RoomSelector]->GetLiveMonster(monsterSelector)->GetMonsterDataBoard();
+				MonsterBoard->SetPoint(600, 250);
+			}
+		}
+		else {
+			if(gameRoom[RoomSelector]->GetLiveMonsterSize()>0)MonsterBoard->SetPoint(50, 50);
+		}
 		isOnShow = flag;
 	}
 	void RoomInterface::SetRoomSelector(int index)
@@ -62,8 +102,42 @@ namespace game_framework {
 	{
 		monsterSelector = index;
 	}
+	int RoomInterface::GetRoomSelector()
+	{
+		return RoomSelector;
+	}
+	bool RoomInterface::GetIsShow()
+	{
+		return isOnShow;
+	}
 	bool RoomInterface::IsMouseOn(CPoint point)
 	{
+		isMouseOn = false;
+		for (int i = 0; i < gameRoom[RoomSelector]->GetLiveMonsterSize(); i++) {
+			int y1 = monster[i]->Top();
+			int y2 = y1 + monster[i]->Height();
+			int x1 = monster[i]->Left();
+			int x2 = x1 + monster[i]->Width();
+			if (point.x > x1 && point.x <= x2 && point.y > y1 && point.y <= y2) {
+				MonsterBoard->SetPoint(50, 50);
+				monsterSelector = i;
+				MonsterBoard = gameRoom[RoomSelector]->GetLiveMonster(monsterSelector)->GetMonsterDataBoard();
+				MonsterBoard->SetPoint(600, 250);
+				isMouseOn = true;
+			}
+		}
+		return false;
+	}
+	bool RoomInterface::IsMouseClick(CPoint point,int monsterIndex)
+	{
+		if (monster[monsterIndex] == NULL)return false;
+		int y1 = monster[monsterIndex]->Top();
+		int y2 = y1 + monster[monsterIndex]->Height();
+		int x1 = monster[monsterIndex]->Left();
+		int x2 = x1 + monster[monsterIndex]->Width();
+		if (point.x > x1 && point.x <= x2 && point.y > y1 && point.y <= y2) {
+			return true;
+		}
 		return false;
 	}
 }

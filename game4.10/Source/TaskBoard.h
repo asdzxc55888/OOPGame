@@ -26,6 +26,7 @@ namespace game_framework {
 		bool OnRButtonDown(UINT nFlags, CPoint point);
 		bool IsMouseOnTaskBoard(CPoint point);
 		bool IsTaskOnClick(CPoint point);
+		bool GetIsOnShow();
 		int  GetShowTaskSize();
 		int  GetTaskBoardX();
 		TaskList GetNowTask();

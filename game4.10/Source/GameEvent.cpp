@@ -126,40 +126,57 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
+	if (myRoomInterface->GetIsShow()) { /////////////未完成
+		for (int i = 0; i < 3; i++) {
+			if (myRoomInterface->IsMouseClick(point, i)) {
+				Monster *_monster = gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i);
+				MonsterLeave( &_monster);
+			}
+		}
+	}
 	if(myTaskBoard.IsTaskOnClick(point))isGamePause=true;
 }
 
 void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
 {
-	for (int i = 0; i < 4; i++) {                            //處理介面顯示
-		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point) && gameRoom[i]->GetLiveMonster(k)->GetMovingType() != Hide) {
-				isMonsterDataBoardShow = true;
-				i = 5;
-				break;
+	if (!isGamePause) {
+		for (int i = 0; i < 4; i++) {                            //處理介面顯示
+			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+				if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point) && gameRoom[i]->GetLiveMonster(k)->GetMovingType() != Hide) {
+					isMonsterDataBoardShow = true;
+					i = 5;
+					break;
+				}
+				isMonsterDataBoardShow = false;
 			}
-			isMonsterDataBoardShow = false;
 		}
-	}
-	for (int i = 0; i < 4; i++) {                            //處理介面顯示
-		if (!isMonsterDataBoardShow) {
-			if(gameRoom[i]->IsMouseOn(point))gameRoom[i]->SetRoomBoard();
+		for (int i = 0; i < 4; i++) {                            //處理介面顯示
+			if (!isMonsterDataBoardShow) {
+				if (gameRoom[i]->IsMouseOn(point))gameRoom[i]->SetRoomBoard();
+			}
 		}
-	}
 
-	if (comingMonster != NULL) {                            //處理介面顯示
-		comingMonster->IsMouseOn(point);
-	}
-	for (int i = 0; i < 10; i++) {                          //處理介面顯示
-		if (warrior[i] != NULL) {
-			warrior[i]->IsMouseOn(point);
+		if (comingMonster != NULL) {                            //處理介面顯示
+			comingMonster->IsMouseOn(point);
 		}
+		for (int i = 0; i < 10; i++) {                          //處理介面顯示
+			if (warrior[i] != NULL) {
+				warrior[i]->IsMouseOn(point);
+			}
+		}
+	}
+	if (myRoomInterface->GetIsShow()) {
+		myRoomInterface->IsMouseOn(point);
 	}
 	myTaskBoard.IsMouseOnTaskBoard(point);
 }
 
 void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 {
+	if (myRoomInterface->GetIsShow()) {                      //房屋介面取消
+		myRoomInterface->SetInterfaceShow(false);
+		isGamePause = false;
+	}
 	if (isOnBattle)
 	{
 		for (int i = 0; i < roomSize; i++)
@@ -187,13 +204,14 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 	else {
 		for (int i = 0; i < roomSize; i++)
 		{
-			if (gameRoom[i]->IsMouseOn(point)) {
-				myRoomInterface->SetInterfaceShow(true);
+			if (gameRoom[i]->IsMouseOn(point)) {           //房屋介面
 				myRoomInterface->SetRoomSelector(i);
+				myRoomInterface->SetInterfaceShow(true);
+				isGamePause = true;
 			}
 		}
 	}
-	if(myTaskBoard.OnRButtonDown(nFlags, point))isGamePause=false;
+	if(myTaskBoard.GetIsOnShow() && myTaskBoard.OnRButtonDown(nFlags, point))isGamePause=false;
 }
 
 void GameEvent::OnMove()

@@ -8,6 +8,8 @@
 namespace game_framework {
 	MonsterDataBoard::MonsterDataBoard(int MaxHp, int ApD, int AdD, int dps, string MonsterType,int gneder,bool flag,  string _name)
 	{
+		x = 50;
+		y = 50;
 		isLoadBitmaps = false;
 		Initialize(MaxHp, ApD, AdD, dps, MonsterType, gneder,flag,_name);
 	}
@@ -53,9 +55,7 @@ namespace game_framework {
 		}
 		
 		SetData(maxHp, maxHp, ApD, AdD, dps);
-		//////////////////////////////////////////////////////////////////////
-		x = 50;
-		y = 50;
+		/////////////////////////////////////////////////////////////////////
 
 		Board.SetTopLeft(x, y);
 		MaxHp->SetTopLeft(x + 310, y + 130);
@@ -128,6 +128,13 @@ namespace game_framework {
 	{
 		x = _x;
 		y = _y;
+		Board.SetTopLeft(x, y);
+		MaxHp->SetTopLeft(x + 310, y + 130);
+		Hp->SetTopLeft(x + 260, y + 130);
+		AttackPower->SetTopLeft(x + 70, y + 170);
+		AdDefense->SetTopLeft(x + 190, y + 170);
+		ApDefense->SetTopLeft(x + 300, y + 170);
+		Picture.SetTopLeft(x + 35, y + 20);
 	}
 	void MonsterDataBoard::OnShow()
 	{

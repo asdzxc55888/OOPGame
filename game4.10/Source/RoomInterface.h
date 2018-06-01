@@ -11,6 +11,8 @@ namespace game_framework {
 #define RoomInterface_Right_y 70
 #define RoomInterface_Left_x 117
 #define RoomInterface_Left_y 70
+#define monsterBmp_x 280
+#define monsterBmp_y 160
 	class RoomInterface
 	{
 	public:
@@ -22,16 +24,20 @@ namespace game_framework {
 		void SetInterfaceShow(bool flag);
 		void SetRoomSelector(int index);
 		void SetMonsterSelector(int index);
+		int  GetRoomSelector();
+		bool GetIsShow();
 		bool IsMouseOn(CPoint point);
+		bool IsMouseClick(CPoint point, int monsterIndex);
 	private:
 		int RoomSelector;
 		int monsterSelector;
 		bool isOnShow;
 		bool isMouseOn;
-		CMovingBitmap bg;     //背景圖
+		CMovingBitmap bg;                            //背景圖
 		CMovingBitmap Increase_btn,Decrease_btn;     //房租調整按鍵
 		CMovingBitmap Right_btn, Left_btn;           //房間選擇鈕
-		MonsterDataBoard MonsterBoard;               //怪物資料欄
+		CMovingBitmap *monster[3];                   //怪物圖
+		MonsterDataBoard *MonsterBoard;              //怪物資料欄
 		Room **gameRoom;
 	};
 

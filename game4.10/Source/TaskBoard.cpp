@@ -133,6 +133,10 @@ namespace game_framework {
 		}
 		return false;
 	}
+	bool TaskBoard::GetIsOnShow()
+	{
+		return IsInterfaceOnShow;
+	}
 	int TaskBoard::GetShowTaskSize()
 	{
 		int result = 0;
