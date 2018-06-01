@@ -13,14 +13,15 @@ class Room
         void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
         void OnMove();
 		void MonsterDeath(int monsterIndex);
+		void SetRent(int _rent);
 		void SetMonsterFight(bool flag);
 		void SetIsMonsterIn(bool flag, int monsterIndex);
 		void SetMonsterlivingRoom(Monster** _monster); //讓怪物住進房子，回傳NULL指標將原本的怪物抹去
 		void SetRoomBoard(); //設置房屋資料版
 		void LetMonsterGohome(int monsterIndex);
-		int GetRent();
-		int GetX();
-		int GetLiveMonsterSize();
+		int  GetRent();
+		int  GetX();
+		int  GetLiveMonsterSize();
         bool GetIsMonsterLiving();
         bool GetIsMonsterIn(int monsterIndex);
         bool GetIsMonsterFight(int monsterIndex);
