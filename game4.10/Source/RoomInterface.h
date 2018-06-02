@@ -13,6 +13,10 @@ namespace game_framework {
 #define RoomInterface_Left_y 70
 #define monsterBmp_x 280
 #define monsterBmp_y 160
+#define RentPercent_x 232
+#define RentPercent_y 135
+#define RentInt_x 460
+#define RemtInt_y 260
 	class RoomInterface
 	{
 	public:
@@ -21,6 +25,7 @@ namespace game_framework {
 		void Initial();
 		void OnShow();
 		void OnMove();
+		void ShowRentBar();
 		void SetInterfaceShow(bool flag);
 		void SetRoomSelector(int index);
 		void SetMonsterSelector(int index);
@@ -28,11 +33,17 @@ namespace game_framework {
 		bool GetIsShow();
 		bool IsMouseOn(CPoint point);
 		bool IsMouseClick(CPoint point, int monsterIndex);
+		bool IsMouseClick(CPoint point);
 	private:
-		int RoomSelector;
-		int monsterSelector;
+		void ResetRent();
+		int  RoomSelector;
+		int  monsterSelector;
+		int  rentPercent;
+		int  maxPercent;
 		bool isOnShow;
 		bool isMouseOn;
+		bool isMouseOnBtn[4];
+		CInteger *presentRent;
 		CMovingBitmap bg;                            //背景圖
 		CMovingBitmap Increase_btn,Decrease_btn;     //房租調整按鍵
 		CMovingBitmap Right_btn, Left_btn;           //房間選擇鈕

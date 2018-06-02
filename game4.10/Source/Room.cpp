@@ -182,6 +182,10 @@ namespace game_framework
 			isMonsterLiving = false;
 		}
 	}
+	void Room::SetRent(int _rent)
+	{
+		rent = _rent;
+	}
 	void Room::SetMonsterFight(bool flag)  //©Çª«¾Ô°«
 	{
 		for (int i = 0; i < liveMonsterSize; i++) {

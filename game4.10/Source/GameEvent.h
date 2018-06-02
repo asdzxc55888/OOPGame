@@ -68,7 +68,7 @@ namespace game_framework {
 		Obstacle mapObstacle;
 		Room* gameRoom[4];
 		RoomInterface *myRoomInterface;
-		Monster* comingMonster;                    //來看房子的怪物
+		Monster* comingMonster,*LeaveMonster;                    //來看房子的怪物
 		Warrior* warrior[10];
 		time_t Settime, nowtime;
 		int CollectRentTime;

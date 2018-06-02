@@ -48,6 +48,7 @@ void GameEvent::OnBeginState()
 
 	////////////////////////////////////////////////////////
 	for (int i = 0; i < 10; i++)warrior[i] = NULL;
+	LeaveMonster = NULL;
 }
 
 void GameEvent::OnInit()
@@ -126,15 +127,16 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
-	if (myRoomInterface->GetIsShow()) { /////////////未完成
+	if (myRoomInterface->GetIsShow()) {                         /////////////未完成
 		for (int i = 0; i < 3; i++) {
 			if (myRoomInterface->IsMouseClick(point, i)) {
-				Monster *_monster = gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i);
-				MonsterLeave( &_monster);
+				LeaveMonster = gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i);
 			}
 		}
 	}
+	myRoomInterface->IsMouseClick(point);
 	if(myTaskBoard.IsTaskOnClick(point))isGamePause=true;
+
 }
 
 void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
@@ -456,6 +458,10 @@ void GameEvent::OnEvent()
 	}
 
 	if (!isOnBattle)	MonsterMatingEvent();   //怪物交配事件
+
+	if (LeaveMonster != NULL) {
+		MonsterLeave(&LeaveMonster);
+	}
 }
 
 bool GameEvent::GameOver()
@@ -584,7 +590,7 @@ void GameEvent::CollectRent()
 		riseMoney = 0;
 		CollectRentTime = 0;
 	}
-	else CollectRentTime++;
+	else CollectRentTime += TimeLevel;
 }
 
 void GameEvent::MonsterFindHouse(Monster **_monster)
@@ -1069,6 +1075,10 @@ void GameEvent::BattleEnd()
 			riseMoney -= abs(riseMoney) - abs(addMoney);
 			myMoney.SetValue(myMoney.GetValue() + abs(riseMoney) - abs(addMoney));
 		}
+		else if (riseMoney == addMoney) {
+			riseMoney = 0;
+			addMoney = 0;
+		}
 	}
 }
 
@@ -1099,7 +1109,7 @@ void GameEvent::SeleteTaskBattle()
 		switch (myTaskBoard.GetNowTask())
 		{
 		case TaskList::nothing:
-			if (battleCount > 4000 - (TimeLevel * 500)) {
+			if (battleCount > 4000) {
 				isIntoBattle = true;
 				CreateWarrior_event(&warrior[0], villager);
 				for (int i = 0; warrior[i] != NULL; i++) {
@@ -1109,7 +1119,7 @@ void GameEvent::SeleteTaskBattle()
 			}
 			break;
 		case TaskList::FirstTask:
-			if (battleCount > 3000 - (TimeLevel * 500)) {
+			if (battleCount > 3000) {
 				isIntoBattle = true;
 				CreateWarrior_event(&warrior[0], villager);
 				CreateWarrior_event(&warrior[1], firemagic);
@@ -1120,7 +1130,7 @@ void GameEvent::SeleteTaskBattle()
 			}
 			break;
 		case TaskList::Boss:
-			if (battleCount > 3000 - (TimeLevel * 500)) {
+			if (battleCount > 3000 ) {
 				isIntoBattle = true;
 				CreateWarrior_event(&warrior[0], villager);
 				CreateWarrior_event(&warrior[1], firemagic);
@@ -1133,7 +1143,7 @@ void GameEvent::SeleteTaskBattle()
 		default:
 			break;
 		}
-		battleCount++;
+		battleCount += TimeLevel;
 	}
 }
 
