@@ -13,33 +13,19 @@ using namespace std;
 namespace game_framework {
 	Monster::Monster(string _monsterTpye)
 	{
-		monsterAge = 0;
 		monsterType = _monsterTpye;
 		RandGender();
 		RandName();
 		RandBasicAbility();
-		isExist = false;
-		isMouseOn = false;
-		isMusicEffectOn = false;
-		isKid = false;
-		isHeadImgRoad = false;
-		HpCount = 0;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
+		Initial();
 	}
 	Monster::Monster()
 	{
-		monsterAge = 0;
 		RandGender();
 		RandName();
 		RandMonsterType();
 		RandBasicAbility();
-		isExist = false;
-		isMouseOn = false;
-		isMusicEffectOn = false;
-		isKid = false;
-		isHeadImgRoad = false;
-		HpCount = 0;
-		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
+		Initial();
 	}
 	void Monster::operator=(Monster &obj)
 	{
@@ -59,7 +45,6 @@ namespace game_framework {
 		isAlive = obj.isAlive;
 		isKid = obj.isKid;
 		LoadBitmap(monsterType);
-		isExist = true;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 
 	}
@@ -115,7 +100,6 @@ namespace game_framework {
 		root = "Bitmaps\\monster\\monsterAttackRight2_" + childStr + strGender + monsterName;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
-		animation[Hide]->AddBitmap("Bitmaps\\monster\\monsterHide.bmp", RGB(255, 255, 255));
 		/////////////////////////////////////////////////////////////////////////////////////
 		if (!isHeadImgRoad) {
 			headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
@@ -138,6 +122,17 @@ namespace game_framework {
 		AttackPower = (father->AttackPower + mother->AttackPower) / 4 + randValue[3];         //攻擊力
 	}
 
+	void Monster::Initial()
+	{
+		monsterAge = 0;
+		isMouseOn = false;
+		isMusicEffectOn = false;
+		isKid = false;
+		isHeadImgRoad = false;
+		HpCount = 0;
+		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
+	}
+
 	void Monster::SetMonsterType(string _monsterType)
 	{
 		monsterType = _monsterType;
@@ -146,17 +141,13 @@ namespace game_framework {
 	{
 		nowMonsterState = _state;
 	}
-	void Monster::SetMonsterIsExist(bool flag)
-	{
-		isExist = flag;
-	}
 	void Monster::SetIsChild(bool flag)
 	{
 		isKid = flag;
 	}
-	void Monster::SetTimecount(int time)
+	void Monster::SetHeadImgcount(int time)
 	{
-		timecount = time;
+		HeadImgCount = time;
 	}
 	void Monster::ShowHpBar()
 	{
@@ -202,7 +193,7 @@ namespace game_framework {
 	{
 		npcObject::OnShow();
 		HpResume();
-		if (isMouseOn && nowMovingType != Hide) {                   //資料欄的顯示
+		if (isMouseOn && isOnShow) {                   //資料欄的顯示
 			if (!isMusicEffectOn) {
 				CAudio::Instance()->Play(AUDIO_DING);
 				isMusicEffectOn = true;
@@ -231,15 +222,40 @@ namespace game_framework {
 		}
 
 		ShowHpBar();             //顯示血條
-		if (isIntoHouse ||(nowMonsterState==fallInLove && timecount >300)) {
+		if (isIntoHouse ||(nowMonsterState==fallInLove && HeadImgCount >300)) {
 			nowMonsterState = nothing;
 		}
-		else timecount++;
+		else HeadImgCount++;
 
 		if (isKid && monsterAge > GrowupTime) { //成長時間
 			GrowUp();
 		}
 		else if (isKid) monsterAge++;
+
+	}
+	void Monster::MonsterLoad(char * str, int index)
+	{
+		char indexstr = '0' + index;
+		char temp_str[1024] = "Monster" ;
+		temp_str[7] = indexstr;
+		str = strstr(str, temp_str);
+		str += 9;
+
+		str = strstr(str, "MonsterType");         //怪物種類
+		str += 12;
+		strcpy(temp_str, str);
+		monsterType =strtok(temp_str, "\n");
+
+		str = strstr(str, "MonsterName");         //怪物名子
+		str += 12;
+		strcpy(temp_str, str);
+		name = strtok(temp_str, "\n");
+
+		str = strstr(str, "MaxHp");         //怪物名子
+		str += 6;
+		Hp = atoi(str);
+		MaxHp = Hp;
+
 
 	}
 	Monster_state Monster::GetMonsterState()
@@ -265,10 +281,6 @@ namespace game_framework {
 	int Monster::GetMonsterGender()
 	{
 		return monsterGender;
-	}
-	bool Monster::GetIsExist()
-	{
-		return isExist;
 	}
 	bool Monster::GetIsKid()
 	{

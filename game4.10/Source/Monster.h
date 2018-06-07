@@ -22,25 +22,26 @@ namespace game_framework {
 		void operator= (Monster &obj);
 		void LoadBitmap(string monsterName);
 		void InheritAbility(Monster *father,Monster *mother);    //怪物繼承能力
+		void Initial();                                          //初始化
 		void SetMonsterType(string _monsterType);	//設定怪物種類 傳入物種類字串
 		void SetMonsterState(Monster_state _state);	//這定怪物狀態
-		void SetMonsterIsExist(bool flag);			//設定怪物是否顯示在地圖上
 		void SetIsChild(bool flag);
-		void SetTimecount(int time);
+		void SetHeadImgcount(int time);
 		void ShowHpBar();
 		void OnShow();
+		void MonsterLoad(char *str, int index);
 		Monster_state GetMonsterState();            //取的怪物狀態
 		MonsterDataBoard* GetMonsterDataBoard();
 		Gender GetMonsterGendet();
 		string GetMonsterType();
 		string GetMonsterName();
 		int GetMonsterGender();
-		bool GetIsExist();							//取得怪物是否顯示在地圖上
 		bool GetIsKid();
 		bool IsMouseOn(CPoint point);
 	private:
 		int monsterAge;
 		int HpCount;          //生命回復計數
+		int HeadImgCount;
 		void RandMonsterType();
 		void RandBasicAbility();
 		void RandName();
@@ -48,7 +49,6 @@ namespace game_framework {
 		void HpResume();
 		void GrowUp();                                        //怪物長大
 		bool isMusicEffectOn;
-		bool isExist;
 		bool isMouseOn;
 		bool isHeadImgRoad;
 		string name;                                         //怪物名稱

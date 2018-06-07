@@ -7,7 +7,7 @@
 #include "npcObject.h"
 game_framework::npcObject::npcObject()
 {
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < MovingAnimation_type_size; i++)
         animation[i] = new CAnimation;
 
     for (int i = 0; i < 3; i++)
@@ -19,7 +19,7 @@ game_framework::npcObject::npcObject()
     _x = 0;
     _y = 530;
     floor = 0;
-	timecount = 0;
+	GoOutsideCounter = 0;
     isMovingDown = false;			// 是否正在往下移動
     isMovingLeft = false;			// 是否正在往左移動
     isMovingRight = false;			// 是否正在往右移動
@@ -31,12 +31,13 @@ game_framework::npcObject::npcObject()
     isOnBattle = false;
 	isMusicEffectOn=false;
 	isMouseOn=false;
+	isOnShow = true;
     nowMovingType = Forward;    // 預設動圖
 }
 
 game_framework::npcObject::~npcObject()
 {
-    for (int i = 0; i < 7; i++)delete animation[i];
+    for (int i = 0; i < MovingAnimation_type_size; i++)delete animation[i];
 
     for (int i = 0; i < 3; i++)delete magicAttack[i];
 }
@@ -47,6 +48,10 @@ void game_framework::npcObject::operator=(npcObject obj)
 
 void game_framework::npcObject::OnMove()
 {
+	if (isAlive)                                                      //設定座標
+	{
+		for (int i = 0; i < MovingAnimation_type_size; i++)animation[i]->SetTopLeft(_x, _y);
+	}
     if (isIntoHouse)        //怪物進屋
     {
         if (isOnBattle)
@@ -69,7 +74,7 @@ void game_framework::npcObject::OnMove()
             if (animation[nowMovingType]->GetCurrentBitmapNumber() == 0)
             {
                 isIntoHouse = false;
-                nowMovingType = Hide;
+				isOnShow = false;
                 animation[nowMovingType]->OnMove();
 
                 if (isMovingDown)                        //下樓動畫
@@ -95,26 +100,22 @@ void game_framework::npcObject::OnMove()
     }
     else if (isGoOutside)                           //出門動畫
     {
-        if (timecount >= 60)              //
+        if (GoOutsideCounter >= 45)              //
         {
             nowMovingType = Forward;
             isGoOutside = false;
-			timecount = 0;
+			GoOutsideCounter = 0;
             if (BattleTemp = true)isOnBattle = true;
 
             animation[nowMovingType]->OnMove();
         }
-        else if (timecount >= 30)        //
+        else if (GoOutsideCounter >= 20)        //
         {
+			isOnShow = true;
             nowMovingType = Forward;
             animation[nowMovingType]->OnMove();
         }
-        else                                                //開門緩衝時間
-        {
-            nowMovingType = Hide;
-            animation[nowMovingType]->OnMove();
-        }
-		timecount++;
+		GoOutsideCounter++;
     }
     else
     {
@@ -155,10 +156,8 @@ void game_framework::npcObject::OnMove()
 
 void game_framework::npcObject::OnShow()
 {
-    if (isAlive)
+    if (isOnShow && isAlive)
     {
-        for (int i = 0; i < 7; i++)animation[i]->SetTopLeft(_x, _y);
-
         animation[nowMovingType]->OnShow();
     }
 
@@ -215,6 +214,11 @@ void game_framework::npcObject::SetIsAlive(bool flag)
 void game_framework::npcObject::SetIsOnBattle(bool flag)
 {
     isOnBattle = flag;
+}
+
+void game_framework::npcObject::SetIsOnShow(bool flag)
+{
+	isOnShow = flag;
 }
 
 void game_framework::npcObject::SetBattleTemp(bool flag)
@@ -340,7 +344,7 @@ void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
 void game_framework::npcObject::SetTimeLevel(int _timeLevel)
 {
 	timeLevel = _timeLevel;
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < MovingAnimation_type_size; i++) {
 		animation[i]->SetDelayCount((40-10 * timeLevel));
 	}
 }
@@ -405,6 +409,11 @@ bool game_framework::npcObject::GetIsOnBattle()
 bool game_framework::npcObject::GetIsAlive()
 {
     return isAlive;
+}
+
+bool game_framework::npcObject::GetIsOnShow()
+{
+	return isOnShow;
 }
 
 bool game_framework::npcObject::IsMouseOn(CPoint point)

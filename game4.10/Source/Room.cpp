@@ -7,7 +7,7 @@
 #include "Room.h"
 namespace game_framework
 {
-	Room::Room(int x, int y) : _x(x), _y(y) //未完成
+	Room::Room(int x, int y, int _roomNumber) : _x(x), _y(y),RoomNumber(_roomNumber) //未完成
 	{
 		Initial();
 	}
@@ -27,7 +27,6 @@ namespace game_framework
 		liveMonsterSize = 0;
 		timecount = 0;
 		rent = 15;
-		RoomNumber = 100;
 		isDoorOpen = false;
 		isMonsterLiving = false;
 		isMouseOn = false;
@@ -83,7 +82,7 @@ namespace game_framework
 				if (animation.GetCurrentBitmapNumber() == 0)isDoorOpen = false;
 			}
 		}
-		for (int i = 0; i < liveMonsterSize; i++) {                                                            ///////////////怪物出門緩沖
+		for (int i = 0; i < liveMonsterSize; i++) {                               ///////////////怪物出門緩沖
 			if (timecount >150 && monsterGoOutsideTemp[i]) {
 				liveMonster[i]->SetIsGoOutside(true);
 				isMonsterIn[i] = false;
@@ -182,6 +181,10 @@ namespace game_framework
 			isMonsterLiving = false;
 		}
 	}
+	void Room::SetDoorOpen()
+	{
+		isDoorOpen = true;
+	}
 	void Room::SetRent(int _rent)
 	{
 		rent = _rent;
@@ -191,7 +194,7 @@ namespace game_framework
 		for (int i = 0; i < liveMonsterSize; i++) {
 			if (!liveMonster[i]->GetIsOnBattle()) {
 				monsterGoOutsideTemp[i] = true;
-				liveMonster[i]->SetPoint(liveMonster[i]->GetX() + 1, liveMonster[i]->GetY());
+				liveMonster[i]->SetPoint(liveMonster[i]->GetX() + 1*i, liveMonster[i]->GetY());
 				liveMonster[i]->SetBattleTemp(true);
 				isMonsterFight[i] = true;
 

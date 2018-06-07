@@ -20,13 +20,14 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 		void OnEvent();                                 // 事件處理
-		bool GameOver();
+		bool GameOver();                                // 判斷是否結束，true代表結束
 		bool SaveGame(string saveName);
 		bool LoadGame(string saveName);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		void SetObstacle();
 		bool GetIsRoomFull();     //房屋是否客滿
-		void CollectRent();            //收取房租
+		void GetMoneyEvent();
+		void CollectRentEvent();            //收取房租
 		////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
 		void MonsterFindHouse(Monster **_monster); //怪物看屋事件 
 		void MonsterlivingHouse_event(Room* _room, Monster** _monster);
@@ -68,7 +69,7 @@ namespace game_framework {
 		Obstacle mapObstacle;
 		Room* gameRoom[4];
 		RoomInterface *myRoomInterface;
-		Monster* comingMonster,*LeaveMonster;                    //來看房子的怪物
+		Monster* comingMonster;                    //來看房子的怪物
 		Warrior* warrior[10];
 		time_t Settime, nowtime;
 		int CollectRentTime;

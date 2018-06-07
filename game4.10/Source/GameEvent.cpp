@@ -16,7 +16,7 @@ GameEvent::GameEvent()
 	Clock = NULL;
 	int room_x = 650, room_y = 510;
 
-	for (int i = 0; i < 4; i++)gameRoom[i] = new Room(room_x + i * 115, room_y);
+	for (int i = 0; i < 4; i++)gameRoom[i] = new Room(room_x + i * 115, room_y,101+i);
 }
 
 GameEvent::~GameEvent()
@@ -48,7 +48,6 @@ void GameEvent::OnBeginState()
 
 	////////////////////////////////////////////////////////
 	for (int i = 0; i < 10; i++)warrior[i] = NULL;
-	LeaveMonster = NULL;
 }
 
 void GameEvent::OnInit()
@@ -127,15 +126,14 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
-	if (myRoomInterface->GetIsShow()) {                         /////////////未完成
+	if (myRoomInterface->GetIsShow()) {                         //房務介面動作
+		myRoomInterface->IsMouseClick(point);
 		for (int i = 0; i < 3; i++) {
-			if (myRoomInterface->IsMouseClick(point, i)) {
-				LeaveMonster = gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i);
+			if (myRoomInterface->IsMouseClick(point, i)) {     //驅逐怪物動作
 			}
 		}
 	}
-	myRoomInterface->IsMouseClick(point);
-	if(myTaskBoard.IsTaskOnClick(point))isGamePause=true;
+	if(myTaskBoard.IsTaskOnClick(point))isGamePause=true;      //任務版介面動作
 
 }
 
@@ -144,7 +142,7 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
 	if (!isGamePause) {
 		for (int i = 0; i < 4; i++) {                            //處理介面顯示
 			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-				if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point) && gameRoom[i]->GetLiveMonster(k)->GetMovingType() != Hide) {
+				if (gameRoom[i]->GetLiveMonster(k)->IsMouseOn(point) && gameRoom[i]->GetLiveMonster(k)->GetIsOnShow()) {
 					isMonsterDataBoardShow = true;
 					i = 5;
 					break;
@@ -206,7 +204,7 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 	else {
 		for (int i = 0; i < roomSize; i++)
 		{
-			if (gameRoom[i]->IsMouseOn(point)) {           //房屋介面
+			if (gameRoom[i]->IsMouseOn(point)) {           //房屋介面滑鼠事件
 				myRoomInterface->SetRoomSelector(i);
 				myRoomInterface->SetInterfaceShow(true);
 				isGamePause = true;
@@ -218,7 +216,7 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 
 void GameEvent::OnMove()
 {
-	if (!isGamePause) {
+	if (!isGamePause) {                    
 		/////////////////////////////////時間控制按鈕////////////////////////////////////////////
 		for (int i = 0; i < 3; i++)
 		{
@@ -235,7 +233,7 @@ void GameEvent::OnMove()
 			}
 		}
 
-		timeControl();
+		timeControl();                                  //設定時間變數
 
 		for (int i = 0; i < roomSize; i++)
 		{
@@ -305,6 +303,7 @@ void GameEvent::OnShow()
 	{
 		comingMonster->OnShow();
 	}
+
 	myMoney.OnShow();
 	Warning.ShowBitmap();
 	myTaskBoard.OnShow();
@@ -314,7 +313,8 @@ void GameEvent::OnShow()
 void GameEvent::OnEvent()
 {
 	SeleteTaskBattle();
-	CollectRent();
+	CollectRentEvent();
+	GetMoneyEvent();
 	if (isIntoBattle)  ////////////////////////////////////////////////進入戰鬥時的事件
 	{
 		Warning.SetTopLeft(1280, 100); //警告圖片
@@ -405,7 +405,6 @@ void GameEvent::OnEvent()
 					}
 					else                                           //結束戰鬥
 					{
-						//BattleEnd(gameRoom, roomSize);
 						CAudio::Instance()->Stop(AUDIO_WARNING);
 						CAudio::Instance()->Play(AUDIO_GAMEBGM);
 						isOnBattle = false;
@@ -456,16 +455,14 @@ void GameEvent::OnEvent()
 	{
 		if (!isOnBattle)CreateMonster_event(&comingMonster);
 	}
+	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件->
 
-	if (!isOnBattle)	MonsterMatingEvent();   //怪物交配事件
-
-	if (LeaveMonster != NULL) {
-		MonsterLeave(&LeaveMonster);
-	}
+	if (!isOnBattle)	MonsterMatingEvent();                       //怪物交配事件
 }
 
 bool GameEvent::GameOver()
 {
+	/*
 	if (GameOverFlag) {
 		for (int i = 0; i < roomSize; i++) {
 			if (gameRoom[i]->GetLiveMonsterSize() > 0) {
@@ -474,7 +471,7 @@ bool GameEvent::GameOver()
 		}
 		CAudio::Instance()->Stop(AUDIO_WARNING);
 		return true;
-	}
+	}*/
 	return false;
 }
 
@@ -490,11 +487,13 @@ bool GameEvent::SaveGame(string saveName)
 	for(int i=0;i<roomSize;i++)
 	{
 		ss << "gameRoomMonster"<< i <<"\n" ;
+		ss << "MonsterSize" << gameRoom[i]->GetLiveMonsterSize() << "\n";
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
 		{
 			ss << "Monster" << k <<"\n" ;
 			ss << "MonsterType" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterType() << "\n";
 			ss << "MonsterName" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterName() << "\n";
+			ss << "MonsterGender" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterGender() << "\n";
 			ss << "MaxHp" <<  "\n" << gameRoom[i]->GetLiveMonster(k)->GetHp() << "\n";
 			ss << "AttackPower" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAttackPower() << "\n";
 			ss << "AdDenfense" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAdDefense() << "\n";
@@ -522,22 +521,22 @@ bool GameEvent::LoadGame(string saveName)
 	str = strstr(buf, "RoomSize");
 	str += 9;
 	roomSize=(atoi(str));
-
-	str = strstr(buf, "Money");
-	str += 6;
-	myMoney.SetValue(atoi(str));
-	str = strstr(buf, "Money");
-	str += 6;
-	myMoney.SetValue(atoi(str));
-	str = strstr(buf, "Money");
-	str += 6;
-	myMoney.SetValue(atoi(str));
-	str = strstr(buf, "Money");
-	str += 6;
-	myMoney.SetValue(atoi(str));
-	str = strstr(buf, "Money");
-	str += 6;
-	myMoney.SetValue(atoi(str));
+	
+	for(int i=0;i<roomSize;i++)
+	{
+		char temp = i + '0';
+		str = strstr(buf, "gameRoomMonster"+ temp);
+		str += 17;
+		str = strstr(str, "MonsterSize" );
+		str += 11;
+		int monsterSize= (atoi(str));
+		for (int k = 0; k < monsterSize; k++) {
+			Monster *_monster = new Monster;
+			_monster->MonsterLoad(str, k);
+			gameRoom[i]->SetMonsterlivingRoom(&_monster);
+			delete _monster;
+		}
+	}
 
 	saveFile.close();
 	return false;
@@ -548,7 +547,7 @@ void GameEvent::SetObstacle()
 	for (int i = 0; i < roomSize; i++)
 	{
 		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
-			if (gameRoom[i]->GetIsMonsterFight(k) && gameRoom[i]->GetLiveMonster(k)->GetMovingType() != Hide)
+			if (gameRoom[i]->GetIsMonsterFight(k) && gameRoom[i]->GetLiveMonster(k)->GetIsOnShow())
 			{
 				Monster* _monster = gameRoom[i]->GetLiveMonster(k);
 				int _x1 = _monster->GetX();
@@ -581,7 +580,26 @@ bool GameEvent::GetIsRoomFull()
 	return true;
 }
 
-void GameEvent::CollectRent()
+void GameEvent::GetMoneyEvent()
+{
+	if (riseMoney != addMoney) {
+		int add = addMoney / 100;
+		if (add == 0)add = 1;
+		myMoney.SetValue(myMoney.GetValue() + add);
+		riseMoney += add;
+
+		if (abs(riseMoney) > abs(addMoney)) {                                                                                                //金錢修正
+			riseMoney -= abs(riseMoney) - abs(addMoney);
+			myMoney.SetValue(myMoney.GetValue() + abs(riseMoney) - abs(addMoney));
+		}
+		else if (riseMoney == addMoney) {
+			riseMoney = 0;
+			addMoney = 0;
+		}
+	}
+}
+
+void GameEvent::CollectRentEvent()
 {
 	if (CollectRentTime > 3500) {
 		for (int i = 0; i < roomSize; i++) {
@@ -750,7 +768,7 @@ void GameEvent::CreateMonster_event(Monster **_monster)
 	{
 		(*_monster) = new Monster();
 		(*_monster)->LoadBitmap((*_monster)->GetMonsterType());
-		(*_monster)->SetMonsterIsExist(true);
+		(*_monster)->SetIsOnShow(true);
 		(*_monster)->SetMonsterState(nothing);
 		(*_monster)->SetPoint(-100, 530);
 	}
@@ -1065,21 +1083,6 @@ void GameEvent::BattleEnd()
 			}
 		}
 	}
-	if (riseMoney != addMoney) {
-		int add = addMoney / 100;
-		if (add == 0)add = 1;
-		myMoney.SetValue(myMoney.GetValue() + add);
-		riseMoney+= add;
-
-		if (abs(riseMoney) > abs(addMoney)) {                                                                                                //金錢修正
-			riseMoney -= abs(riseMoney) - abs(addMoney);
-			myMoney.SetValue(myMoney.GetValue() + abs(riseMoney) - abs(addMoney));
-		}
-		else if (riseMoney == addMoney) {
-			riseMoney = 0;
-			addMoney = 0;
-		}
-	}
 }
 
 void GameEvent::BattleFinish()
@@ -1185,7 +1188,7 @@ void GameEvent::MonsterMatingEvent()
 		int randValue = rand() % 1000;
 		if (randValue<2 && gameRoom[i]->GetLiveMonsterSize() == 2 && gameRoom[i]->GetIsMonsterIn(0) && gameRoom[i]->GetIsMonsterIn(1) ) {
 			gameRoom[i]->GetLiveMonster(0)->SetMonsterState(fallInLove);
-			gameRoom[i]->GetLiveMonster(0)->SetTimecount(0);
+			gameRoom[i]->GetLiveMonster(0)->SetHeadImgcount(0);
 			int childRandvalue = rand() % 1000;
 			if (childRandvalue < 500)MonsterBorn(i);  //怪物出生
 		}
@@ -1198,13 +1201,13 @@ void GameEvent::MonsterBorn(int roomNum)
 	newMonster = new Monster((gameRoom[roomNum])->GetLiveMonster(0)->GetMonsterType());
 	newMonster->SetIsChild(true);
 	newMonster->LoadBitmap(newMonster->GetMonsterType());
-	newMonster->SetMonsterIsExist(false);
+	newMonster->SetIsOnShow(false);                             //設定在家
 	newMonster->SetMonsterState(nothing);
 
 	(gameRoom[roomNum])->SetMonsterlivingRoom(&newMonster);
 	(gameRoom[roomNum])->GetLiveMonster(2)->SetPoint((gameRoom[roomNum])->GetX(), (gameRoom[roomNum])->GetLiveMonster(0)->GetY() + 20); //高度修正
 	(gameRoom[roomNum])->GetLiveMonster(2)->SetIsGoOutside(false);
-	(gameRoom[roomNum])->GetLiveMonster(2)->SetMovingType(Hide);
+	(gameRoom[roomNum])->GetLiveMonster(2)->SetIsOnShow(false);
 	(gameRoom[roomNum])->GetLiveMonster(2)->InheritAbility(gameRoom[roomNum]->GetLiveMonster(0), gameRoom[roomNum]->GetLiveMonster(1));
 	(gameRoom[roomNum])->SetIsMonsterIn(true, 2);
 }

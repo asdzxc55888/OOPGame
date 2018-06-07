@@ -6,18 +6,19 @@ namespace game_framework
 class Room
 {
     public:
-        Room(int x, int y);
+        Room(int x, int y,int _roomNumber);
         ~Room();
         void LoadBitmap();
         void Initial();                       //初始化
         void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
         void OnMove();
 		void MonsterDeath(int monsterIndex);
+		void SetDoorOpen();
 		void SetRent(int _rent);
 		void SetMonsterFight(bool flag);
-		void SetIsMonsterIn(bool flag, int monsterIndex);
-		void SetMonsterlivingRoom(Monster** _monster); //讓怪物住進房子，回傳NULL指標將原本的怪物抹去
-		void SetRoomBoard(); //設置房屋資料版
+		void SetIsMonsterIn(bool flag, int monsterIndex);  //設定怪物是否在家
+		void SetMonsterlivingRoom(Monster** _monster);     //讓怪物住進房子
+		void SetRoomBoard();                               //設置房屋資料版
 		void LetMonsterGohome(int monsterIndex);
 		int  GetRent();
 		int  GetX();

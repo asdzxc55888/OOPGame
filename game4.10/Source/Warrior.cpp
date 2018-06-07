@@ -87,7 +87,6 @@ namespace game_framework {
 		root = "Bitmaps\\warrior\\warriorAttackRight2_" + str;
 		strcpy(test, root.c_str());
 		animation[Attack_Right]->AddBitmap(test, RGB(255, 255, 255));
-		animation[Hide]->AddBitmap("Bitmaps\\warrior\\warriorHide.bmp", RGB(255, 255, 255));
 	}
 	void Warrior::OnShow()
 	{
