@@ -2,7 +2,7 @@
 #include "npcObject.h"
 class Warrior;
 #include"Warrior.h"
-#define totalMonsterType_size  3
+#define totalMonsterType_size  4
 #define GrowupTime 3000
 namespace game_framework {
 	enum Monster_state {
@@ -11,7 +11,8 @@ namespace game_framework {
 		wolking,
 		lookHouse,
 		findHouse,
-		fallInLove
+		finishhouse,
+		fallInLove,
 	};
 	enum Gender {male,female};
 	class Monster :public npcObject
@@ -56,7 +57,7 @@ namespace game_framework {
 		Gender monsterGender;                //怪物性別
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
-		CMovingBitmap headImg[3];                      //頭上符號
+		CMovingBitmap headImg[4];                      //頭上符號
 
 	};
 	

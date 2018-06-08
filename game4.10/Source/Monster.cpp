@@ -105,6 +105,7 @@ namespace game_framework {
 			headImg[0].LoadBitmap("Bitmaps\\headimg\\lookhouse.bmp", RGB(255, 255, 255));
 			headImg[1].LoadBitmap("Bitmaps\\headimg\\findhouse.bmp", RGB(255, 255, 255));
 			headImg[2].LoadBitmap("Bitmaps\\headimg\\love.bmp", RGB(255, 255, 255));
+			headImg[3].LoadBitmap("Bitmaps\\headimg\\finishhouse.bmp", RGB(255, 255, 255));
 			isHeadImgRoad = true;
 		}
 	}
@@ -219,6 +220,10 @@ namespace game_framework {
 			headImg[2].SetTopLeft(_x + 5, _y - 20);
 			headImg[2].ShowBitmap();
 			break;
+		case game_framework::finishhouse:
+			headImg[3].SetTopLeft(_x + 5, _y - 20);
+			headImg[3].ShowBitmap();
+			break;
 		}
 
 		ShowHpBar();             //顯示血條
@@ -331,7 +336,7 @@ namespace game_framework {
 	}
 	void Monster::RandMonsterType()
 	{
-		string totalMonsterType[totalMonsterType_size] = { "tentacle","kappa","eye" };
+		string totalMonsterType[totalMonsterType_size] = { "tentacle","kappa","eye","chicken"};
 		int result = rand() % totalMonsterType_size;
 		monsterType = totalMonsterType[result];
 	}
@@ -362,6 +367,13 @@ namespace game_framework {
 			AdDefense = 3;			//物理防禦
 			AttackPower = 14;         //攻擊力
 			AttackType = Ad;			//攻擊模式
+		}
+		else if (monsterType == "chicken") {
+			Hp = 150;					//血量
+			ApDefense = 2;			//魔法防禦
+			AdDefense = 2;			//物理防禦
+			AttackPower = 16;         //攻擊力
+			AttackType = Ap;			//攻擊模式
 		}
 		//隨機能力
 		Hp += randValue[0];

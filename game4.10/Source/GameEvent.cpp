@@ -689,7 +689,7 @@ void GameEvent::MonsterBeingClick(Monster ** _monster)
 			if (!((gameRoom)[i]->GetLiveMonsterSize()>0))    //沒怪物住的話就分配到那間房
 			{
 				MonsterlivingHouse_event((gameRoom)[i], _monster);
-				(gameRoom)[i]->GetLiveMonster(0)->SetMonsterState(nothing);
+				(gameRoom)[i]->GetLiveMonster(0)->SetMonsterState(finishhouse);
 				MonsterGohome_event(gameRoom[i], 0);
 				break;
 			}
