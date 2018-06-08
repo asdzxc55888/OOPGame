@@ -8,7 +8,7 @@ namespace game_framework {
 	enum Monster_state {
 		leave,
 		nothing,
-		wolking,
+		working,
 		lookHouse,
 		findHouse,
 		fallInLove
@@ -47,16 +47,16 @@ namespace game_framework {
 		void RandName();
 		void RandGender();
 		void HpResume();
-		void GrowUp();                                        //怪物長大
+		void GrowUp();                              //怪物長大
 		bool isMusicEffectOn;
 		bool isMouseOn;
 		bool isHeadImgRoad;
-		string name;                                         //怪物名稱
+		string name;                                //怪物名稱
 		string monsterType;                         //怪物類型
-		Gender monsterGender;                //怪物性別
+		Gender monsterGender;                       //怪物性別
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
-		CMovingBitmap headImg[3];                      //頭上符號
+		CMovingBitmap headImg[3];                   //頭上符號
 
 	};
 	

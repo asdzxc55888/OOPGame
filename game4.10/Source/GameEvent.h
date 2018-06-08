@@ -6,6 +6,8 @@
 #include "GMoney.h"
 #include "RoomInterface.h"
 namespace game_framework {
+#define room_x 650
+#define room_y 510
 	class GameEvent
 	{
 	public:
@@ -29,7 +31,8 @@ namespace game_framework {
 		void GetMoneyEvent();
 		void CollectRentEvent();            //收取房租
 		////////////////////////////////////////////////////////////////////////////怪物事件////////////////////////////////////////////////////////
-		void MonsterFindHouse(Monster **_monster); //怪物看屋事件 
+		void MonsterStateEvent();                                            //怪物狀態事件處理
+		void MonsterFindHouse(Monster **_monster);                           //怪物看屋事件 
 		void MonsterlivingHouse_event(Room* _room, Monster** _monster);
 		void MonsterGohome_event(Room *_room, int monsterIndex);             //怪物進房事件，等同怪物住屋事件
 		void MonsterBeingClick(Monster **_monster);                          //怪物被點擊事件
@@ -50,7 +53,6 @@ namespace game_framework {
 		void MonsterPositionFix();                                                      //怪物位置修正
 		Monster* findMonsterTarget(Warrior *_warrior);
 		Warrior* findWarriorTarget(Monster *_monster);
-		void BattleEnd();                                                                        //戰鬥結束
 		void BattleFinish();																	//戰鬥完成
 		void SeleteTaskBattle();															//依任務選擇出場勇者
 		void BattleTest1();
@@ -89,5 +91,5 @@ namespace game_framework {
 		bool GameOverFlag;                       //有人入住就為true 判斷是否為遊戲剛開始
 		bool WarningQuit;
 	};
-	
+
 }

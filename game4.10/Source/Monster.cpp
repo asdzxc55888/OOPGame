@@ -18,6 +18,7 @@ namespace game_framework {
 		RandName();
 		RandBasicAbility();
 		Initial();
+		isKid = false;
 	}
 	Monster::Monster()
 	{
@@ -26,6 +27,7 @@ namespace game_framework {
 		RandMonsterType();
 		RandBasicAbility();
 		Initial();
+		isKid = false;
 	}
 	void Monster::operator=(Monster &obj)
 	{
@@ -127,7 +129,6 @@ namespace game_framework {
 		monsterAge = 0;
 		isMouseOn = false;
 		isMusicEffectOn = false;
-		isKid = false;
 		isHeadImgRoad = false;
 		HpCount = 0;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
@@ -236,7 +237,7 @@ namespace game_framework {
 	void Monster::MonsterLoad(char * str, int index)
 	{
 		char indexstr = '0' + index;
-		char temp_str[1024] = "Monster" ;
+		char temp_str[10240] = "Monster" ;
 		temp_str[7] = indexstr;
 		str = strstr(str, temp_str);
 		str += 9;
@@ -254,6 +255,10 @@ namespace game_framework {
 		str = strstr(str, "MonsterGender");         //性別
 		str += 14;
 		monsterGender = (Gender)atoi(str);
+
+		str = strstr(str, "MonsterState");         //怪物狀態
+		str += 13;
+		nowMonsterState = (Monster_state)atoi(str);
 
 		str = strstr(str, "X");         //座標
 		str += 2;
@@ -289,7 +294,15 @@ namespace game_framework {
 			isOnShow = false;
 		}else isOnShow = true;
 
+		str = strstr(str, "IsKid");
+		str += 6;
+		if (atoi(str) == 0) {
+			isKid = false;
+		}
+		else isKid = true;
+
 		Initial();
+
 		LoadBitmap(monsterType);
 	}
 	Monster_state Monster::GetMonsterState()

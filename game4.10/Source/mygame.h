@@ -55,6 +55,8 @@ namespace game_framework
 
 class CGameStateInit : public CGameState
 {
+#define LoadInterface_x 50
+#define LoadInterface_y 50
     public:
         CGameStateInit(CGame* g);
         ~CGameStateInit();
@@ -67,6 +69,7 @@ class CGameStateInit : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         CMovingBitmap Background;                       // 背景
+		CMovingBitmap LoadInterface;
         CAnimation* menuBtn[4];
         CInteger temp;
         bool isMouseOn[4];
