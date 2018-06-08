@@ -109,6 +109,7 @@ void CGameStateInit::OnInit()
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
     //
 	isLoadingBitmaps = true;
+	isLoadInterfaceOnShow = false;
 }
 
 void CGameStateInit::OnBeginState()
@@ -138,7 +139,10 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
         CAudio::Instance()->Play(AUDIO_GAMEBGM);
         CAudio::Instance()->Stop(AUDIO_MENUBGM);
     }
-
+	if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 開始遊戲
+	{
+		isLoadInterfaceOnShow = true;
+	}
     if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
         exit(1);		// 離開遊戲
 }
@@ -189,6 +193,10 @@ void CGameStateInit::OnShow()
         menuBtn[i]->SetTopLeft((SIZE_X - menuBtn[i]->Width()) / 2, SIZE_Y / 2 + 60 * (i + 1));
         menuBtn[i]->OnShow();
     }
+
+	if (isLoadInterfaceOnShow) {
+		Load.OnShow();
+	}
 
     CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
     CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間

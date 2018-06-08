@@ -57,11 +57,8 @@ namespace game_framework {
 		Gender monsterGender;                       //怪物性別
 		Monster_state nowMonsterState;				//怪物當前狀態
 		MonsterDataBoard *MyBoard;                  //資訊欄
-<<<<<<< HEAD
 		CMovingBitmap headImg[4];                      //頭上符號
-=======
-		CMovingBitmap headImg[3];                   //頭上符號
->>>>>>> 3b21e7391739cf8b94bdfad85e11d65b170ab95e
+
 
 	};
 	

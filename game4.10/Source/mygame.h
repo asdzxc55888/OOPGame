@@ -41,6 +41,7 @@
 #pragma once
 #include "CBouncingBall.h"
 #include"GameEvent.h"
+#include "LoadInterface.h"
 
 namespace game_framework
 {
@@ -69,12 +70,13 @@ class CGameStateInit : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         CMovingBitmap Background;                       // 背景
-		CMovingBitmap LoadInterface;
         CAnimation* menuBtn[4];
         CInteger temp;
+		LoadInterface Load;
         bool isMouseOn[4];
         bool isLoadingBitmaps;
         bool isPlayAudio;
+		bool isLoadInterfaceOnShow;
 		bool BGM;
 };
 

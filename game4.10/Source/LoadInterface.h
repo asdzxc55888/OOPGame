@@ -9,6 +9,7 @@ namespace game_framework {
 		~LoadInterface();
 		void Initial();
 		void OnShow();
+		void OnClick(int saveIndex);
 		void ShowSave();
 		void LoadSaveData();
 	private:
