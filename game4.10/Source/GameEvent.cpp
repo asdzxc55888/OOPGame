@@ -130,6 +130,9 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 		myRoomInterface->IsMouseClick(point);
 		for (int i = 0; i < 3; i++) {
 			if (myRoomInterface->IsMouseClick(point, i)) {     //驅逐怪物動作
+				gameRoom[myRoomInterface->GetRoomSelector()]->SetDoorOpen();
+				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i)->SetIsGoOutside(true);
+				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i)->SetMonsterState(leave);
 			}
 		}
 	}
@@ -327,7 +330,7 @@ void GameEvent::OnEvent()
 		{
 			for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
 			{
-				if (gameRoom[i]->GetIsMonsterLiving() && !gameRoom[i]->GetIsMonsterIn(k))
+				if (gameRoom[i]->GetLiveMonsterSize()>0 && !gameRoom[i]->GetIsMonsterIn(k))
 				{
 					MonsterGohome_event(gameRoom[i], k);
 				}
@@ -415,9 +418,6 @@ void GameEvent::OnEvent()
 			}
 		}
 	}
-	if (!isOnBattle) {
-		BattleEnd();
-	}
 
 	MonsterPositionFix();
 	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件
@@ -458,6 +458,32 @@ void GameEvent::OnEvent()
 	//////////////////////////////////////////////////////////////////////////////////////來臨怪物事件->
 
 	if (!isOnBattle)	MonsterMatingEvent();                       //怪物交配事件
+
+	for (int i = 0; i < roomSize; i++) {                               //居民狀態處理
+		for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++) {
+			Monster *_monster = gameRoom[i]->GetLiveMonster(k);
+			Monster_state monster_state=_monster->GetMonsterState();
+
+			switch (monster_state)
+			{
+			case game_framework::leave:
+				if (MonsterLeave(&_monster) )
+				{
+					gameRoom[i]->MonsterLeave(k);
+				}
+				break;
+			case game_framework::nothing:
+				if (!isOnBattle && _monster->GetIsOnBattle())
+				{
+					gameRoom[i]->LetMonsterGohome(k);
+					gameRoom[i]->GetLiveMonster(k)->SetIsOnBattle(false);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }
 
 bool GameEvent::GameOver()
@@ -494,10 +520,14 @@ bool GameEvent::SaveGame(string saveName)
 			ss << "MonsterType" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterType() << "\n";
 			ss << "MonsterName" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterName() << "\n";
 			ss << "MonsterGender" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetMonsterGender() << "\n";
+			ss << "X" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetX() << "\n";
+			ss << "Y" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetY() << "\n";
+			ss << "AttackType" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAttackType() << "\n";
 			ss << "MaxHp" <<  "\n" << gameRoom[i]->GetLiveMonster(k)->GetHp() << "\n";
 			ss << "AttackPower" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAttackPower() << "\n";
 			ss << "AdDenfense" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetAdDefense() << "\n";
 			ss << "ApDenfense" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetApDefense() << "\n";
+			ss << "IsOnShow" << "\n" << gameRoom[i]->GetLiveMonster(k)->GetIsOnShow() << "\n";
 		}
 	}
 	saveFile << ss.str();
@@ -509,7 +539,7 @@ bool GameEvent::SaveGame(string saveName)
 bool GameEvent::LoadGame(string saveName)
 {
 	fstream saveFile;
-	char buf[1024];
+	char buf[10240];
 	char *str;        //字串位置
 	string saveRoot = "Save\\" + saveName + ".txt";
 	saveFile.open(saveRoot, ios::in);
@@ -524,8 +554,7 @@ bool GameEvent::LoadGame(string saveName)
 	
 	for(int i=0;i<roomSize;i++)
 	{
-		char temp = i + '0';
-		str = strstr(buf, "gameRoomMonster"+ temp);
+		str = strstr(str, "gameRoomMonster");
 		str += 17;
 		str = strstr(str, "MonsterSize" );
 		str += 11;
@@ -534,6 +563,7 @@ bool GameEvent::LoadGame(string saveName)
 			Monster *_monster = new Monster;
 			_monster->MonsterLoad(str, k);
 			gameRoom[i]->SetMonsterlivingRoom(&_monster);
+			gameRoom[i]->SetIsMonsterIn(true, k);
 			delete _monster;
 		}
 	}
@@ -603,7 +633,7 @@ void GameEvent::CollectRentEvent()
 {
 	if (CollectRentTime > 3500) {
 		for (int i = 0; i < roomSize; i++) {
-			if(gameRoom[i]->GetIsMonsterLiving())addMoney+=gameRoom[i]->GetRent();
+			if(gameRoom[i]->GetLiveMonsterSize()>0)addMoney+=gameRoom[i]->GetRent();
 		}
 		riseMoney = 0;
 		CollectRentTime = 0;
@@ -656,7 +686,7 @@ void GameEvent::MonsterBeingClick(Monster ** _monster)
 	case game_framework::findHouse:                   //同意怪物住進防屋
 		for (int i = 0; i < roomSize; i++)
 		{
-			if (!(gameRoom)[i]->GetIsMonsterLiving())    //沒怪物住的話就分配到那間房
+			if (!((gameRoom)[i]->GetLiveMonsterSize()>0))    //沒怪物住的話就分配到那間房
 			{
 				MonsterlivingHouse_event((gameRoom)[i], _monster);
 				(gameRoom)[i]->GetLiveMonster(0)->SetMonsterState(nothing);

@@ -250,13 +250,47 @@ namespace game_framework {
 		str += 12;
 		strcpy(temp_str, str);
 		name = strtok(temp_str, "\n");
+		
+		str = strstr(str, "MonsterGender");         //性別
+		str += 14;
+		monsterGender = (Gender)atoi(str);
 
-		str = strstr(str, "MaxHp");         //怪物名子
+		str = strstr(str, "X");         //座標
+		str += 2;
+		_x = atoi(str);
+		str = strstr(str, "Y");       
+		str += 2;
+		_y = atoi(str);
+
+		str = strstr(str, "AttackType");         //攻擊方式
+		str += 11;
+		AttackType= (Attack_Type)atoi(str);
+
+		str = strstr(str, "MaxHp");         //血量
 		str += 6;
 		Hp = atoi(str);
 		MaxHp = Hp;
 
+		str = strstr(str, "AttackPower");         //攻擊力
+		str += 12;
+		AttackPower= atoi(str);
 
+		str = strstr(str, "AdDenfense");         //物理防禦
+		str += 11;
+		AdDefense= atoi(str);
+
+		str = strstr(str, "ApDenfense");         //物理防禦
+		str += 11;
+		ApDefense = atoi(str);
+
+		str = strstr(str, "IsOnShow");       
+		str += 9;
+		if (atoi(str) == 0) {
+			isOnShow = false;
+		}else isOnShow = true;
+
+		Initial();
+		LoadBitmap(monsterType);
 	}
 	Monster_state Monster::GetMonsterState()
 	{

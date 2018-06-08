@@ -13,6 +13,7 @@ class Room
         void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
         void OnMove();
 		void MonsterDeath(int monsterIndex);
+		void MonsterLeave(int monsterIndex);
 		void SetDoorOpen();
 		void SetRent(int _rent);
 		void SetMonsterFight(bool flag);
@@ -23,7 +24,6 @@ class Room
 		int  GetRent();
 		int  GetX();
 		int  GetLiveMonsterSize();
-        bool GetIsMonsterLiving();
         bool GetIsMonsterIn(int monsterIndex);
         bool GetIsMonsterFight(int monsterIndex);
         bool IsMouseOn(CPoint point); //檢查滑鼠是否在上面
@@ -40,7 +40,6 @@ class Room
 		void ResortLiveMonster();
 		bool monsterGoOutsideTemp[3]; 
         bool MonsterGoHome(int monsterIndex); //若還沒到達家裡得坐標，回傳 true ，到達了回傳false
-        bool isMonsterLiving; //是否居住怪物
         bool isMonsterIn[3];		//居住的怪物是否在裡面
         bool isDoorOpen;		//門有沒有開
         bool isMonsterGoHome[3];	//怪物是否正在移動進屋

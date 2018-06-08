@@ -28,7 +28,6 @@ namespace game_framework
 		timecount = 0;
 		rent = 15;
 		isDoorOpen = false;
-		isMonsterLiving = false;
 		isMouseOn = false;
 		isMusicEffectOn = false;
 		for (int i = 0; i < 3; i++) isMonsterIn[i] = false;
@@ -44,7 +43,7 @@ namespace game_framework
 				CAudio::Instance()->Play(AUDIO_DING);
 				isMusicEffectOn = true;
 			}
-			if (isMonsterLiving)myDataBoard->OnShow();
+			if (GetLiveMonsterSize()>0)myDataBoard->OnShow();
 		}
 		else {
 			isMusicEffectOn = false;
@@ -105,10 +104,6 @@ namespace game_framework
 	{
 		return liveMonster[index];
 	}
-	bool Room::GetIsMonsterLiving()
-	{
-		return isMonsterLiving;
-	}
 	bool Room::GetIsMonsterIn(int monsterIndex)
 	{
 		return isMonsterIn[monsterIndex];
@@ -130,7 +125,6 @@ namespace game_framework
 	void Room::LetMonsterGohome(int MonsterIndex)
 	{
 		isMonsterGoHome[MonsterIndex] = true;
-		isMonsterLiving = true;
 		isMonsterFight[MonsterIndex] = false;
 	}
 	int Room::GetRent()
@@ -177,8 +171,16 @@ namespace game_framework
 		if (liveMonsterSize > 0) {
 			ResortLiveMonster();
 		}
-		else {
-			isMonsterLiving = false;
+	}
+	void Room::MonsterLeave(int monsterIndex)
+	{
+		liveMonster[monsterIndex] = NULL;
+		liveMonsterSize--;
+		isMonsterFight[monsterIndex] = false;
+		isMonsterIn[monsterIndex] = false;
+		isMonsterGoHome[monsterIndex] = false;
+		if (liveMonsterSize > 0) {
+			ResortLiveMonster();
 		}
 	}
 	void Room::SetDoorOpen()
@@ -255,7 +257,7 @@ namespace game_framework
 		if (liveMonsterSize >= 3)return;
 		liveMonster[liveMonsterSize++] = *_monster;
 		*_monster = NULL;
-		////////////////////////////////////////////////////////////
+
 		if (myDataBoard != NULL) {
 			delete myDataBoard;
 			myDataBoard = NULL;

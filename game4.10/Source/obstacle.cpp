@@ -76,7 +76,7 @@ bool Obstacle::isOverlapping(int _x1, int _x2, int _y1, int _y2, bool *direction
 	for (int i = 0; i < size; i++)
 	{
 
-		if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 16 >= x1[i] && _x1 + 16 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
+		if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 14 >= x1[i] && _x1 + 14 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
 		{
 			if (_x1 > x1[i]) {
 				*direction = true;
