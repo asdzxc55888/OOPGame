@@ -36,7 +36,7 @@ namespace game_framework {
 	{
 		for (int i = 0; i <Save_size;i++) {
 			int x1 = LoadInterface_bg_x + 90;
-			int x2 = x1 + 300;
+			int x2 = x1 + 500;
 			int y1 = LoadInterface_bg_y + 75 + (i * 80);
 			int y2 = y1 + 50;
 			if (point.x > x1 && point.x <= x2 && point.y > y1 && point.y <= y2) {
@@ -94,7 +94,7 @@ namespace game_framework {
 	{
 		for (int i = 0; i <Save_size; i++) {
 			int x1 = LoadInterface_bg_x + 90;
-			int x2 = x1 + 300;
+			int x2 = x1 + 500;
 			int y1 = LoadInterface_bg_y + 75 + (i * 80);
 			int y2 = y1 + 50;
 			if (point.x > x1 && point.x <= x2 && point.y > y1 && point.y <= y2) {

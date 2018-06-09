@@ -272,7 +272,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
             }
             else
             {
-                //	magicAttack[i]->SetTarget(target_x1, target_x2);
+                magicAttack[k]->SetTarget(target_x1, target_x2);
             }
         }
     }

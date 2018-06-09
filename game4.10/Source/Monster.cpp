@@ -132,6 +132,7 @@ namespace game_framework {
 		isMusicEffectOn = false;
 		isHeadImgRoad = false;
 		HpCount = 0;
+		HeadImgCount = 0;
 		MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, monsterType, (int)monsterGender, true, name);
 	}
 
@@ -228,7 +229,10 @@ namespace game_framework {
 		}
 
 		ShowHpBar();             //Εγ₯ά¦ε±ψ
-		if (isIntoHouse ||(nowMonsterState==fallInLove && HeadImgCount >300)) {
+		if ((nowMonsterState==fallInLove && HeadImgCount >300)) {
+			nowMonsterState = nothing;
+		}
+		else if (nowMonsterState == finishhouse && HeadImgCount > 300) {
 			nowMonsterState = nothing;
 		}
 		else HeadImgCount++;

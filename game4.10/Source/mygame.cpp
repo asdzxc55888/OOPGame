@@ -152,6 +152,8 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 	else {
 		SaveIndex = Load.OnClick(point);
 		if (SaveIndex != 0) {
+			CAudio::Instance()->Play(AUDIO_GAMEBGM);
+			CAudio::Instance()->Stop(AUDIO_MENUBGM);
 			GotoGameState(GAME_STATE_RUN);	  // ¤Á´«¦ÜGAME_STATE_RUN
 		}
 	}
