@@ -90,6 +90,7 @@ void CGameStateInit::OnInit()
     //
     // 開始載入資料
     //
+	Load.LoadBitmap();
     temp.LoadBitmap();
     Background.LoadBitmap("Bitmaps\\StartBackground.bmp");
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start.bmp", RGB(255, 255, 255));
@@ -132,24 +133,40 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
-    {
-        CAudio::Instance()->Play(AUDIO_DECISION);
-        GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
-        CAudio::Instance()->Play(AUDIO_GAMEBGM);
-        CAudio::Instance()->Stop(AUDIO_MENUBGM);
-    }
-	if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 開始遊戲
-	{
-		isLoadInterfaceOnShow = true;
+	if (!isLoadInterfaceOnShow) {
+		if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
+		{
+			CAudio::Instance()->Play(AUDIO_DECISION);
+			GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
+			CAudio::Instance()->Play(AUDIO_GAMEBGM);
+			CAudio::Instance()->Stop(AUDIO_MENUBGM);
+		}
+		if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 開始遊戲
+		{
+			CAudio::Instance()->Play(AUDIO_DECISION);
+			isLoadInterfaceOnShow = true;
+		}
+		if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
+			exit(1);		// 離開遊戲
 	}
-    if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
-        exit(1);		// 離開遊戲
+	else {
+		SaveIndex = Load.OnClick(point);
+		if (SaveIndex != 0) {
+			GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
+		}
+	}
+}
+void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (isLoadInterfaceOnShow) {    //讀取介面取消動作
+		CAudio::Instance()->Play(AUDIO_DING);
+		isLoadInterfaceOnShow = false;
+	}
 }
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
-    if (isLoadingBitmaps)
+    if (isLoadingBitmaps && !isLoadInterfaceOnShow)
     {
         for (int i = 0; i < 4; i++)
         {
@@ -166,7 +183,18 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
                 isPlayAudio = false;
             }
         }
-    }
+	}
+	else if (isLoadInterfaceOnShow) {
+		if (Load.MouseOn(point)) {
+			if (!isPlayAudio) {
+				CAudio::Instance()->Play(AUDIO_DING);
+			}
+			isPlayAudio = true;
+		}
+		else {
+			isPlayAudio = false;
+		}
+	}
 }
 
 
@@ -286,11 +314,13 @@ CGameStateRun::CGameStateRun(CGame* g) : CGameState(g)
 
 CGameStateRun::~CGameStateRun()
 {
+	delete myGame;
 }
 
 void CGameStateRun::OnBeginState()
 {
 	myGame->OnBeginState();
+	LoadGame();
 }
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
@@ -357,6 +387,16 @@ void CGameStateRun::OnRButtonDown(UINT nFlags, CPoint point)  // 處理滑鼠的動作
 
 void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 {
+}
+
+void CGameStateRun::LoadGame()
+{
+	if (SaveIndex != 0) {
+		string saveName_str = "save";
+		char NumTemp='0'+SaveIndex;
+		saveName_str += NumTemp;
+		myGame->LoadGame(saveName_str);
+	}
 }
 
 void CGameStateRun::OnShow()
