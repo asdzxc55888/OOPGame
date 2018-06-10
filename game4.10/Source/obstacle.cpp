@@ -43,8 +43,7 @@ bool Obstacle::isHit(int _x1, int _x2, int _y1, int _y2)
 {
     for (int i = 0; i < size; i++)
     {
-    
-        if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2-12 >= x1[i] && _x1+12 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
+        if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 12 >= x1[i] && _x1 + 12 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
         {
             return true;
         }
@@ -52,39 +51,43 @@ bool Obstacle::isHit(int _x1, int _x2, int _y1, int _y2)
 
     return false;
 }
-bool Obstacle::isHit(int _x1, int _x2, int _y1, int _y2, bool * direction)
+bool Obstacle::isHit(int _x1, int _x2, int _y1, int _y2, bool* direction)
 {
-	for (int i = 0; i < size; i++)
-	{
+    for (int i = 0; i < size; i++)
+    {
+        if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 12 >= x1[i] && _x1 + 12 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
+        {
+            if (_x1 > x1[i])
+            {
+                *direction = true;
+            }
+            else
+            {
+                *direction = false;
+            }
 
-		if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 12 >= x1[i] && _x1 + 12 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
-		{
-			if (_x1 > x1[i]) {
-				*direction = true;
-			}
-			else {
-				*direction = false;
-			}
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
-bool Obstacle::isOverlapping(int _x1, int _x2, int _y1, int _y2, bool *direction)
+bool Obstacle::isOverlapping(int _x1, int _x2, int _y1, int _y2, bool* direction)
 {
-	for (int i = 0; i < size; i++)
-	{
+    for (int i = 0; i < size; i++)
+    {
+        if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 14 >= x1[i] && _x1 + 14 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
+        {
+            if (_x1 > x1[i])
+            {
+                *direction = true;
+            }
+            else *direction = false;
 
-		if (!(_x1 == x1[i] && _x2 == x2[i] && _y1 == y1[i] && _y2 == y2[i]) && (_x2 - 14 >= x1[i] && _x1 + 14 < x2[i] && _y1 <= y2[i] && _y2 > y1[i]))
-		{
-			if (_x1 > x1[i]) {
-				*direction = true;
-			}else *direction = false;
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 }

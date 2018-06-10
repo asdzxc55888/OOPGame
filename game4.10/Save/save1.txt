@@ -1,4 +1,4 @@
-save1 Fri Jun  8 11:36:14 2018
+save1 Sat Jun  9 19:51:27 2018
 
 Money
 1120
@@ -14,7 +14,7 @@ MonsterName
 MonsterGender
 0
 MonsterState
-1
+6
 X
 651
 Y
@@ -41,7 +41,7 @@ MonsterName
 MonsterGender
 1
 MonsterState
-6
+1
 X
 650
 Y
@@ -61,7 +61,7 @@ IsOnShow
 IsKid
 0
 gameRoomMonster1
-MonsterSize2
+MonsterSize3
 Monster0
 MonsterType
 tentacle
@@ -116,6 +116,33 @@ IsOnShow
 0
 IsKid
 0
+Monster2
+MonsterType
+tentacle
+MonsterName
+Íº¹Å½÷
+MonsterGender
+0
+MonsterState
+1
+X
+765
+Y
+550
+AttackType
+1
+MaxHp
+53
+AttackPower
+8
+AdDenfense
+4
+ApDenfense
+2
+IsOnShow
+0
+IsKid
+1
 gameRoomMonster2
 MonsterSize1
 Monster0
@@ -146,7 +173,7 @@ IsOnShow
 IsKid
 0
 gameRoomMonster3
-MonsterSize2
+MonsterSize3
 Monster0
 MonsterType
 kappa
@@ -155,7 +182,7 @@ MonsterName
 MonsterGender
 1
 MonsterState
-1
+6
 X
 992
 Y
@@ -201,3 +228,30 @@ IsOnShow
 0
 IsKid
 0
+Monster2
+MonsterType
+kappa
+MonsterName
+ªL«Û§Ê
+MonsterGender
+1
+MonsterState
+1
+X
+995
+Y
+550
+AttackType
+0
+MaxHp
+65
+AttackPower
+7
+AdDenfense
+4
+ApDenfense
+2
+IsOnShow
+0
+IsKid
+1

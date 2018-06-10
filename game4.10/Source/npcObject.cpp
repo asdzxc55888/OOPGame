@@ -19,7 +19,7 @@ game_framework::npcObject::npcObject()
     _x = 0;
     _y = 530;
     floor = 0;
-	GoOutsideCounter = 0;
+    GoOutsideCounter = 0;
     isMovingDown = false;			// 是否正在往下移動
     isMovingLeft = false;			// 是否正在往左移動
     isMovingRight = false;			// 是否正在往右移動
@@ -29,9 +29,9 @@ game_framework::npcObject::npcObject()
     isAlive = true;
     isFirstShot = true;
     isOnBattle = false;
-	isMusicEffectOn=false;
-	isMouseOn=false;
-	isOnShow = true;
+    isMusicEffectOn = false;
+    isMouseOn = false;
+    isOnShow = true;
     nowMovingType = Forward;    // 預設動圖
 }
 
@@ -48,10 +48,11 @@ void game_framework::npcObject::operator=(npcObject obj)
 
 void game_framework::npcObject::OnMove()
 {
-	if (isAlive)                                                      //設定座標
-	{
-		for (int i = 0; i < MovingAnimation_type_size; i++)animation[i]->SetTopLeft(_x, _y);
-	}
+    if (isAlive)                                                      //設定座標
+    {
+        for (int i = 0; i < MovingAnimation_type_size; i++)animation[i]->SetTopLeft(_x, _y);
+    }
+
     if (isIntoHouse)        //怪物進屋
     {
         if (isOnBattle)
@@ -74,7 +75,7 @@ void game_framework::npcObject::OnMove()
             if (animation[nowMovingType]->GetCurrentBitmapNumber() == 0)
             {
                 isIntoHouse = false;
-				isOnShow = false;
+                isOnShow = false;
                 animation[nowMovingType]->OnMove();
 
                 if (isMovingDown)                        //下樓動畫
@@ -104,18 +105,20 @@ void game_framework::npcObject::OnMove()
         {
             nowMovingType = Forward;
             isGoOutside = false;
-			GoOutsideCounter = 0;
+            GoOutsideCounter = 0;
+
             if (BattleTemp = true)isOnBattle = true;
 
             animation[nowMovingType]->OnMove();
         }
         else if (GoOutsideCounter >= 20)        //
         {
-			isOnShow = true;
+            isOnShow = true;
             nowMovingType = Forward;
             animation[nowMovingType]->OnMove();
         }
-		GoOutsideCounter++;
+
+        GoOutsideCounter++;
     }
     else
     {
@@ -130,12 +133,12 @@ void game_framework::npcObject::OnMove()
         else if (isMovingLeft)
         {
             nowMovingType = Moving_Left;
-            _x -= movingSpeed*timeLevel;
+            _x -= movingSpeed * timeLevel;
         }
         else if (isMovingRight)
         {
             nowMovingType = Moving_Right;
-            _x += movingSpeed*timeLevel;
+            _x += movingSpeed * timeLevel;
         }
 
         animation[nowMovingType]->OnMove();
@@ -145,11 +148,13 @@ void game_framework::npcObject::OnMove()
     {
         if (magicAttack[i] != NULL)
         {
-            magicAttack[i]->OnMove(); 
-			if (magicAttack[i]->Getdx()>250|| magicAttack[i]->Getdx()<-250) {
-				delete magicAttack[i];
-				magicAttack[i] = NULL;
-			}
+            magicAttack[i]->OnMove();
+
+            if (magicAttack[i]->Getdx() > 250 || magicAttack[i]->Getdx() < -250)
+            {
+                delete magicAttack[i];
+                magicAttack[i] = NULL;
+            }
         }
     }
 }
@@ -218,7 +223,7 @@ void game_framework::npcObject::SetIsOnBattle(bool flag)
 
 void game_framework::npcObject::SetIsOnShow(bool flag)
 {
-	isOnShow = flag;
+    isOnShow = flag;
 }
 
 void game_framework::npcObject::SetBattleTemp(bool flag)
@@ -230,7 +235,7 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 {
     /////////////////////////////////////////////////////////////////////創造魔法攻擊
     int i = 0;
-	int AttackCount_total = 20 * (4 - timeLevel);
+    int AttackCount_total = 20 * (4 - timeLevel);
 
     while (magicAttack[i] != NULL)
     {
@@ -239,9 +244,9 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
         if (i > 3) return false;
     }
 
-    if (isFirstShot ||  AttackCount_total<AttackCount)
+    if (isFirstShot ||  AttackCount_total < AttackCount)
     {
-        magicAttack[i] = new MagicAttack(_x+GetWidth()/2-10, _y + 10, AttackPower, timeLevel, type);
+        magicAttack[i] = new MagicAttack(_x + GetWidth() / 2 - 10, _y + 10, AttackPower, timeLevel, type);
         magicAttack[i]->SetTarget(target_x1, target_x2);
 
         if (target_x1 < _x)
@@ -252,12 +257,14 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
         {
             magicAttack[i]->SetDirection(Right);
         }
-		AttackCount=0;
+
+        AttackCount = 0;
         isFirstShot = false;
-	}
-	else {
-		AttackCount++;
-	}
+    }
+    else
+    {
+        AttackCount++;
+    }
 
     //////////////////////////////////////////////////////////////////////////判斷是否擊中
     for (int k = 0; k < 3; k++)
@@ -282,7 +289,8 @@ bool game_framework::npcObject::MagicAttack_event(int target_x1, int target_x2, 
 
 bool game_framework::npcObject::PhysicalAttack_event(int tar_x1, int tar_x2)
 {
-	int AttackCount_total = 20 * (4-timeLevel);
+    int AttackCount_total = 20 * (4 - timeLevel);
+
     if (isFirstShot || AttackCount > AttackCount_total)
     {
         if (HitRectangle(tar_x1, 0, tar_x2, 0))
@@ -290,22 +298,23 @@ bool game_framework::npcObject::PhysicalAttack_event(int tar_x1, int tar_x2)
             if (tar_x1 > _x)
             {
                 SetMovingType(Attack_Right);
-				animation[Attack_Right]->SetDelayCount(30);
+                animation[Attack_Right]->SetDelayCount(30);
             }
             else
             {
                 SetMovingType(Attack_Left);
-				animation[Attack_Left]->SetDelayCount(30);
+                animation[Attack_Left]->SetDelayCount(30);
             }
 
             isFirstShot = false;
-			AttackCount = 0;
+            AttackCount = 0;
             return true;
-		}
-	}
-	else {
-		AttackCount++;
-	}
+        }
+    }
+    else
+    {
+        AttackCount++;
+    }
 
     return false;
 }
@@ -343,10 +352,12 @@ void game_framework::npcObject::BeingAttack(int damge, Attack_Type type)
 
 void game_framework::npcObject::SetTimeLevel(int _timeLevel)
 {
-	timeLevel = _timeLevel;
-	for (int i = 0; i < MovingAnimation_type_size; i++) {
-		animation[i]->SetDelayCount((40-10 * timeLevel));
-	}
+    timeLevel = _timeLevel;
+
+    for (int i = 0; i < MovingAnimation_type_size; i++)
+    {
+        animation[i]->SetDelayCount((40 - 10 * timeLevel));
+    }
 }
 
 
@@ -413,17 +424,19 @@ bool game_framework::npcObject::GetIsAlive()
 
 bool game_framework::npcObject::GetIsOnShow()
 {
-	return isOnShow;
+    return isOnShow;
 }
 
 bool game_framework::npcObject::IsMouseOn(CPoint point)
 {
-	if (point.x > _x && point.x <= _x + GetWidth() && point.y > _y && point.y <= _y + GetHeight()) {
-		isMouseOn = true;
-		return isMouseOn;
-	}
-	isMouseOn = false;
-	return isMouseOn;
+    if (point.x > _x && point.x <= _x + GetWidth() && point.y > _y && point.y <= _y + GetHeight())
+    {
+        isMouseOn = true;
+        return isMouseOn;
+    }
+
+    isMouseOn = false;
+    return isMouseOn;
 }
 
 game_framework::Attack_Type game_framework::npcObject::GetAttackType()
@@ -433,7 +446,7 @@ game_framework::Attack_Type game_framework::npcObject::GetAttackType()
 
 game_framework::MovingAnimation_Type game_framework::npcObject::GetMovingType()
 {
-	return nowMovingType;
+    return nowMovingType;
 }
 
 bool game_framework::npcObject::HitRectangle(int tx1, int ty1, int tx2, int ty2)
