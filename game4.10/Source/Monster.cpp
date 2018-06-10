@@ -74,6 +74,7 @@ void Monster::LoadBitmap(string monsterName)
 
     if (isKid)childStr = "child_";
 
+	root += childStr;
     root += strGender;
     root += monsterName;
     char test[100];

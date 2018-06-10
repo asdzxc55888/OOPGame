@@ -321,6 +321,6 @@ void Room::SetRoomBoard()
         _monsterIsKid[i] = liveMonster[i]->GetIsKid();
     }
 
-    myDataBoard = new RoomDataBoard(liveMonsterSize, _monsterType, _monsterGender, _monsterName, _monsterIsKid, RoomNumber);
+    myDataBoard = new RoomDataBoard(liveMonsterSize, _monsterType, _monsterGender, _monsterName, _monsterIsKid, RoomNumber,rent);
 }
 }

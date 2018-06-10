@@ -8,19 +8,25 @@
 
 namespace game_framework
 {
-RoomDataBoard::RoomDataBoard(int liveMonsterSize, string monsterType[3], int monsterGender[3], string monsterName[3], bool monsterIsKid[3], int number)
+RoomDataBoard::RoomDataBoard(int liveMonsterSize, string monsterType[3], int monsterGender[3], string monsterName[3], bool monsterIsKid[3], int number, int _rent)
 {
-    Initialize(liveMonsterSize, monsterType, monsterGender, monsterName, monsterIsKid, number);
+    Initialize(liveMonsterSize, monsterType, monsterGender, monsterName, monsterIsKid, number,_rent);
 }
 RoomDataBoard::~RoomDataBoard()
 {
+	delete rent_int;
 }
-void RoomDataBoard::Initialize(int liveMonsterSize, string monsterType[3], int monsterGender[3], string _monsterName[3], bool monsterIsKid[3], int number)
+void RoomDataBoard::Initialize(int liveMonsterSize, string monsterType[3], int monsterGender[3], string _monsterName[3], bool monsterIsKid[3], int number, int _rent)
 {
     MonsterImgSize = liveMonsterSize;
     RoomNumber = number;
     x = 50;
     y = 50;
+	rent = _rent;
+	rent_int = new CInteger(2);
+	rent_int->SetInteger(rent);
+	rent_int->SetTopLeft(RentBar_x+170, RentBar_y);
+	rent_int->SetIsBmpLoaded();
     bmp.LoadBitmap("Bitmaps\\gameRun\\RoomBoard.bmp", RGB(255, 255, 255));
     bmp.SetTopLeft(x, y);
 
@@ -53,6 +59,7 @@ void RoomDataBoard::Initialize(int liveMonsterSize, string monsterType[3], int m
 void RoomDataBoard::OnShow()
 {
     bmp.ShowBitmap();
+	rent_int->ShowBitmap();
 
     for (int i = 0; i < MonsterImgSize; i++)
     {
@@ -61,6 +68,7 @@ void RoomDataBoard::OnShow()
 
     ShowName();
     ShowRoomNumber();
+	ShowRentBar();
 }
 void RoomDataBoard::ShowName()
 {
@@ -92,5 +100,31 @@ void RoomDataBoard::ShowRoomNumber()
     pDC->TextOut(x + 28, y + 18, str);
     pDC->SelectObject(fp);						// 放掉 font f (千萬不要漏了放掉)
     CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
+}
+void RoomDataBoard::ShowRentBar()
+{
+	if (!SHOW_LOAD_PROGRESS)
+		return;
+	int rentPercent = rent * 100 / 30;
+	const int bar_width = 155;
+	const int bar_height = 19;
+	const int x1 = RentBar_x ;
+	const int x2 = x1 + bar_width;
+	const int y1 = RentBar_y ;
+	const int y2 = y1 + bar_height;
+	const int pen_width = bar_height / 8;
+	const int progress_x1 = x1 + pen_width;
+	const int progress_x2 = progress_x1 + rentPercent * (bar_width - 2 * pen_width) / 100;
+	const int progress_x2_end = x2 - pen_width;
+	const int progress_y1 = y1 + pen_width;
+	const int progress_y2 = y2 - pen_width;
+	CDC* pDC = CDDraw::GetBackCDC();			// 取得 Back Plain 的 CDC
+	CPen* pp, p(PS_NULL, 0, RGB(0, 0, 0));		// 清除pen
+	pp = pDC->SelectObject(&p);
+	CBrush b2(RGB(0, 162, 232));					// 畫黃色 progrss進度
+	pDC->SelectObject(&b2);
+	pDC->Rectangle(progress_x1, progress_y1, progress_x2, progress_y2);
+	pDC->SelectObject(pp);						// 釋放 pen
+	CDDraw::ReleaseBackCDC();					// 放掉 Back Plain 的 CDC
 }
 }

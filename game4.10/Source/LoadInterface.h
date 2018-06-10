@@ -15,7 +15,7 @@ class LoadInterface
         bool MouseOn(CPoint point);
         void ShowSave();
         void LoadSaveData();
-        int OnClick(CPoint point);   //回傳遞幾個存檔
+        int  OnClick(CPoint point);   //回傳遞幾個存檔
     private:
         CMovingBitmap bg;   //背景圖
         string save_str[Save_size];

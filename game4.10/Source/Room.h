@@ -26,7 +26,7 @@ class Room
         int  GetLiveMonsterSize();
         bool GetIsMonsterIn(int monsterIndex);
         bool GetIsMonsterFight(int monsterIndex);
-        bool IsMouseOn(CPoint point); //檢查滑鼠是否在上面
+        bool IsMouseOn(CPoint point);                      //檢查滑鼠是否在上面
         bool MovingLR(int x, int MonsterIndex);
         Monster* GetLiveMonster(int index);
     private:

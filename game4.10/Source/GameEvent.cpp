@@ -36,8 +36,8 @@ void GameEvent::OnBeginState()
     isOnBattle = false;
     isIntoBattle = false;
     isMonsterGoingOut = false;
-    WarningQuit = false;
     isMonsterDataBoardShow = false;
+	isEffectMusicOn = false;
     myMoney.SetValue(1000);
     ///////////////////////////時間設定/////////////////////
     TimeLevel = 1;
@@ -55,6 +55,7 @@ void GameEvent::OnInit()
     Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
     Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
     myTaskBoard.LoadBitmap();
+	myMenu.LoadBitmap();
     SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
     SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
     SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
@@ -80,6 +81,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
+	const char KEY_ESC = 27;
 
     if (nChar == KEY_LEFT)
     {
@@ -97,7 +99,16 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     {
         riseMoney = 0;
         addMoney = -100;
-    }
+	}
+	else if (nChar == KEY_ESC) {
+		if (myMenu.GetIsOnShow()) {  
+			if(myMenu.SetIsOnShow(false))isGamePause = false; //取消
+		}
+		else {
+			myMenu.SetIsOnShow(true);
+			isGamePause = true;
+		}
+	}
 }
 
 void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
@@ -141,6 +152,11 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
             }
         }
     }
+
+	if (myMenu.GetIsOnShow())
+	{
+		myMenu.IsMouseClick();
+	}
 
     if (myTaskBoard.IsTaskOnClick(point))isGamePause = true;   //任務版介面動作
 }
@@ -189,18 +205,34 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
     if (myRoomInterface->GetIsShow())
     {
         myRoomInterface->IsMouseOn(point);
-    }
+	}
+	else if (myMenu.GetIsOnShow())
+	{
+		if (myMenu.IsMouseOn(point)) 
+		{
+			if(!isEffectMusicOn)CAudio::Instance()->Play(AUDIO_DING);
+			isEffectMusicOn = true;
+		}
+		else
+		{
+			isEffectMusicOn = false;
+		}
+	}
 
     myTaskBoard.IsMouseOnTaskBoard(point);
 }
 
 void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 {
-    if (myRoomInterface->GetIsShow())                        //房屋介面取消
+    if (myRoomInterface->GetIsShow())                        // 房屋介面取消
     {
         myRoomInterface->SetInterfaceShow(false);
         isGamePause = false;
-    }
+	}
+	else if (myMenu.GetIsOnShow())                           // 主選單界面取消
+	{
+		if (myMenu.SetIsOnShow(false))isGamePause = false;
+	}
 
     if (isOnBattle)
     {
@@ -340,6 +372,7 @@ void GameEvent::OnShow()
     Warning.ShowBitmap();
     myTaskBoard.OnShow();
     myRoomInterface->OnShow();
+	myMenu.OnShow();
 }
 
 void GameEvent::OnEvent()
@@ -1256,7 +1289,7 @@ void GameEvent::SeleteTaskBattle()
 
                     for (int i = 0; warrior[i] != NULL; i++)
                     {
-                        warrior[i]->SetPoint(-100 - (60 * i), 540);
+                        warrior[i]->SetPoint(-50 - (60 * i), 540);
                     }
 
                     battleCount = 0;
