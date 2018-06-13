@@ -37,7 +37,7 @@ void GameEvent::OnBeginState()
     isIntoBattle = false;
     isMonsterGoingOut = false;
     isMonsterDataBoardShow = false;
-	isEffectMusicOn = false;
+    isEffectMusicOn = false;
     myMoney.SetValue(1000);
     ///////////////////////////時間設定/////////////////////
     TimeLevel = 1;
@@ -55,7 +55,7 @@ void GameEvent::OnInit()
     Background.LoadBitmap("Bitmaps\\gameBackground1.bmp");
     Warning.LoadBitmap("Bitmaps\\Warning.bmp", RGB(255, 255, 255));
     myTaskBoard.LoadBitmap();
-	myMenu.LoadBitmap();
+    myMenu.LoadBitmap();
     SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_2.bmp", RGB(255, 255, 255));
     SpeedControlBtn[0].AddBitmap("Bitmaps\\gameRun\\SpeedButton1_1.bmp", RGB(255, 255, 255));
     SpeedControlBtn[1].AddBitmap("Bitmaps\\gameRun\\SpeedButton2_2.bmp", RGB(255, 255, 255));
@@ -81,7 +81,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     const char KEY_UP = 0x26; // keyboard上箭頭
     const char KEY_RIGHT = 0x27; // keyboard右箭頭
     const char KEY_DOWN = 0x28; // keyboard下箭頭
-	const char KEY_ESC = 27;
+    const char KEY_ESC = 27;
 
     if (nChar == KEY_LEFT)
     {
@@ -99,16 +99,19 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     {
         riseMoney = 0;
         addMoney = -100;
-	}
-	else if (nChar == KEY_ESC) {
-		if (myMenu.GetIsOnShow()) {  
-			if(myMenu.SetIsOnShow(false))isGamePause = false; //取消
-		}
-		else {
-			myMenu.SetIsOnShow(true);
-			isGamePause = true;
-		}
-	}
+    }
+    else if (nChar == KEY_ESC)
+    {
+        if (myMenu.GetIsOnShow())
+        {
+            if (myMenu.SetIsOnShow(false))isGamePause = false; //取消
+        }
+        else
+        {
+            myMenu.SetIsOnShow(true);
+            isGamePause = true;
+        }
+    }
 }
 
 void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
@@ -153,10 +156,30 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
         }
     }
 
-	if (myMenu.GetIsOnShow())
-	{
-		myMenu.IsMouseClick();
-	}
+    if (myMenu.GetIsOnShow())
+    {
+        myMenu.IsMouseClick();
+
+        if (myMenu.GetIsSaveDataOnShow())
+        {
+            int SaveIndex = myMenu.SaveDataOnClick();
+
+            if (SaveIndex != 0 && myMenu.GetState()==Save)
+            {
+                string save_str = "save";
+                save_str += ('0' + SaveIndex);
+                SaveGame(save_str);
+                isGamePause = false;
+			}
+			else if (SaveIndex != 0 && myMenu.GetState() == Load)
+			{
+				string save_str = "save";
+				save_str += ('0' + SaveIndex);
+				LoadGame(save_str);
+				isGamePause = false;
+			}
+        }
+    }
 
     if (myTaskBoard.IsTaskOnClick(point))isGamePause = true;   //任務版介面動作
 }
@@ -205,19 +228,20 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
     if (myRoomInterface->GetIsShow())
     {
         myRoomInterface->IsMouseOn(point);
-	}
-	else if (myMenu.GetIsOnShow())
-	{
-		if (myMenu.IsMouseOn(point)) 
-		{
-			if(!isEffectMusicOn)CAudio::Instance()->Play(AUDIO_DING);
-			isEffectMusicOn = true;
-		}
-		else
-		{
-			isEffectMusicOn = false;
-		}
-	}
+    }
+    else if (myMenu.GetIsOnShow())
+    {
+        if (myMenu.IsMouseOn(point))
+        {
+            if (!isEffectMusicOn)CAudio::Instance()->Play(AUDIO_DING);
+
+            isEffectMusicOn = true;
+        }
+        else
+        {
+            isEffectMusicOn = false;
+        }
+    }
 
     myTaskBoard.IsMouseOnTaskBoard(point);
 }
@@ -228,11 +252,11 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
     {
         myRoomInterface->SetInterfaceShow(false);
         isGamePause = false;
-	}
-	else if (myMenu.GetIsOnShow())                           // 主選單界面取消
-	{
-		if (myMenu.SetIsOnShow(false))isGamePause = false;
-	}
+    }
+    else if (myMenu.GetIsOnShow())                           // 主選單界面取消
+    {
+        if (myMenu.SetIsOnShow(false)) isGamePause = false;
+    }
 
     if (isOnBattle)
     {
@@ -372,7 +396,7 @@ void GameEvent::OnShow()
     Warning.ShowBitmap();
     myTaskBoard.OnShow();
     myRoomInterface->OnShow();
-	myMenu.OnShow();
+    myMenu.OnShow();
 }
 
 void GameEvent::OnEvent()
@@ -563,6 +587,7 @@ bool GameEvent::SaveGame(string saveName)
     std::stringstream ss;
     string saveRoot = "Save\\" + saveName + ".txt";
     saveFile.open(saveRoot, ios::out);
+    time(&nowtime);
     ss << saveName << " " << ctime(&nowtime) << "\n";
     ss << "Money\n" << myMoney.GetValue() << "\n";               //金錢
     ss << "RoomSize\n" << roomSize << "\n";                      //房間SIZE

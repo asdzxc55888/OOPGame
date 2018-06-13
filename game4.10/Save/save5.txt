@@ -1,4 +1,4 @@
-save1 Mon Jun 11 23:05:41 2018
+save5 Wed Jun 13 14:57:22 2018
 
 Money
 1120
@@ -144,7 +144,7 @@ IsOnShow
 IsKid
 1
 gameRoomMonster2
-MonsterSize2
+MonsterSize3
 Monster0
 MonsterType
 eye
@@ -199,6 +199,33 @@ IsOnShow
 0
 IsKid
 0
+Monster2
+MonsterType
+eye
+MonsterName
+“\Æaﬁ≥
+MonsterGender
+1
+MonsterState
+1
+X
+880
+Y
+550
+AttackType
+0
+MaxHp
+79
+AttackPower
+10
+AdDenfense
+4
+ApDenfense
+2
+IsOnShow
+0
+IsKid
+1
 gameRoomMonster3
 MonsterSize3
 Monster0
