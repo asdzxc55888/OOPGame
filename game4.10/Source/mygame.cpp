@@ -69,7 +69,7 @@ namespace game_framework
 CGameStateInit::CGameStateInit(CGame* g)
     : CGameState(g)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
         menuBtn[i] = new CAnimation(3);
 
     isLoadingBitmaps = false;
@@ -77,7 +77,7 @@ CGameStateInit::CGameStateInit(CGame* g)
 
 CGameStateInit::~CGameStateInit()
 {
-    for (int i = 0; i < 4; i++)delete menuBtn[i];
+    for (int i = 0; i < 3; i++)delete menuBtn[i];
 }
 
 void CGameStateInit::OnInit()
@@ -97,10 +97,8 @@ void CGameStateInit::OnInit()
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start1.bmp", RGB(255, 255, 255));
     menuBtn[1]->AddBitmap("Bitmaps\\menu\\load.bmp", RGB(255, 255, 255));
     menuBtn[1]->AddBitmap("Bitmaps\\menu\\load1.bmp", RGB(255, 255, 255));
-    menuBtn[2]->AddBitmap("Bitmaps\\menu\\Options.bmp", RGB(255, 255, 255));
-    menuBtn[2]->AddBitmap("Bitmaps\\menu\\Options1.bmp", RGB(255, 255, 255));
-    menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit.bmp", RGB(255, 255, 255));
-    menuBtn[3]->AddBitmap("Bitmaps\\menu\\Quit1.bmp", RGB(255, 255, 255));
+    menuBtn[2]->AddBitmap("Bitmaps\\menu\\Quit.bmp", RGB(255, 255, 255));
+    menuBtn[2]->AddBitmap("Bitmaps\\menu\\Quit1.bmp", RGB(255, 255, 255));
     CAudio::Instance()->Load(AUDIO_DING, "Sounds\\Ding.mp3");
     CAudio::Instance()->Load(AUDIO_DECISION, "Sounds\\decision.mp3");
     CAudio::Instance()->Load(AUDIO_MENUBGM, "Sounds\\menuBGM.mp3");
@@ -115,7 +113,7 @@ void CGameStateInit::OnInit()
 
 void CGameStateInit::OnBeginState()
 {
-    for (int i = 0; i < 4; i++)isMouseOn[i] = false;
+    for (int i = 0; i < 3; i++)isMouseOn[i] = false;
 
     BGM = false;
     isLoadingBitmaps = false;
@@ -144,14 +142,14 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
             CAudio::Instance()->Stop(AUDIO_MENUBGM);
         }
 
-        if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 開始遊戲
+        if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 讀取遊戲
         {
             CAudio::Instance()->Play(AUDIO_DECISION);
             isLoadInterfaceOnShow = true;
         }
 
-        if (point.x > menuBtn[3]->Left() && point.x <  menuBtn[3]->Left() + menuBtn[3]->Width() && point.y >  menuBtn[3]->Top() && point.y < menuBtn[3]->Height() + menuBtn[3]->Top()) // 開始遊戲
-            exit(1);		// 離開遊戲
+        if (point.x > menuBtn[2]->Left() && point.x <  menuBtn[2]->Left() + menuBtn[2]->Width() && point.y >  menuBtn[2]->Top() && point.y < menuBtn[2]->Height() + menuBtn[2]->Top()) // 離開遊戲
+            exit(1);	
     }
     else
     {
@@ -178,7 +176,7 @@ void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
     if (isLoadingBitmaps && !isLoadInterfaceOnShow)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (point.x > menuBtn[i]->Left() && point.x <  menuBtn[i]->Left() + menuBtn[i]->Width() && point.y >  menuBtn[i]->Top() && point.y < menuBtn[i]->Height() + menuBtn[i]->Top())
             {
@@ -226,7 +224,7 @@ void CGameStateInit::OnShow()
 
     Background.ShowBitmap();
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
     {
         if (isMouseOn[i])
         {
@@ -234,7 +232,7 @@ void CGameStateInit::OnShow()
         }
         else  menuBtn[i]->Reset();
 
-        menuBtn[i]->SetTopLeft((SIZE_X - menuBtn[i]->Width()) / 2, SIZE_Y / 2 + 60 * (i + 1));
+        menuBtn[i]->SetTopLeft((SIZE_X - menuBtn[i]->Width()) / 2, SIZE_Y / 2 + 70 * (i + 1));
         menuBtn[i]->OnShow();
     }
 

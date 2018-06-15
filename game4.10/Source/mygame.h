@@ -72,10 +72,10 @@ class CGameStateInit : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         CMovingBitmap Background;                       // 背景
-        CAnimation* menuBtn[4];
+        CAnimation* menuBtn[3];
         CInteger temp;
         LoadInterface Load;
-        bool isMouseOn[4];
+        bool isMouseOn[3];
         bool isLoadingBitmaps;
         bool isPlayAudio;
         bool isLoadInterfaceOnShow;
