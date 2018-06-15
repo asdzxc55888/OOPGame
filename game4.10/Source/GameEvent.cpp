@@ -1355,7 +1355,7 @@ void GameEvent::SeleteTaskBattle()
 
                     for (int i = 0; warrior[i] != NULL; i++)
                     {
-                        warrior[i]->SetPoint(-100 - (60 * i), 490);
+                        warrior[i]->SetPoint(-200 - (60 * i), 490);
                     }
 
                     battleCount = 0;

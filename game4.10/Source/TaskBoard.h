@@ -4,6 +4,7 @@ enum TaskList
 {
     nothing,
     FirstTask,
+	eggComing,
     Boss
 };
 #define TaskSize 3

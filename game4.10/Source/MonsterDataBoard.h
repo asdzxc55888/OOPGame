@@ -12,6 +12,7 @@ class MonsterDataBoard
         void ShowName();
         void SetData(int hp, int maxHp, int ApD, int AdD, int dps);
         void SetPoint(int _x, int _y);
+		void ResetCInteger(int hp, int maxHp, int ApD, int AdD, int dps);
         void OnShow();
     private:
         int GetDigit(int x);

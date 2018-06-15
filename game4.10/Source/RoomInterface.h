@@ -41,10 +41,11 @@ class RoomInterface
         bool IsMouseClick(CPoint point);
     private:
         void ResetRent();
-        int  RoomSelector;
-        int  monsterSelector;
-        int  rentPercent;
-        int  maxPercent;
+        int  RoomSelector;			 // 當前所選擇的房屋
+        int  monsterSelector;		 // 當前所選的怪物
+        int  rentPercent;			 // 房租百分比
+        int  maxPercent;             // 最大房租
+		int monster_count = 0;       // 顯示怪物的計數
 		bool isCancleShow;
         bool isOnShow;
         bool isMouseOn;

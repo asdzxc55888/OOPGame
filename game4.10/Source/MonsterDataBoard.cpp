@@ -136,6 +136,8 @@ void MonsterDataBoard::ShowName()
 }
 void MonsterDataBoard::SetData(int hp, int maxHp, int ApD, int AdD, int dps)
 {
+	ResetCInteger(hp, maxHp, ApD, AdD, dps);
+
     Hp->SetInteger(hp);
     MaxHp->SetInteger(maxHp);
     AttackPower->SetInteger(dps);
@@ -153,6 +155,23 @@ void MonsterDataBoard::SetPoint(int _x, int _y)
     AdDefense->SetTopLeft(x + 190, y + 170);
     ApDefense->SetTopLeft(x + 300, y + 170);
     Picture.SetTopLeft(x + 35, y + 20);
+}
+void MonsterDataBoard::ResetCInteger(int hp, int maxHp, int ApD, int AdD, int dps)
+{
+	delete Hp, MaxHp, AttackPower, AdDefense, ApDefense;
+	Hp = new CInteger(GetDigit(maxHp));
+	MaxHp = new CInteger(GetDigit(maxHp));
+	AttackPower = new CInteger(GetDigit(dps));
+	AdDefense = new CInteger(GetDigit(AdD));
+	ApDefense = new CInteger(GetDigit(ApD));
+
+	Hp->SetIsBmpLoaded();
+	MaxHp->SetIsBmpLoaded();
+	AttackPower->SetIsBmpLoaded();
+	AdDefense->SetIsBmpLoaded();
+	ApDefense->SetIsBmpLoaded();
+
+	SetPoint(x, y);
 }
 void MonsterDataBoard::OnShow()
 {

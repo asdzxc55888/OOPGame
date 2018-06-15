@@ -83,9 +83,9 @@ void RoomInterface::OnShow()
 
         if (gameRoom[RoomSelector]->GetLiveMonsterSize() > 0 && isMouseOn)MonsterBoard->OnShow();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < monster_count; i++)
         {
-            if (monster[i] != NULL)
+            if (monster[i] != NULL )
             {
                 monster[i]->ShowBitmap();
             }
@@ -124,6 +124,8 @@ void RoomInterface::ShowRentBar()
 }
 void RoomInterface::SetInterfaceShow(bool flag)
 {
+	monster_count = 0;
+
     if (flag)
     {
         for (int i = 0; i < 3; i++) if (monster[i] != NULL)
@@ -136,29 +138,33 @@ void RoomInterface::SetInterfaceShow(bool flag)
         {
             monster[i] = new CMovingBitmap();
             Monster* _thisM = gameRoom[RoomSelector]->GetLiveMonster(i);
-            string _monsterType = _thisM->GetMonsterType();
-            _monsterType += ".bmp";
 
-            if (_thisM->GetMonsterGender() == male)
-            {
-                _monsterType = "m_" + _monsterType;
-            }
-            else
-            {
-                _monsterType = "w_" + _monsterType;
-            }
+			if (_thisM->GetMonsterState() != leave) {
+				string _monsterType = _thisM->GetMonsterType();
+				_monsterType += ".bmp";
 
-            if (_thisM->GetIsKid()) _monsterType = "child_" + _monsterType;
+				if (_thisM->GetMonsterGender() == male)
+				{
+					_monsterType = "m_" + _monsterType;
+				}
+				else
+				{
+					_monsterType = "w_" + _monsterType;
+				}
 
-            _monsterType = "Bitmaps\\monster\\monster_" + _monsterType;
-            char root[200] ;
-            strcpy(root, _monsterType.c_str());
-            monster[i]->LoadBitmap(root, RGB(255, 255, 255));
-			if (_thisM->GetIsKid()) {
-				monster[i]->SetTopLeft(monsterBmp_x + i * 65, monsterBmp_y+20);
-			}
-			else {
-				monster[i]->SetTopLeft(monsterBmp_x + i * 60, monsterBmp_y);
+				if (_thisM->GetIsKid()) _monsterType = "child_" + _monsterType;
+
+				_monsterType = "Bitmaps\\monster\\monster_" + _monsterType;
+				char root[200];
+				strcpy(root, _monsterType.c_str());
+				monster[monster_count]->LoadBitmap(root, RGB(255, 255, 255));
+				if (_thisM->GetIsKid()) {
+					monster[monster_count]->SetTopLeft(monsterBmp_x + monster_count * 65, monsterBmp_y + 20);
+				}
+				else {
+					monster[monster_count]->SetTopLeft(monsterBmp_x + monster_count * 60, monsterBmp_y);
+				}
+				monster_count++;
 			}
             
         }
@@ -209,10 +215,20 @@ bool RoomInterface::IsMouseOn(CPoint point)
         isMouseOnBtn[1] = true;
         return true;
     }
+	else if (point.x > Right_btn.Left() && point.x <= Right_btn.Left() + Right_btn.Width() && point.y > Right_btn.Top() && point.y <= Right_btn.Top() + Right_btn.Height())
+	{
+		isMouseOnBtn[2] = true;
+		return true;
+	}
+	else if (point.x > Left_btn.Left() && point.x <= Left_btn.Left() + Left_btn.Width() && point.y > Left_btn.Top() && point.y <= Left_btn.Top() + Left_btn.Height())
+	{
+		isMouseOnBtn[3] = true;
+		return true;
+	}
 
     for (int i = 0; i < 4; i++)isMouseOnBtn[i] = false;
 
-    for (int i = 0; i < gameRoom[RoomSelector]->GetLiveMonsterSize(); i++)
+    for (int i = 0; i < monster_count; i++)
     {
         int y1 = monster[i]->Top();
         int y2 = y1 + monster[i]->Height();
@@ -238,7 +254,7 @@ bool RoomInterface::IsMouseOn(CPoint point)
 }
 bool RoomInterface::IsMouseClick(CPoint point, int monsterIndex)
 {
-    if (monster[monsterIndex] == NULL)return false;
+    if (monster[monsterIndex] == NULL || monsterIndex >= monster_count)return false;
 
     int y1 = monster[monsterIndex]->Top();
     int y2 = y1 + monster[monsterIndex]->Height();
@@ -254,7 +270,7 @@ bool RoomInterface::IsMouseClick(CPoint point, int monsterIndex)
 }
 bool RoomInterface::IsMouseClick(CPoint point)
 {
-    if (point.x > Increase_btn.Left() && point.x <= Increase_btn.Left() + Increase_btn.Width() && point.y > Increase_btn.Top() && point.y <= Increase_btn.Top() + Increase_btn.Height())
+    if (isMouseOnBtn[0])
     {
         if (gameRoom[RoomSelector]->GetRent() < maxPercent)
         {
@@ -264,7 +280,7 @@ bool RoomInterface::IsMouseClick(CPoint point)
 
         return true;
     }
-    else if (point.x > Decrease_btn.Left() && point.x <= Decrease_btn.Left() + Decrease_btn.Width() && point.y > Decrease_btn.Top() && point.y <= Decrease_btn.Top() + Decrease_btn.Height())
+    else if (isMouseOnBtn[1])
     {
         if (gameRoom[RoomSelector]->GetRent() > 0)
         {
@@ -274,6 +290,18 @@ bool RoomInterface::IsMouseClick(CPoint point)
 
         return true;
     }
+	else if (isMouseOnBtn[2])
+	{
+		RoomSelector += 1;
+		SetInterfaceShow(true);
+		return true;
+	}
+	else if (isMouseOnBtn[3])
+	{
+		RoomSelector -= 1;
+		SetInterfaceShow(true);
+		return true;
+	}
 
     return false;
 }
