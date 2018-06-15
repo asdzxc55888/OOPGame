@@ -466,7 +466,7 @@ void Monster::HpResume()
 {
     if (Hp < MaxHp)
     {
-        if (HpCount > (500) - (timeLevel * 150))
+        if (HpCount > (500))
         {
             Hp += MaxHp / 50;
 

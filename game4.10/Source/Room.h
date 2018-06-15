@@ -24,6 +24,7 @@ class Room
         int  GetRent();
         int  GetX();
         int  GetLiveMonsterSize();
+		int  GetRoomNumber();
         bool GetIsMonsterIn(int monsterIndex);
         bool GetIsMonsterFight(int monsterIndex);
         bool IsMouseOn(CPoint point);                      //檢查滑鼠是否在上面

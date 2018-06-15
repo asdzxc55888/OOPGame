@@ -19,7 +19,7 @@ RoomInterface::~RoomInterface()
 void RoomInterface::Initial()
 {
     presentRent = new CInteger(2);
-
+	roomNumber = new CInteger(3);
     for (int i = 0; i < 4; i++)isMouseOnBtn[i] = false;
 
     bg.LoadBitmap("Bitmaps\\gameRun\\Room_interface.bmp", RGB(255, 255, 255));
@@ -27,6 +27,7 @@ void RoomInterface::Initial()
     Decrease_btn.LoadBitmap("Bitmaps\\gameRun\\decrease_button.bmp", RGB(255, 255, 255));
     Right_btn.LoadBitmap("Bitmaps\\gameRun\\right_button.bmp", RGB(255, 255, 255));
     Left_btn.LoadBitmap("Bitmaps\\gameRun\\left_button.bmp", RGB(255, 255, 255));
+	cancle_btn.LoadBitmap("Bitmaps\\button_driveout.bmp", RGB(255, 255, 255));
     bg.SetTopLeft(RoomInterface_bg_x, RoomInterface_bg_y);
     Increase_btn.SetTopLeft(RoomInterface_Increase_x, RoomInterface_Increase_y);
     Decrease_btn.SetTopLeft(RoomInterface_Decrease_x, RoomInterface_Decrease_y);
@@ -34,6 +35,7 @@ void RoomInterface::Initial()
     Left_btn.SetTopLeft(RoomInterface_Left_x, RoomInterface_Left_y);
     isMouseOn = false;
     isOnShow = false;
+	isCancleShow = false;
     monsterSelector = 0;
     RoomSelector = 0;
     rentPercent = 0;
@@ -41,6 +43,8 @@ void RoomInterface::Initial()
     presentRent->SetIsBmpLoaded();
     presentRent->SetInteger(15);
     presentRent->SetTopLeft(RentInt_x, RemtInt_y);
+	roomNumber->SetIsBmpLoaded();
+	roomNumber->SetTopLeft(RoomInterface_RoomNumber_x, RoomInterface_RoomNumber_y);
 
     for (int i = 0; i < 3; i++)
     {
@@ -54,6 +58,7 @@ void RoomInterface::OnShow()
         bg.ShowBitmap();
         ShowRentBar();
         presentRent->ShowBitmap();
+		roomNumber->ShowBitmap();
 
         if (isMouseOnBtn[0])
         {
@@ -85,6 +90,7 @@ void RoomInterface::OnShow()
                 monster[i]->ShowBitmap();
             }
         }
+		if (isCancleShow)cancle_btn.ShowBitmap();
     }
 }
 void RoomInterface::OnMove()
@@ -148,7 +154,13 @@ void RoomInterface::SetInterfaceShow(bool flag)
             char root[200] ;
             strcpy(root, _monsterType.c_str());
             monster[i]->LoadBitmap(root, RGB(255, 255, 255));
-            monster[i]->SetTopLeft(monsterBmp_x + i * 60, monsterBmp_y);
+			if (_thisM->GetIsKid()) {
+				monster[i]->SetTopLeft(monsterBmp_x + i * 65, monsterBmp_y+20);
+			}
+			else {
+				monster[i]->SetTopLeft(monsterBmp_x + i * 60, monsterBmp_y);
+			}
+            
         }
 
         if (gameRoom[RoomSelector]->GetLiveMonster(monsterSelector) != NULL)
@@ -169,6 +181,7 @@ void RoomInterface::SetInterfaceShow(bool flag)
 void RoomInterface::SetRoomSelector(int index)
 {
     RoomSelector = index;
+	roomNumber->SetInteger(gameRoom[RoomSelector]->GetRoomNumber());
 }
 void RoomInterface::SetMonsterSelector(int index)
 {
@@ -212,9 +225,14 @@ bool RoomInterface::IsMouseOn(CPoint point)
             monsterSelector = i;
             MonsterBoard = gameRoom[RoomSelector]->GetLiveMonster(monsterSelector)->GetMonsterDataBoard();
             MonsterBoard->SetPoint(600, 250);
+			cancle_btn.SetTopLeft(cancle_x + i*60  , cancle_y);
+			isCancleShow = true;
             isMouseOn = true;
+			return true;
         }
     }
+
+	isCancleShow = false;
 
     return false;
 }

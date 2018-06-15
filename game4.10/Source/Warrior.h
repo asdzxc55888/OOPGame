@@ -7,7 +7,9 @@ namespace game_framework
 enum warrior_type
 {
     villager,
-    firemagic
+    firemagic,
+	egg,
+	boss
 };
 class Warrior : public npcObject
 {

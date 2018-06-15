@@ -143,6 +143,10 @@ int Room::GetLiveMonsterSize()
 
     return size;
 }
+int Room::GetRoomNumber()
+{
+	return RoomNumber;
+}
 void Room::LetMonsterGohome(int MonsterIndex)
 {
     isMonsterGoHome[MonsterIndex] = true;

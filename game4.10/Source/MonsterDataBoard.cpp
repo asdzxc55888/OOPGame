@@ -71,7 +71,13 @@ void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string M
     AttackPower->SetTopLeft(x + 70, y + 170);
     AdDefense->SetTopLeft(x + 190, y + 170);
     ApDefense->SetTopLeft(x + 300, y + 170);
-    Picture.SetTopLeft(x + 35, y + 20);
+	Picture.SetTopLeft(x + 35, y + 20);
+	if (MonsterType == "boss")
+	{
+		Picture.SetTopLeft(x -10, y );
+		Hp->SetTopLeft(x + 240, y + 130);
+		MaxHp->SetTopLeft(x + 300, y + 130);
+	}
 }
 void MonsterDataBoard::ShowHpBar(int percent)
 {

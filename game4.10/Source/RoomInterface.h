@@ -12,12 +12,16 @@ namespace game_framework
 #define RoomInterface_Right_y 70
 #define RoomInterface_Left_x 117
 #define RoomInterface_Left_y 70
+#define RoomInterface_RoomNumber_x 220
+#define RoomInterface_RoomNumber_y 85
 #define monsterBmp_x 280
 #define monsterBmp_y 160
 #define RentPercent_x 232
 #define RentPercent_y 135
 #define RentInt_x 460
 #define RemtInt_y 260
+#define cancle_x 320
+#define cancle_y 160
 class RoomInterface
 {
     public:
@@ -41,14 +45,17 @@ class RoomInterface
         int  monsterSelector;
         int  rentPercent;
         int  maxPercent;
+		bool isCancleShow;
         bool isOnShow;
         bool isMouseOn;
         bool isMouseOnBtn[4];
         CInteger* presentRent;
+		CInteger* roomNumber;
         CMovingBitmap bg;                            //背景圖
         CMovingBitmap Increase_btn, Decrease_btn;    //房租調整按鍵
         CMovingBitmap Right_btn, Left_btn;           //房間選擇鈕
         CMovingBitmap* monster[3];                   //怪物圖
+		CMovingBitmap cancle_btn;                    //驅逐怪物提示圖
         MonsterDataBoard* MonsterBoard;              //怪物資料欄
         Room** gameRoom;
 };

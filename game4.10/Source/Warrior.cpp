@@ -12,19 +12,7 @@ Warrior::Warrior()
     RandWarroirType();
     string LoadBmpString = "";
 
-    switch (warriorType)
-    {
-        case game_framework::villager:
-            LoadBmpString = "villager";
-            break;
-
-        case game_framework::firemagic:
-            LoadBmpString = "firemagic";
-            break;
-
-        default:
-            break;
-    }
+	LoadBmpString = GetWarriorType();
 
     LoadBitmap(LoadBmpString);
     RandBasicAbility();
@@ -32,27 +20,17 @@ Warrior::Warrior()
 }
 Warrior::Warrior(warrior_type type)
 {
-    string LoadBmpString = "";
+    string LoadBmpString = "",name=" ";
 
-    switch (type)
-    {
-        case game_framework::villager:
-            LoadBmpString = "villager";
-            warriorType = villager;
-            break;
+	warriorType = type;
 
-        case game_framework::firemagic:
-            LoadBmpString = "firemagic";
-            warriorType = firemagic;
-            break;
+	if (type == boss)name = "­õ¸«¦Ñ¤j";
 
-        default:
-            break;
-    }
+	LoadBmpString = GetWarriorType();
 
     LoadBitmap(LoadBmpString);
     RandBasicAbility();
-    MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString, 0, false, " ");
+    MyBoard = new MonsterDataBoard(Hp, ApDefense, AdDefense, AttackPower, LoadBmpString, 0, false, name);
 }
 Warrior::~Warrior()
 {
@@ -129,6 +107,12 @@ string Warrior::GetWarriorType()
             return "firemagic";
             break;
 
+		case game_framework::egg:
+			return "egg";
+			break;
+		case game_framework::boss:
+			return "boss";
+			break;
         default:
             break;
     }
@@ -165,6 +149,23 @@ void Warrior::RandBasicAbility()
             AttackPower = 10;
             AttackType = Ap;
             break;
+
+		case game_framework::egg:
+			Hp = 150;
+			ApDefense = 2;
+			AdDefense = 8;
+			AttackPower = 20;
+			AttackType = Ap;
+			break;
+
+		case game_framework::boss:
+			Hp = 1900;
+			ApDefense = 15;
+			AdDefense = 15;
+			AttackPower = 20;
+			AttackType = Ap;
+			break;
+
 
         default:
             break;

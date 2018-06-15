@@ -248,16 +248,6 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
 
 void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 {
-    if (myRoomInterface->GetIsShow())                        // 房屋介面取消
-    {
-        myRoomInterface->SetInterfaceShow(false);
-        isGamePause = false;
-    }
-    else if (myMenu.GetIsOnShow())                           // 主選單界面取消
-    {
-        if (myMenu.SetIsOnShow(false)) isGamePause = false;
-    }
-
     if (isOnBattle)
     {
         for (int i = 0; i < roomSize; i++)
@@ -286,16 +276,28 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
     }
     else
     {
-        for (int i = 0; i < roomSize; i++)
-        {
-            if (gameRoom[i]->IsMouseOn(point))             //房屋介面滑鼠事件
-            {
-                myRoomInterface->SetRoomSelector(i);
-                myRoomInterface->SetInterfaceShow(true);
-                isGamePause = true;
-            }
-        }
+		if (!myRoomInterface->GetIsShow()) {
+			for (int i = 0; i < roomSize; i++)
+			{
+				if (gameRoom[i]->IsMouseOn(point))             //房屋介面滑鼠事件
+				{
+					myRoomInterface->SetRoomSelector(i);
+					myRoomInterface->SetInterfaceShow(true);
+					isGamePause = true;
+				}
+			}
+		}
+		else
+		{
+			myRoomInterface->SetInterfaceShow(false);
+			isGamePause = false;
+		}
     }
+
+	 if (myMenu.GetIsOnShow())                           // 主選單界面取消
+	{
+		if (myMenu.SetIsOnShow(false)) isGamePause = false;
+	}
 
     if (myTaskBoard.GetIsOnShow() && myTaskBoard.OnRButtonDown(nFlags, point))isGamePause = false;
 }
@@ -595,6 +597,7 @@ bool GameEvent::SaveGame(string saveName)
     for (int i = 0; i < roomSize; i++)
     {
         ss << "gameRoomMonster" << i << "\n" ;
+		ss << "Rent" << gameRoom[i]->GetRent() << "\n";
         ss << "MonsterSize" << gameRoom[i]->GetLiveMonsterSize() << "\n";
 
         for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
@@ -652,6 +655,11 @@ bool GameEvent::LoadGame(string saveName)
     {
         str = strstr(str, "gameRoomMonster");
         str += 17;
+
+		str = strstr(str, "Rent");               //房租讀取
+		str += 4;
+		gameRoom[i]->SetRent((atoi(str)));
+
         str = strstr(str, "MonsterSize" );
         str += 11;
         int monsterSize = (atoi(str));
@@ -1314,7 +1322,7 @@ void GameEvent::SeleteTaskBattle()
 
                     for (int i = 0; warrior[i] != NULL; i++)
                     {
-                        warrior[i]->SetPoint(-50 - (60 * i), 540);
+                        warrior[i]->SetPoint(-100 - (60 * i), 540);
                     }
 
                     battleCount = 0;
@@ -1343,13 +1351,11 @@ void GameEvent::SeleteTaskBattle()
                 if (battleCount > 3000 )
                 {
                     isIntoBattle = true;
-                    CreateWarrior_event(&warrior[0], villager);
-                    CreateWarrior_event(&warrior[1], firemagic);
-                    CreateWarrior_event(&warrior[2], villager);
+                    CreateWarrior_event(&warrior[0], boss);
 
                     for (int i = 0; warrior[i] != NULL; i++)
                     {
-                        warrior[i]->SetPoint(-100 - (60 * i), 540);
+                        warrior[i]->SetPoint(-100 - (60 * i), 490);
                     }
 
                     battleCount = 0;
