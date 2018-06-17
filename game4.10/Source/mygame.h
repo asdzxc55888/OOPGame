@@ -39,8 +39,7 @@
  *      3. Use ShowInitProgress(percent) to display loading progress.
 */
 #pragma once
-#include "CBouncingBall.h"
-#include"GameEvent.h"
+#include "GameEvent.h"
 #include "LoadInterface.h"
 
 namespace game_framework

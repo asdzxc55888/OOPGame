@@ -25,6 +25,7 @@ GameEvent::~GameEvent()
 void GameEvent::OnBeginState()
 {
     myRoomInterface = new RoomInterface(gameRoom);
+	isRoomDataBoardShow = false;
     Warning.SetTopLeft(-1280, 100);
     roomSize = 4;
     battleCount = 0;
@@ -47,6 +48,9 @@ void GameEvent::OnBeginState()
 
     ////////////////////////////////////////////////////////
     for (int i = 0; i < 10; i++)warrior[i] = NULL;
+
+	DevilRoom_x = 660;
+	DevilRoom_floor = 1;
 }
 
 void GameEvent::OnInit()
@@ -121,7 +125,7 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
         MonsterBeingClick(&comingMonster);
     }
 
-    for (int i = 0; i < 3; i++)                                  //時間控制按鈕
+    for (int i = 0; i < 3; i++)                                   //時間控制按鈕
     {
         int _x = SpeedControlBtn[i].Left();
         int _x2 = _x + SpeedControlBtn[i].Width();
@@ -141,19 +145,25 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
         }
     }
 
-    if (myRoomInterface->GetIsShow())                           //房務介面動作
+    if (myRoomInterface->GetIsShow())                          //房務介面動作
     {
         myRoomInterface->IsMouseClick(point);
 
         for (int i = 0; i < 3; i++)
         {
-            if (myRoomInterface->IsMouseClick(point, i))       //驅逐怪物動作
-            {
-                gameRoom[myRoomInterface->GetRoomSelector()]->SetDoorOpen();
-                gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i)->SetIsGoOutside(true);
-                gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(i)->SetMonsterState(leave);
-            }
+			myRoomInterface->IsMouseClick(point, i);
         }
+
+		if (myRoomInterface->GetIsConfirmOnShow())
+		{
+			int leaveMonsterIndex = myRoomInterface->IsConfirmOnClick();
+			if (leaveMonsterIndex != -1)
+			{
+				gameRoom[myRoomInterface->GetRoomSelector()]->SetDoorOpen();
+				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(leaveMonsterIndex)->SetIsGoOutside(true);
+				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(leaveMonsterIndex)->SetMonsterState(leave);
+			}
+		}
     }
 
     if (myMenu.GetIsOnShow())
@@ -202,14 +212,19 @@ void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
                 isMonsterDataBoardShow = false;
             }
         }
-
-        for (int i = 0; i < 4; i++)                              //處理介面顯示
-        {
-            if (!isMonsterDataBoardShow)
-            {
-                if (gameRoom[i]->IsMouseOn(point))gameRoom[i]->SetRoomBoard();
-            }
-        }
+		
+		for (int i = 0; i < 4; i++)                              //處理介面顯示
+		{
+			if (!isMonsterDataBoardShow)
+			{
+				if (gameRoom[i]->IsMouseOn(point))
+				{
+					gameRoom[i]->SetRoomBoard();
+					isRoomDataBoardShow = true;
+					break;
+				}
+			}
+		}
 
         if (comingMonster != NULL)                              //處理介面顯示
         {
@@ -449,9 +464,12 @@ void GameEvent::OnEvent()
                 {
                     WarriorAttack_event(warrior[i], &target);
                 }
-                else
+                else                                    //落沒有怪物擇去魔王帳篷
                 {
-                    Moving((&warrior[i]), 700, 1);
+					if (Moving((&warrior[i]), DevilRoom_x, DevilRoom_floor))
+					{
+						warrior[i]->SetIntoHouse(true);
+					}
                 }
             }
         }
@@ -629,6 +647,7 @@ bool GameEvent::LoadGame(string saveName)
     fstream saveFile;
     char buf[10240];
     char* str;        //字串位置
+	OnBeginState();
     string saveRoot = "Save\\" + saveName + ".txt";
     saveFile.open(saveRoot, ios::in);
     saveFile.read(buf, sizeof(buf));
@@ -700,7 +719,7 @@ void GameEvent::SetObstacle()
 
     for (int i = 0; i < 10; i++)
     {
-        if (warrior[i] != NULL)
+        if (warrior[i] != NULL && warrior[i]->GetIsOnShow())
         {
             int _x1 = warrior[i]->GetX();
             int _x2 = warrior[i]->GetWidth() + _x1;
@@ -893,10 +912,22 @@ bool GameEvent::Moving(Monster** _monster, int x, int floor)
         {
             monsterMovingDirection = true;
         }
-        else
-        {
-            monsterMovingDirection = false;
-        }
+		else if ((*_monster)->GetMovingType() == Moving_Right)
+		{
+			monsterMovingDirection = false;
+		}
+		else
+		{
+			if (x < x1)
+			{
+				monsterMovingDirection = true;
+			}
+			else
+			{
+				monsterMovingDirection = false;
+			}
+
+		}
 
         if (monsterMovingDirection == obsDirection)
         {
@@ -989,10 +1020,22 @@ bool GameEvent::Moving(Warrior** _warrior, int x, int floor)
         {
             monsterMovingDirection = true;
         }
-        else
+        else if((*_warrior)->GetMovingType() == Moving_Right)
         {
             monsterMovingDirection = false;
-        }
+		}
+		else
+		{
+			if (x < x1)
+			{
+				monsterMovingDirection = true;
+			}
+			else
+			{
+				monsterMovingDirection = false;
+			}
+
+		}
 
         if (monsterMovingDirection == obsDirection)
         {
@@ -1229,6 +1272,7 @@ Monster* GameEvent::findMonsterTarget(Warrior* _warrior)
 {
     Monster* result = NULL;
     int minX = 9999;
+	int dx = 0;
 
     for (int i = 0; i < roomSize; i++)
     {
@@ -1236,12 +1280,12 @@ Monster* GameEvent::findMonsterTarget(Warrior* _warrior)
         {
             if (gameRoom[i]->GetLiveMonster(k)->GetIsOnBattle())  //判斷怪物是否正在戰鬥
             {
-                int dx = abs(_warrior->GetX() - (gameRoom[i]->GetLiveMonster(k))->GetX());          //距離差
+                dx = abs(_warrior->GetX() - (gameRoom[i]->GetLiveMonster(k))->GetX());          //距離差
 
                 if (gameRoom[i]->GetLiveMonster(k)->GetFloor() != _warrior->GetFloor())
                 {
                     int dFloor = abs(gameRoom[i]->GetLiveMonster(k)->GetFloor() - _warrior->GetFloor());   //樓層差
-                    dx += dFloor * 400;
+                    dx += dFloor * 1000;
                 }
 
                 if (dx < minX)
@@ -1252,6 +1296,18 @@ Monster* GameEvent::findMonsterTarget(Warrior* _warrior)
             }
         }
     }
+
+	dx = abs(_warrior->GetX() - DevilRoom_x);                  //魔王房屋距離判斷
+	if (DevilRoom_floor != _warrior->GetFloor())
+	{
+		int dFloor = abs(DevilRoom_floor - _warrior->GetFloor());   //樓層差
+		dx += dFloor * 1000;
+	}
+
+	if (dx < minX)
+	{
+		return NULL;
+	}
 
     return result;
 }
@@ -1270,7 +1326,7 @@ Warrior* GameEvent::findWarriorTarget(Monster* _monster)
             if (_monster->GetFloor() != warrior[i]->GetFloor())
             {
                 int dFloor = abs(_monster->GetFloor() - warrior[i]->GetFloor());   //樓層差
-                dx += dFloor * 400;
+                dx += dFloor * 1000;
             }
 
             if (dx < minX)

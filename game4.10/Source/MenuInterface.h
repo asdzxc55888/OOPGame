@@ -35,7 +35,7 @@ namespace game_framework
 		string confirm_information;           // 確認資訊文字
 		string confirm_str[2];                // 確認選項文字 YES NO
 		string option_str[Option_size];       // 選項文字
-		string save_str[save_size];
+		string save_str[save_size];           // 存檔文字
 		string title;                         // 選單標題
 		bool isSaveMouseOn[save_size];
 		bool isSaveExist[save_size];

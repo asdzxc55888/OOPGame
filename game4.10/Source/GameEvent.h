@@ -84,11 +84,14 @@ class GameEvent
         int battleCount;
         int riseMoney;
         int addMoney;
+		int DevilRoom_x;						  //魔王房間的座標
+		int DevilRoom_floor;                      //魔王房間的樓層
         bool isGamePause;                         //遊戲是否暫停
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
         bool isSpeedControlOn[3];
         bool isMonsterDataBoardShow;
+		bool isRoomDataBoardShow;
         bool isMonsterGoingOut;
 		bool isEffectMusicOn;
         bool GameOverFlag;                        //有人入住就為true 判斷是否為遊戲剛開始

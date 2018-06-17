@@ -129,6 +129,10 @@ bool Room::GetIsMonsterFight(int monsterIndex)
 {
     return isMonsterFight[monsterIndex];
 }
+bool Room::GetIsMouseOn()
+{
+	return isMouseOn;
+}
 int Room::GetLiveMonsterSize()
 {
     int size = 0;

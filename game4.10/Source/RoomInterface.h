@@ -31,33 +31,41 @@ class RoomInterface
         void OnShow();
         void OnMove();
         void ShowRentBar();
+		void ShowConfirm();
         void SetInterfaceShow(bool flag);
         void SetRoomSelector(int index);
         void SetMonsterSelector(int index);
         int  GetRoomSelector();
         bool GetIsShow();
+		bool GetIsConfirmOnShow();
         bool IsMouseOn(CPoint point);
         bool IsMouseClick(CPoint point, int monsterIndex);
         bool IsMouseClick(CPoint point);
+		int  IsConfirmOnClick();
     private:
         void ResetRent();
         int  RoomSelector;			 // 當前所選擇的房屋
         int  monsterSelector;		 // 當前所選的怪物
         int  rentPercent;			 // 房租百分比
         int  maxPercent;             // 最大房租
-		int monster_count = 0;       // 顯示怪物的計數
+		int  monster_count;          // 顯示怪物的計數
+		int  leaveMonsterIndex;
 		bool isCancleShow;
         bool isOnShow;
         bool isMouseOn;
+		bool isConfirmBtnMouseOn[2];
         bool isMouseOnBtn[4];
+		bool isConfirmOnShow;
+		string confirm_str[2];                // 確認選項文字 YES NO
         CInteger* presentRent;
 		CInteger* roomNumber;
-        CMovingBitmap bg;                            //背景圖
-        CMovingBitmap Increase_btn, Decrease_btn;    //房租調整按鍵
-        CMovingBitmap Right_btn, Left_btn;           //房間選擇鈕
-        CMovingBitmap* monster[3];                   //怪物圖
-		CMovingBitmap cancle_btn;                    //驅逐怪物提示圖
-        MonsterDataBoard* MonsterBoard;              //怪物資料欄
+		CMovingBitmap confirm_bg;                    // 確認背景圖
+        CMovingBitmap bg;                            // 背景圖
+        CMovingBitmap Increase_btn, Decrease_btn;    // 房租調整按鍵
+        CMovingBitmap Right_btn, Left_btn;           // 房間選擇鈕
+        CMovingBitmap* monster[3];                   // 怪物圖
+		CMovingBitmap cancle_btn;                    // 驅逐怪物提示圖
+        MonsterDataBoard* MonsterBoard;              // 怪物資料欄
         Room** gameRoom;
 };
 

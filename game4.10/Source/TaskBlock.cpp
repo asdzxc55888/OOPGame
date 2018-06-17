@@ -51,7 +51,6 @@ void TaskBlock::LoadBitmap()
 {
     TaskBlockBackGround[0].LoadBitmap("Bitmaps\\TaskBlock.bmp", RGB(255, 255, 255));
     TaskBlockBackGround[1].LoadBitmap("Bitmaps\\Tasking.bmp", RGB(255, 255, 255));
-    TaskBlockBackGround[2].LoadBitmap("Bitmaps\\Taskfinish.bmp", RGB(255, 255, 255));
     TaskContentBackGround.LoadBitmap("Bitmaps\\Instruction.bmp", RGB(255, 255, 255));
 }
 void TaskBlock::OnShow()

@@ -9,8 +9,8 @@ class Room
         Room(int x, int y, int _roomNumber);
         ~Room();
         void LoadBitmap();
-        void Initial();                       //初始化
-        void OnShow(bool flag);//true 為讓門顯示 false試讓怪物顯示
+        void Initial();									   //初始化
+        void OnShow(bool flag);							   //true 為讓門顯示 false試讓怪物顯示
         void OnMove();
         void MonsterDeath(int monsterIndex);
         void MonsterLeave(int monsterIndex);
@@ -27,29 +27,30 @@ class Room
 		int  GetRoomNumber();
         bool GetIsMonsterIn(int monsterIndex);
         bool GetIsMonsterFight(int monsterIndex);
+		bool GetIsMouseOn();
         bool IsMouseOn(CPoint point);                      //檢查滑鼠是否在上面
         bool MovingLR(int x, int MonsterIndex);
         Monster* GetLiveMonster(int index);
     private:
-        int  _x, _y; //座標
-        int  floor;                           //樓層
-        int  liveMonsterSize;     //居住怪物個數
+        int  _x, _y;							    //座標
+        int  floor;								    //樓層
+        int  liveMonsterSize;					    //居住怪物個數
         int  RoomNumber;
         int  timecount;
-        int  rent;                           //租金
-        void SetMonsterIntohome(int monsterIndex); //怪物進門的動作
+        int  rent;								    //租金
+        void SetMonsterIntohome(int monsterIndex);	//怪物進門的動作
         void ResortLiveMonster();
         bool monsterGoOutsideTemp[3];
-        bool MonsterGoHome(int monsterIndex); //若還沒到達家裡得坐標，回傳 true ，到達了回傳false
-        bool isMonsterIn[3];		//居住的怪物是否在裡面
-        bool isDoorOpen;		//門有沒有開
-        bool isMonsterGoHome[3];	//怪物是否正在移動進屋
-        bool isMonsterFight[3];    //怪物是否戰鬥
+        bool MonsterGoHome(int monsterIndex);		//若還沒到達家裡得坐標，回傳 true ，到達了回傳false
+        bool isMonsterIn[3];						//居住的怪物是否在裡面
+        bool isDoorOpen;							//門有沒有開
+        bool isMonsterGoHome[3];					//怪物是否正在移動進屋
+        bool isMonsterFight[3];						//怪物是否戰鬥
         bool isMouseOn;
         bool isMusicEffectOn;
-        Monster* liveMonster[3];	//居住怪物
+        Monster* liveMonster[3];					//居住怪物
         RoomDataBoard* myDataBoard;
-        CAnimation animation;  //動畫
+        CAnimation animation;						//動畫
 };
 }
 
