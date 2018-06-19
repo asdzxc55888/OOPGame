@@ -27,6 +27,8 @@ void GameEvent::OnBeginState()
     myRoomInterface = new RoomInterface(gameRoom);
 	isRoomDataBoardShow = false;
     Warning.SetTopLeft(-1280, 100);
+	fall.Reset();
+	fall.SetTopLeft(0,0);
     roomSize = 4;
     battleCount = 0;
     addMoney = 0;
@@ -39,6 +41,7 @@ void GameEvent::OnBeginState()
     isMonsterGoingOut = false;
     isMonsterDataBoardShow = false;
     isEffectMusicOn = false;
+	isFall = false;
     myMoney.SetValue(1000);
     ///////////////////////////時間設定/////////////////////
     TimeLevel = 1;
@@ -69,6 +72,17 @@ void GameEvent::OnInit()
     SpeedControlBtn[0].SetTopLeft(1035, 675);
     SpeedControlBtn[1].SetTopLeft(1122, 675);
     SpeedControlBtn[2].SetTopLeft(1209, 675);
+
+	for (int i = 0; i < 15; i++) {
+		string temp = "Bitmaps\\GameFall\\quest_lose_";
+		stringstream ss;
+		ss << i;
+		temp += ss.str();
+		temp += ".bmp";
+		char root[100];
+		strcpy(root, temp.c_str());
+		fall.AddBitmap(root, RGB(255, 255, 255));
+	}
     ///////////////////////////////////////////////////////////////////
     CAudio::Instance()->Load(AUDIO_DOOROPEN, "Sounds\\RoomOpen.mp3");
     CAudio::Instance()->Load(AUDIO_DOORCLOSE, "Sounds\\RoomClose.mp3");
@@ -112,7 +126,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
         }
         else
         {
-            myMenu.SetIsOnShow(true);
+			myMenu.SetIsOnShow(true);
             isGamePause = true;
         }
     }
@@ -379,8 +393,13 @@ void GameEvent::OnMove()
         {
             gameRoom[i]->OnMove();
         }
-    }
 
+		if (isFall)                    //失敗動畫
+		{
+			if (fall.IsFinalBitmap())GameOverFlag = true;
+			fall.OnMove();
+		}
+    }
     myMoney.OnMove();
     myRoomInterface->OnMove();
 }
@@ -408,6 +427,11 @@ void GameEvent::OnShow()
     {
         comingMonster->OnShow();
     }
+
+	if (isFall)                    //失敗動畫
+	{
+		fall.OnShow();
+	}
 
     myMoney.OnShow();
     Warning.ShowBitmap();
@@ -466,9 +490,12 @@ void GameEvent::OnEvent()
                 }
                 else                                    //落沒有怪物擇去魔王帳篷
                 {
-					if (Moving((&warrior[i]), DevilRoom_x, DevilRoom_floor))
+					if (Moving((&warrior[i]), DevilRoom_x, DevilRoom_floor)&& !isFall)
 					{
+						CAudio::Instance()->Pause();
+						CAudio::Instance()->Play(AUDIO_Fail);
 						warrior[i]->SetIntoHouse(true);
+						isFall = true;
 					}
                 }
             }
@@ -577,28 +604,12 @@ void GameEvent::OnEvent()
 
     if (!isOnBattle)	MonsterMatingEvent();                       //怪物交配事件
 
-    if (!GameOverFlag)
-    {
-        for (int i = 0; i < roomSize; i++)
-        {
-            if (gameRoom[i]->GetLiveMonsterSize())GameOverFlag = true;
-        }
-    }
 }
+
 
 bool GameEvent::GameOver()
 {
-    /*
-    if (GameOverFlag) {
-    	for (int i = 0; i < roomSize; i++) {
-    		if (gameRoom[i]->GetLiveMonsterSize() > 0) {
-    			return false;
-    		}
-    	}
-    	CAudio::Instance()->Stop(AUDIO_WARNING);
-    	return true;
-    }*/
-    return false;
+    return GameOverFlag;
 }
 
 bool GameEvent::SaveGame(string saveName)
@@ -1366,7 +1377,7 @@ void GameEvent::BattleFinish()
 
 void GameEvent::SeleteTaskBattle()
 {
-    if (!isOnBattle && GameOverFlag)
+    if (!isOnBattle)
     {
         switch (myTaskBoard.GetNowTask())
         {

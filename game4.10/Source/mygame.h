@@ -124,6 +124,7 @@ class CGameStateOver : public CGameState
         void OnShow();									// 顯示這個狀態的遊戲畫面
     private:
         int counter;	// 倒數之計數器
+		CMovingBitmap bg;  //背景圖
 };
 
 }

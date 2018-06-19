@@ -66,26 +66,28 @@ class GameEvent
         void MonsterBorn(int roomNum);  //怪物出身
     private:
         CMovingBitmap  Background;                  //背景圖
-        CMovingBitmap  Warning;                    //警告圖
-        CAnimation     SpeedControlBtn[3];            //速度控制圖
-        GMoney         myMoney;
-        TaskBoard      myTaskBoard;
-        Obstacle       mapObstacle;
-        Room*          gameRoom[4];
-        RoomInterface* myRoomInterface;
-		MenuInterface  myMenu;
-        Monster*       comingMonster;                    //來看房子的怪物
-        Warrior*       warrior[10];
+        CMovingBitmap  Warning;                     //警告圖
+		CAnimation     fall;                        //失敗圖
+        CAnimation     SpeedControlBtn[3];          //速度控制圖
+        GMoney         myMoney;						//金錢
+        TaskBoard      myTaskBoard;					//任務版 管理任務的物件
+        Obstacle       mapObstacle;					//怪物與勇者的座標 用來做障礙物判斷
+        Room*          gameRoom[4];					//房間
+        RoomInterface* myRoomInterface;				//房間資訊
+		MenuInterface  myMenu;						//主選單
+        Monster*       comingMonster;               //來看房子的怪物
+        Warrior*       warrior[10];					//勇者
         time_t         Settime, nowtime;
+		int addMoney;                             //增加的金錢
+		int battleCount;                          //剩餘發生戰鬥時間
         int CollectRentTime;
-        int TimeLevel;                            //時間快慢
-        int Clock;
-        int roomSize;                             //房間大小
-        int battleCount;
-        int riseMoney;
-        int addMoney;
+		int Clock;
 		int DevilRoom_x;						  //魔王房間的座標
 		int DevilRoom_floor;                      //魔王房間的樓層
+        int TimeLevel;                            //時間快慢
+        int roomSize;                             //房間大小
+        int riseMoney;                            //正在增加的金錢
+		bool isFall;
         bool isGamePause;                         //遊戲是否暫停
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
@@ -94,7 +96,7 @@ class GameEvent
 		bool isRoomDataBoardShow;
         bool isMonsterGoingOut;
 		bool isEffectMusicOn;
-        bool GameOverFlag;                        //有人入住就為true 判斷是否為遊戲剛開始
+        bool GameOverFlag;                        //遊戲結束
 };
 
 }
