@@ -251,6 +251,14 @@ void Room::SetMonsterIntohome(int monsterIndex) //怪物到達門後的動作
     isDoorOpen = true;
     isMonsterFight[monsterIndex] = false;
 }
+
+void swap(bool &bool_1,bool &bool_2)
+{
+	bool temp = bool_1;
+	bool_1 = bool_2;
+	bool_2 = temp;
+}
+
 void Room::ResortLiveMonster()     //重新排列怪物順序
 {
     for (int i = 0; i < 2; i++)
@@ -262,6 +270,11 @@ void Room::ResortLiveMonster()     //重新排列怪物順序
                 if (liveMonster[k] != NULL)
                 {
                     liveMonster[i] = liveMonster[k];
+					swap(isMonsterFight[i], isMonsterFight[k]);
+					swap(isMonsterGoHome[i], isMonsterGoHome[k]);
+					swap(isMonsterIn[i], isMonsterIn[k]);
+					isMonsterFight[i] = isMonsterFight[k];
+
                     liveMonster[k] = NULL;
                     break;
                 }

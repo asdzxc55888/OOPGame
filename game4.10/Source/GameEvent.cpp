@@ -103,15 +103,15 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
     if (nChar == KEY_LEFT)
     {
-        LoadGame("save1");
+       
     }
     else if (nChar == KEY_RIGHT)
     {
-        SaveGame("save1");
+        
     }
     else if (nChar == KEY_UP)
     {
-        BattleTest1();
+      
     }
     else if (nChar == KEY_DOWN)  //測試
     {
@@ -176,6 +176,8 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 				gameRoom[myRoomInterface->GetRoomSelector()]->SetDoorOpen();
 				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(leaveMonsterIndex)->SetIsGoOutside(true);
 				gameRoom[myRoomInterface->GetRoomSelector()]->GetLiveMonster(leaveMonsterIndex)->SetMonsterState(leave);
+				myRoomInterface->SetInterfaceShow(false);
+				isGamePause = false;
 			}
 		}
     }
@@ -459,7 +461,7 @@ void GameEvent::OnEvent()
         {
             for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
             {
-                if (gameRoom[i]->GetLiveMonsterSize() > 0 && !gameRoom[i]->GetIsMonsterIn(k))
+                if (gameRoom[i]->GetLiveMonsterSize() > 0 && !gameRoom[i]->GetIsMonsterIn(k) && gameRoom[i]->GetLiveMonster(k)!=NULL)
                 {
                     MonsterGohome_event(gameRoom[i], k);
                 }
@@ -1360,14 +1362,23 @@ void GameEvent::BattleFinish()
             riseMoney = 0;
             addMoney = 100;
             myTaskBoard.SetNowTask(TaskList::nothing);
+			myTaskBoard.SetTaskShow(FirstTask, false);
+			myTaskBoard.SetTaskShow(eggComing, true);
             myTaskBoard.SetTaskShow(Boss, true);
             break;
+
+		case eggComing:
+			riseMoney = 0;
+			addMoney = 500;
+			myTaskBoard.SetNowTask(TaskList::nothing);
+			break;
 
         case Boss:
             riseMoney = 0;
             addMoney = 1500;
             myTaskBoard.SetNowTask(TaskList::nothing);
             myTaskBoard.SetTaskShow(Boss, false);
+			GameOverFlag = true;
             break;
 
         default:
@@ -1382,7 +1393,7 @@ void GameEvent::SeleteTaskBattle()
         switch (myTaskBoard.GetNowTask())
         {
             case TaskList::nothing:
-                if (battleCount > 4000)
+                if (battleCount > 5000)
                 {
                     isIntoBattle = true;
                     CreateWarrior_event(&warrior[0], villager);
@@ -1404,16 +1415,26 @@ void GameEvent::SeleteTaskBattle()
                     CreateWarrior_event(&warrior[0], villager);
                     CreateWarrior_event(&warrior[1], firemagic);
 
-                    for (int i = 0; warrior[i] != NULL; i++)
-                    {
-                        warrior[i]->SetPoint(-100 - (60 * i), 540);
-                    }
+                    warrior[0]->SetPoint(-100, 540);
+					warrior[1]->SetPoint(-160, 540);
 
                     battleCount = 0;
                 }
 
                 break;
+			case TaskList::eggComing:
+				if (battleCount > 3000)
+				{
+					isIntoBattle = true;
+					CreateWarrior_event(&warrior[0], egg);
+					CreateWarrior_event(&warrior[1], egg);
 
+					warrior[0]->SetPoint(-100, 530);
+					warrior[1]->SetPoint(-160, 530);
+
+					battleCount = 0;
+				}
+				break;
             case TaskList::Boss:
                 if (battleCount > 3000 )
                 {
@@ -1433,18 +1454,6 @@ void GameEvent::SeleteTaskBattle()
         }
 
         battleCount += TimeLevel;
-    }
-}
-
-void GameEvent::BattleTest1()
-{
-    isIntoBattle = true;
-    CreateWarrior_event(&warrior[0], villager);
-    CreateWarrior_event(&warrior[1], firemagic);
-
-    for (int i = 0; warrior[i] != NULL; i++)
-    {
-        warrior[i]->SetPoint(-100 - (60 * i), 540);
     }
 }
 
@@ -1479,14 +1488,20 @@ void GameEvent::MonsterMatingEvent()
     for (int i = 0; i < roomSize; i++)
     {
         int randValue = rand() % 1000;
+		
 
         if (randValue < 2 && gameRoom[i]->GetLiveMonsterSize() == 2 && gameRoom[i]->GetIsMonsterIn(0) && gameRoom[i]->GetIsMonsterIn(1) )
         {
-            gameRoom[i]->GetLiveMonster(0)->SetMonsterState(fallInLove);
-            gameRoom[i]->GetLiveMonster(0)->SetHeadImgcount(0);
-            int childRandvalue = rand() % 1000;
+			Monster *_monster1 = gameRoom[i]->GetLiveMonster(0);
+			Monster *_monster2 = gameRoom[i]->GetLiveMonster(1);
+			if ((_monster1->GetMonsterGender() != _monster2->GetMonsterGender()) && !_monster1->GetIsKid() && !_monster2->GetIsKid())
+			{
+				_monster1->SetMonsterState(fallInLove);
+				_monster1->SetHeadImgcount(0);
+				int childRandvalue = rand() % 1000;
 
-            if (childRandvalue < 500)MonsterBorn(i);  //怪物出生
+				if (childRandvalue < 200)MonsterBorn(i);  //怪物出生
+			}
         }
     }
 }

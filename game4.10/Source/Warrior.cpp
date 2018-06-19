@@ -159,7 +159,7 @@ void Warrior::RandBasicAbility()
 			break;
 
 		case game_framework::boss:
-			Hp = 1900;
+			Hp = 700;
 			ApDefense = 15;
 			AdDefense = 15;
 			AttackPower = 20;

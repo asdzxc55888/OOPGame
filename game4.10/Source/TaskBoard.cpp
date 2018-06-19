@@ -28,6 +28,7 @@ void TaskBoard::Initial()
     IsTaskShow[nothing] = true;
     IsTaskShow[1] = true;
     IsTaskShow[2] = false;
+	IsTaskShow[3] = false;
     TaskBoardImg.SetTopLeft(TaskBoard_x, TaskBoard_y);
     TaskBoardInterface.SetTopLeft(TaskBoardInterface_x, TaskBoardInterface_y);
     TaskInformation.SetTopLeft(50, 50);
@@ -80,6 +81,19 @@ void TaskBoard::SetTaskShow(TaskList _task, bool flag)
 void TaskBoard::SetNowTask(TaskList _task)
 {
     nowTask = _task;
+
+	for (int i = 0; i < GetShowTaskSize(); i++)              //設定任務狀態
+	{
+		if ((TaskList)i == nowTask)
+		{
+			myTaskBlock[i]->SetTaskState(doing);
+			TaskTitle = myTaskBlock[i]->GetTaskName();
+		}
+		else
+		{
+			myTaskBlock[i]->SetTaskState(normal);
+		}
+	}
 }
 void TaskBoard::SetCompletionPercent(int percent)
 {

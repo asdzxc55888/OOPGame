@@ -7,7 +7,7 @@ enum TaskList
 	eggComing,
     Boss
 };
-#define TaskSize 3
+#define TaskSize 4
 #define TaskBoardInterface_x 125
 #define TaskBoardInterface_y 20
 #define TaskBoard_x 330
