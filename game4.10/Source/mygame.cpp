@@ -38,6 +38,7 @@ void CGameStateInit::OnInit()
     //
     Load.LoadBitmap();
     temp.LoadBitmap();
+	tutorial.LoadBitmap("Bitmaps\\menu\\Instructions.bmp", RGB(255, 255, 255));
     Background.LoadBitmap("Bitmaps\\StartBackground.bmp");
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start.bmp", RGB(255, 255, 255));
     menuBtn[0]->AddBitmap("Bitmaps\\menu\\start1.bmp", RGB(255, 255, 255));
@@ -64,9 +65,9 @@ void CGameStateInit::OnBeginState()
     for (int i = 0; i < 3; i++)isMouseOn[i] = false;
 
     BGM = false;
+	isTutorialShow = false;
 	isPlayAudio = false;
 	isLoadInterfaceOnShow = false;
-
 	CAudio::Instance()->Pause();
 }
 
@@ -75,10 +76,16 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     const char KEY_ESC = 27;
     const char KEY_SPACE = ' ';
 
+	if (isTutorialShow && nChar == KEY_ESC)
+	{
+		CAudio::Instance()->Play(AUDIO_DECISION);
+		GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
+		CAudio::Instance()->Play(AUDIO_GAMEBGM);
+		CAudio::Instance()->Stop(AUDIO_MENUBGM);
+	}
+
     if (nChar == KEY_SPACE)
         GotoGameState(GAME_STATE_RUN);						// 切換至GAME_STATE_RUN
-    else if (nChar == KEY_ESC)								// Demo 關閉遊戲的方法
-        PostMessage(AfxGetMainWnd()->m_hWnd, WM_CLOSE, 0, 0);	// 關閉遊戲
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -87,10 +94,8 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
     {
         if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // 開始遊戲
         {
-            CAudio::Instance()->Play(AUDIO_DECISION);
-            GotoGameState(GAME_STATE_RUN);	  // 切換至GAME_STATE_RUN
-            CAudio::Instance()->Play(AUDIO_GAMEBGM);
-            CAudio::Instance()->Stop(AUDIO_MENUBGM);
+			isTutorialShow = true;
+			tutorial.SetTopLeft(190, 20);
         }
 
         if (point.x > menuBtn[1]->Left() && point.x <  menuBtn[1]->Left() + menuBtn[1]->Width() && point.y >  menuBtn[1]->Top() && point.y < menuBtn[1]->Height() + menuBtn[1]->Top()) // 讀取遊戲
@@ -192,6 +197,10 @@ void CGameStateInit::OnShow()
         Load.OnShow();
     }
 
+	if (isTutorialShow)
+	{
+		tutorial.ShowBitmap();
+	}
     CSpecialEffect::DelayFromSetCurrentTime(GAME_CYCLE_TIME);
     CSpecialEffect::SetCurrentTime();	// 設定離開OnIdle()的時間
   
