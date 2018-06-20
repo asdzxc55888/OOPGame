@@ -50,6 +50,7 @@ void CGameStateInit::OnInit()
     CAudio::Instance()->Load(AUDIO_DECISION, "Sounds\\decision.mp3");
     CAudio::Instance()->Load(AUDIO_MENUBGM, "Sounds\\menuBGM.mp3");
     CAudio::Instance()->Load(AUDIO_GAMEBGM, "Sounds\\GameBGM.mp3");
+	CAudio::Instance()->Load(AUDIO_VICTORY, "Sounds\\Victory.mp3");
     //Sleep(300);				// 放慢，以便看清楚進度，實際遊戲請刪除此Sleep
     //
     // 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%

@@ -20,6 +20,9 @@ GameEvent::GameEvent()
 
 GameEvent::~GameEvent()
 {
+	for (int i = 0; i < 4; i++) delete gameRoom[i];
+	for (int i = 0; i < 10; i++) delete warrior[i];
+	delete myRoomInterface;
 }
 
 void GameEvent::OnBeginState()
@@ -33,6 +36,7 @@ void GameEvent::OnBeginState()
     battleCount = 0;
     addMoney = 0;
     riseMoney = 0;
+	endCount = 0;
     Clock = int(time(&nowtime)) + 60000;
     isGamePause = false;
     GameOverFlag = false;
@@ -42,12 +46,14 @@ void GameEvent::OnBeginState()
     isMonsterDataBoardShow = false;
     isEffectMusicOn = false;
 	isFall = false;
+	isVictory = false;
     myMoney.SetValue(1000);
     ///////////////////////////時間設定/////////////////////
     TimeLevel = 1;
     isSpeedControlOn[0] = true;
 
     for (int i = 1; i < 3; i++)isSpeedControlOn[i] = false;
+	Victory.SetTopLeft(0, -300);
 
     ////////////////////////////////////////////////////////
     for (int i = 0; i < 10; i++)warrior[i] = NULL;
@@ -72,6 +78,10 @@ void GameEvent::OnInit()
     SpeedControlBtn[0].SetTopLeft(1035, 675);
     SpeedControlBtn[1].SetTopLeft(1122, 675);
     SpeedControlBtn[2].SetTopLeft(1209, 675);
+
+	Victory.LoadBitmap("Bitmaps\\gameRun\\quest_win.bmp", RGB(255, 255, 255));
+	Menu_Btn.LoadBitmap("Bitmaps\\gameRun\\GameEscBtn1.bmp", RGB(255, 255, 255));
+	Menu_Btn.SetTopLeft(Menu_btn_x, Menu_btn_y);
 
 	for (int i = 0; i < 15; i++) {
 		string temp = "Bitmaps\\GameFall\\quest_lose_";
@@ -107,7 +117,7 @@ void GameEvent::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
     else if (nChar == KEY_RIGHT)
     {
-        
+	
     }
     else if (nChar == KEY_UP)
     {
@@ -138,6 +148,12 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
     {
         MonsterBeingClick(&comingMonster);
     }
+
+	if (isMenuBtnOn)
+	{
+		myMenu.SetIsOnShow(true);
+		CAudio::Instance()->Play(AUDIO_DECISION);
+	}
 
     for (int i = 0; i < 3; i++)                                   //時間控制按鈕
     {
@@ -213,7 +229,20 @@ void GameEvent::OnLButtonDown(UINT nFlags, CPoint point)
 void GameEvent::OnMouseMove(UINT nFlags, CPoint point)
 {
     if (!isGamePause)
-    {
+    {                                          
+		int x1 = Menu_btn_x;								//主選單按鈕
+		int x2 = x1 + Menu_Btn.Width();
+		int y1 = Menu_btn_y;
+		int y2 = y1 + Menu_Btn.Height();
+
+		if (point.x > x1 && point.x <= x2 && point.y > y1 && point.y <= y2)
+		{
+			isMenuBtnOn = true;
+		}
+		else {
+			isMenuBtnOn = false;
+		}
+
         for (int i = 0; i < 4; i++)                              //處理介面顯示
         {
             for (int k = 0; k < gameRoom[i]->GetLiveMonsterSize(); k++)
@@ -335,6 +364,12 @@ void GameEvent::OnRButtonDown(UINT nFlags, CPoint point)
 
 void GameEvent::OnMove()
 {
+	if (isVictory)
+	{
+		endCount++;
+		if (Victory.Top() < 0)Victory.SetTopLeft(Victory.Left(), Victory.Top() + 3);
+		if (endCount >= 400)GameOverFlag = true;
+	}
     if (!isGamePause)
     {
         /////////////////////////////////時間控制按鈕////////////////////////////////////////////
@@ -412,6 +447,12 @@ void GameEvent::OnShow()
     SpeedControlBtn[0].OnShow();
     SpeedControlBtn[1].OnShow();
     SpeedControlBtn[2].OnShow();
+	if (isMenuBtnOn) {
+		Menu_Btn.ShowBitmap(1.1);
+	}
+	else {
+		Menu_Btn.ShowBitmap();
+	}
 
     for (int i = 0; i < 4; i++)gameRoom[i]->OnShow(true);
 
@@ -434,7 +475,10 @@ void GameEvent::OnShow()
 	{
 		fall.OnShow();
 	}
-
+	if (isVictory)
+	{
+		Victory.ShowBitmap();
+	}
     myMoney.OnShow();
     Warning.ShowBitmap();
     myTaskBoard.OnShow();
@@ -624,7 +668,6 @@ bool GameEvent::SaveGame(string saveName)
     ss << saveName << " " << ctime(&nowtime) << "\n";
     ss << "Money\n" << myMoney.GetValue() << "\n";               //金錢
     ss << "RoomSize\n" << roomSize << "\n";                      //房間SIZE
-
     for (int i = 0; i < roomSize; i++)
     {
         ss << "gameRoomMonster" << i << "\n" ;
@@ -1361,7 +1404,7 @@ void GameEvent::BattleFinish()
         case FirstTask:
             riseMoney = 0;
             addMoney = 100;
-            myTaskBoard.SetNowTask(TaskList::nothing);
+            myTaskBoard.SetNowTask(TaskList::nothing_task);
 			myTaskBoard.SetTaskShow(FirstTask, false);
 			myTaskBoard.SetTaskShow(eggComing, true);
             myTaskBoard.SetTaskShow(Boss, true);
@@ -1370,15 +1413,17 @@ void GameEvent::BattleFinish()
 		case eggComing:
 			riseMoney = 0;
 			addMoney = 500;
-			myTaskBoard.SetNowTask(TaskList::nothing);
+			myTaskBoard.SetNowTask(TaskList::nothing_task);
 			break;
 
         case Boss:
             riseMoney = 0;
             addMoney = 1500;
-            myTaskBoard.SetNowTask(TaskList::nothing);
+            myTaskBoard.SetNowTask(TaskList::nothing_task);
             myTaskBoard.SetTaskShow(Boss, false);
-			GameOverFlag = true;
+			CAudio::Instance()->Pause();
+			CAudio::Instance()->Play(AUDIO_VICTORY);
+			isVictory = true;
             break;
 
         default:
@@ -1392,7 +1437,7 @@ void GameEvent::SeleteTaskBattle()
     {
         switch (myTaskBoard.GetNowTask())
         {
-            case TaskList::nothing:
+            case TaskList::nothing_task:
                 if (battleCount > 5000)
                 {
                     isIntoBattle = true;

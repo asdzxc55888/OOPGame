@@ -9,6 +9,13 @@
 #define reward_str_y 480
 namespace game_framework
 {
+enum TaskList
+{
+	nothing_task,
+    FirstTask,
+    eggComing,
+    Boss
+};
 enum TaskState
 {
     normal,
@@ -32,11 +39,13 @@ class TaskBlock
         void IsMouseOn(CPoint point);
         bool IsMouseClick(CPoint point);
         string GetTaskName();
+		TaskList GetTask();
     private:
         int x, y;
         bool isMouseOn;
         bool isMusicEffectOn;
         TaskState state;
+		TaskList thisTask;                              // 當前方塊任務
         string TaskName;
         string Content;
         string reward_str;

@@ -23,9 +23,9 @@ void TaskBoard::Initial()
     completionPercent ->SetInteger(0);
     completionPercent->SetTopLeft(170, 205);
     completionPercent->SetIsBmpLoaded();
-    nowTask = nothing;
+    nowTask = nothing_task;
     isMouseOn = false;
-    IsTaskShow[nothing] = true;
+    IsTaskShow[nothing_task] = true;
     IsTaskShow[1] = true;
     IsTaskShow[2] = false;
 	IsTaskShow[3] = false;
@@ -142,14 +142,14 @@ bool TaskBoard::IsTaskOnClick(CPoint point)
         {
             if (myTaskBlock[i]->IsMouseClick(point))              //任務方塊
             {
-                nowTask = (TaskList)i;   //未完成
+                nowTask = myTaskBlock[i]->GetTask();   //未完成
                 TaskTitle = myTaskBlock[i]->GetTaskName();
             }
         }
 
         for (int i = 0; i < GetShowTaskSize(); i++)              //設定任務狀態
         {
-            if ((TaskList)i == nowTask)
+            if (myTaskBlock[i]->GetTask() == nowTask)
             {
                 myTaskBlock[i]->SetTaskState(doing);
             }

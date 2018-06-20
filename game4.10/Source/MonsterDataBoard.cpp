@@ -74,7 +74,7 @@ void MonsterDataBoard::Initialize(int maxHp, int ApD, int AdD, int dps, string M
 	Picture.SetTopLeft(x + 35, y + 20);
 	if (MonsterType == "boss")
 	{
-		Picture.SetTopLeft(x -10, y );
+		Picture.SetTopLeft(x -100, y-20 );
 		Hp->SetTopLeft(x + 240, y + 130);
 		MaxHp->SetTopLeft(x + 300, y + 130);
 	}

@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CAboutDlg" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAABAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\game.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameApp" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAwAQAAAABAAAAAAA=</HashCode>
+      <FileName>Source\game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameDoc" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAACAAAgAAAACAgAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\gameDoc.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGameView" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAHAAAAAGABAgABAgBIAABAIAAoMAAAQgQA=</HashCode>
+      <FileName>Source\gameView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMainFrame" Collapsed="true">
+    <Position X="14.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABCACgAAAAgAAAAASAAAiECAgCAAAgAAAAAQAEAAABA=</HashCode>
+      <FileName>Source\MainFrm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CAudio" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgoAAAAAAQIAAQIAAAAAQRAAACAIAA4AIAAAiAAAA=</HashCode>
+      <FileName>Source\audio.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CSpecialEffect" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAACAAgAAAAAAAAACAIAAIAAAAAAAAIAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CDDraw" Collapsed="true">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAIkAAQABkEB1ICAAEAATQAAAACEAQABBKCACaJQA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CMovingBitmap" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAABACAAAAAEYCAAAIIAAACAAAAACAAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CAnimation" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABAAABBIAAAiAAUAIAAAIAAAIOABgAAEEgAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CInteger" Collapsed="true">
+    <Position X="13" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAACAAJBAAAAAAEQAAAABAAAAEARgAACIAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGame" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgBACEQAgBAABAwADAABpAgAQAQAIgAAAwAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateInit" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAABACACEAAAAAAAAgCABAEAgSAAAAgBAAUAAA=</HashCode>
+      <FileName>Source\mygame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateRun" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAAACAAAAAAAAQAABAABIAAgQAAAAAAAAUAEE=</HashCode>
+      <FileName>Source\mygame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameStateOver" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAIAAAAAAAAAAABAAgUAAAAAAAAEAAA=</HashCode>
+      <FileName>Source\mygame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::CGameState" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAgAAECAAAAAAABAAABAABIAAgQIAAAAAAIUAEA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GameEvent" Collapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wgSG0IggggA4BQkIRdGgARAAiRZMEhwAAsI4CAIUYoE=</HashCode>
+      <FileName>Source\GameEvent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::GMoney" Collapsed="true">
+    <Position X="13" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAIAAAAoAAAAAAAAQAAAAAACAAAABgAAAkEAA=</HashCode>
+      <FileName>Source\GMoney.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::LoadInterface" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAgAAAAEAAIAAQAAAAQCAAAAABBAAAACAAAUAAI=</HashCode>
+      <FileName>Source\LoadInterface.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::MagicAttack" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAAAAAAAYAIAAgAAQAAAAAAAgAYADgQEAEJQI=</HashCode>
+      <FileName>Source\MagicAttack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::MenuInterface" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACAgkAkQBAEAAIEAAACAAUEAAgABDDMFAACIgAEEAA=</HashCode>
+      <FileName>Source\MenuInterface.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Monster" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIgAACAAAACAMAZAAgBBAYAUAAGAAAABkQwDIA0CAI=</HashCode>
+      <FileName>Source\Monster.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::MonsterDataBoard" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAoBEBAgBAhYAAAAAACAAAAAAEAAABACBgACAEQgA=</HashCode>
+      <FileName>Source\MonsterDataBoard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::npcObject" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FA0gohAoBowEgBgQAIAOCIBAEIEGBIgVZSCgLmGcQUA=</HashCode>
+      <FileName>Source\npcObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Obstacle" Collapsed="true">
+    <Position X="13" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAACAAIAIAAQAAwAAASKAAQAAAAAAAAA=</HashCode>
+      <FileName>Source\obstacle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Room" Collapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wEUAcIAKIBYgAAAEABAMIIyAAQYMwEAARIAIBAAGgAA=</HashCode>
+      <FileName>Source\Room.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::RoomDataBoard" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAIgAIAABQIAAAAAIAAAAAAQACACAABgAAQEAAA=</HashCode>
+      <FileName>Source\RoomDataBoard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::RoomInterface" Collapsed="true">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgxGJgAEBAAVEAIkABACAAQEASAEABGAFAAIggcEACI=</HashCode>
+      <FileName>Source\RoomInterface.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::TaskBlock" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAECAABAgAEAAAABAAABAUAAACEAAAEBABgBCBEAIA=</HashCode>
+      <FileName>Source\TaskBlock.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::TaskBoard" Collapsed="true">
+    <Position X="13" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAgQABAAAAAAAACAgQAIAAEIEAiAIAhoAJXAAA=</HashCode>
+      <FileName>Source\TaskBoard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="game_framework::Warrior" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAABAAAAQAUAAAAAAAAAAQAAAABUAAA=</HashCode>
+      <FileName>Source\Warrior.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="GAME_STATES" Collapsed="true">
+    <Position X="13" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="AUDIO_ID" Collapsed="true">
+    <Position X="9.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAEAABAAAAAAABAAAAkAgAAAQAAAgABAAAABAAQA=</HashCode>
+      <FileName>Source\gamelib.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TaskList" Collapsed="true">
+    <Position X="13" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAgAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\TaskBoard.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::Direction" Collapsed="true">
+    <Position X="11.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Source\MagicAttack.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::Menu_state" Collapsed="true">
+    <Position X="7.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAIAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Source\MenuInterface.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::Monster_state" Collapsed="true">
+    <Position X="9.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgEQAAAAAAAAAAAAAAAAQAAAABIAAAAAAACAA=</HashCode>
+      <FileName>Source\Monster.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::Gender" Collapsed="true">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Source\Monster.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::Attack_Type" Collapsed="true">
+    <Position X="7.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Source\npcObject.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::MovingAnimation_Type" Collapsed="true">
+    <Position X="11.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAECAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Source\npcObject.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::TaskState" Collapsed="true">
+    <Position X="14.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAgAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Source\TaskBlock.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="game_framework::warrior_type" Collapsed="true">
+    <Position X="7.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAADAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\Warrior.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft JhengHei UI" Size="9" />
+</ClassDiagram>

@@ -23,9 +23,9 @@ Y
 AttackType
 1
 MaxHp
-157
+1570
 AttackPower
-16
+160
 AdDenfense
 5
 ApDenfense

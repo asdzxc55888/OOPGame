@@ -101,7 +101,8 @@ enum AUDIO_ID {				// 定義各種音效的編號
 	AUDIO_DECISION,
 	AUDIO_WARNING,
 	AUDIO_Fail,
-	AUDIO_GAMEOVER
+	AUDIO_GAMEOVER,
+	AUDIO_VICTORY
 };
 
 /////////////////////////////////////////////////////////////////////////////

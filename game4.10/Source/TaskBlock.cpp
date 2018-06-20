@@ -41,7 +41,8 @@ void TaskBlock::Initial(int Index)
             break;
         }
     }
-
+	
+	thisTask = (TaskList)Index;
     TaskName = Data[0];
     Content = Data[1];
     reward_str = Data[2];
@@ -181,5 +182,9 @@ bool TaskBlock::IsMouseClick(CPoint point)
 string TaskBlock::GetTaskName()
 {
     return TaskName;
+}
+TaskList TaskBlock::GetTask()
+{
+	return thisTask;
 }
 }

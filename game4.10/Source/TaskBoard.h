@@ -1,12 +1,5 @@
 #pragma once
 #include "TaskBlock.h"
-enum TaskList
-{
-    nothing,
-    FirstTask,
-	eggComing,
-    Boss
-};
 #define TaskSize 4
 #define TaskBoardInterface_x 125
 #define TaskBoardInterface_y 20

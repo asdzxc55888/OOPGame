@@ -10,6 +10,8 @@ namespace game_framework
 {
 #define room_x 650
 #define room_y 510
+#define Menu_btn_x 0
+#define Menu_btn_y 635
 class GameEvent
 {
     public:
@@ -66,6 +68,8 @@ class GameEvent
     private:
         CMovingBitmap  Background;                  //背景圖
         CMovingBitmap  Warning;                     //警告圖
+		CMovingBitmap  Menu_Btn;
+		CMovingBitmap  Victory;
 		CAnimation     fall;                        //失敗圖
         CAnimation     SpeedControlBtn[3];          //速度控制圖
         GMoney         myMoney;						//金錢
@@ -86,7 +90,10 @@ class GameEvent
         int TimeLevel;                            //時間快慢
         int roomSize;                             //房間大小
         int riseMoney;                            //正在增加的金錢
+		int endCount;          
 		bool isFall;
+		bool isVictory;                           //遊戲勝利
+		bool isMenuBtnOn;
         bool isGamePause;                         //遊戲是否暫停
         bool isIntoBattle;                        //是否剛進入戰鬥
         bool isOnBattle;						  //是否在戰鬥
