@@ -68,6 +68,7 @@ void CGameStateInit::OnBeginState()
 	isTutorialShow = false;
 	isPlayAudio = false;
 	isLoadInterfaceOnShow = false;
+	Load.LoadSaveData();
 	CAudio::Instance()->Pause();
 }
 
@@ -90,7 +91,7 @@ void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    if (!isLoadInterfaceOnShow)
+    if (!isLoadInterfaceOnShow && !isTutorialShow)
     {
         if (point.x > menuBtn[0]->Left() && point.x <  menuBtn[0]->Left() + menuBtn[0]->Width() && point.y >  menuBtn[0]->Top() && point.y < menuBtn[0]->Height() + menuBtn[0]->Top()) // ¶}©l¹CÀ¸
         {
@@ -130,7 +131,7 @@ void CGameStateInit::OnRButtonDown(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnMouseMove(UINT nFlags, CPoint point)
 {
-    if (isLoadingBitmaps && !isLoadInterfaceOnShow)
+    if (isLoadingBitmaps && !isLoadInterfaceOnShow && !isTutorialShow)
     {
         for (int i = 0; i < 3; i++)
         {

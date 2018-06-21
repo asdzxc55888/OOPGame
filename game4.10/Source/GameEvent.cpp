@@ -20,9 +20,7 @@ GameEvent::GameEvent()
 
 GameEvent::~GameEvent()
 {
-	for (int i = 0; i < 4; i++) delete gameRoom[i];
-	for (int i = 0; i < 10; i++) delete warrior[i];
-	delete myRoomInterface;
+	
 }
 
 void GameEvent::OnBeginState()
